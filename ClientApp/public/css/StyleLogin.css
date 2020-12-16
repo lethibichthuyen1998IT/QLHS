@@ -1,0 +1,303 @@
+﻿html, body {
+    font-family: Arial, Helvetica, sans-serif;
+    font: 'Times-Roman';
+}
+
+form {
+    border: 3px solid #f1f1f1;
+
+}
+textarea {
+    height: auto;
+    max-height: 1000px;
+}
+
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+    button:hover {
+        opacity: 0.8;
+    }
+
+.cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #f44336;
+}
+
+.successbtn {
+    width: 100%;
+    padding: 14px 20px;
+    background-color: #5DADE2;
+}
+.grid-container {
+    display: grid;
+
+    padding: 20px;
+    position: absolute;
+    top: 200px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: repeat(8,minmax(0,1fr));
+   
+    grid-gap: 5px;
+}
+    .grid-container div {
+        background-color: #EEEEEE;
+    }
+
+
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+}
+
+img.avatar {
+    width: 15%;
+    border-radius: 50%;
+}
+
+.containerlogin {
+    padding-right: 50px;
+    padding-top: 10px;
+    padding-left: 50px;
+}
+
+
+
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+   
+}
+body404 {
+    background: #ffff;
+    padding: 0px;
+    margin: 0px;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.container404 {
+    background-color: #ffff;
+    margin: 0px auto;
+    text-align: center;
+    height: 650px;
+    
+}
+
+h3 {
+    font-size: 16px;
+    color: #3498db;
+    font-weight: bold;
+    text-align: center;
+    line-height: 130%;
+}
+
+.buton {
+    background: #3498db;
+    padding: 10px 20px;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 3px;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #ff0;
+}
+
+span {
+    font-size: 14px;
+    color: #FFF;
+    font-weight: normal;
+    text-align: center;
+}
+
+    span a {
+        color: #FF0;
+        text-decoration: none;
+    }
+
+        span a:hover {
+            color: #F00;
+        }
+.containerTB {
+    margin-top: 10px
+}
+
+.content-box {
+    padding: 32px 28px;
+    margin: 0 0 20px;
+    text-align: center;
+    cursor: pointer
+}
+
+    .content-box p {
+        margin: 1px;
+        color: #fff;
+        white-space: pre;
+       height:60px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .content-box h3 {
+        line-height: 16px;
+        padding-bottom: 8px;
+        color: #fff;
+        font-weight: 400
+    }
+
+    .content-box i {
+        font-size: 80px;
+        height: 80px;
+        color: #fff;
+        margin: 10px 0;
+        display: block
+    }
+
+    .content-box.color-effect-1 {
+        background: #46ADFF;
+    }
+
+.box-icon i {
+    display: inline-block;
+    font-size: 0;
+    cursor: pointer;
+    margin: 15px 0;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    color: #fff
+}
+
+    .box-icon i:after {
+        pointer-events: none;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        content: '';
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box
+    }
+
+    .box-icon i:before {
+        speak: none;
+        font-size: 40px;
+        line-height: 90px;
+        font-style: normal;
+        font-weight: 400;
+        font-variant: normal;
+        text-transform: none;
+        display: block;
+        -webkit-font-smoothing: antialiased
+    }
+
+.box-icon-effect-1 .box-icon i {
+    background: rgba(255, 255, 255, .2);
+    color: #fff;
+    -webkit-transition: background .2s, color .2s;
+    -moz-transition: background .2s, color .2s;
+    transition: background .2s, color .2s
+}
+
+    .box-icon-effect-1 .box-icon i:after {
+        top: -7px;
+        left: -7px;
+        padding: 7px;
+        box-shadow: 0 0 0 4px #fff;
+        -webkit-transition: -webkit-transform .2s, opacity .2s;
+        -webkit-transform: scale(.8);
+        -moz-transition: -moz-transform .2s, opacity .2s;
+        -moz-transform: scale(.8);
+        -ms-transform: scale(.8);
+        transition: transform .2s, opacity .2s;
+        transform: scale(.8);
+        opacity: 0
+    }
+
+.content-box:hover .box-icon-effect-1a .box-icon i {
+    background: #fff;
+    color: #3acf87
+}
+
+    .content-box:hover .box-icon-effect-1a .box-icon i:after {
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+        opacity: 1
+    }
+
+.box-icon-effect-2 .box-icon i {
+    box-shadow: 0 0 0 4px #fff;
+    overflow: hidden;
+    -webkit-transition: background .3s, color .3s, box-shadow .3s;
+    -moz-transition: background .3s, color .3s, box-shadow .3s;
+    transition: background .3s, color .3s, box-shadow .3s;
+    color: #fff
+}
+
+/*p {
+    white-space: nowrap;
+    height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}*/
+a:link {
+    text-decoration: none
+}
+
+@media screen and (max-width: 500px) {
+    img {
+        width: 70%;
+    }
+
+    .container {
+        padding: 70px 10px 10px 10px;
+    }
+
+    h3 {
+        font-size: 14px;
+    }
+}
+@font-face {
+    font-family: "Open Sans";
+    src: url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2"), url("/fonts/OpenSans-Regular-webfont.woff") format("woff");
+}
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+        display: block;
+        float: none;
+    }
+
+    .cancelbtn {
+        width: 100%;
+    }
+}
