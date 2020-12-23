@@ -17,16 +17,36 @@ namespace QuanLyHieuSuat.Controllers
 
 
 
-        [HttpGet("{id}")]
-        public IEnumerable<Phancong> Index(string id)
+        [HttpGet("{id}/{idnh}")]
+        public Phancong Index(string id, int idnh)
         {
             try
             {
                 var pc = from a in db.Phancong
                          join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
-                         where a.Mavienchuc == id
+                         where a.Mavienchuc == id && a.Manamhoc==idnh
                          select a;
-                return pc.ToList();
+                return pc.SingleOrDefault();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        [HttpGet("VC/{idvc}")]
+        public Phancong VC(string idvc)
+        {
+
+            var nh = (from a in db.Namhoc orderby a.Manamhoc descending select a.Manamhoc).FirstOrDefault();
+            
+
+            try
+            {
+                var pc = from a in db.Phancong
+                         join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
+                         where a.Mavienchuc == idvc && a.Manamhoc == nh
+                         select a;
+                return pc.SingleOrDefault();
             }
             catch
             {

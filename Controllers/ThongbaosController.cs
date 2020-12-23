@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using QuanLyHieuSuat.DTO;
 using QuanLyHieuSuat.Models;
 
 namespace QuanLyHieuSuat.Controllers
@@ -23,6 +24,19 @@ namespace QuanLyHieuSuat.Controllers
             try
             {
                 return db.Thongbao.ToList();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        [HttpGet("{id}")]
+        public Thongbao ct(int id)
+        {
+            Thongbao tb = db.Thongbao.Find(id);
+            try
+            {
+               return tb;
             }
             catch
             {
@@ -50,6 +64,8 @@ namespace QuanLyHieuSuat.Controllers
             }
         }
 
+     
+
 
 
         [HttpPut("{id}")]
@@ -67,6 +83,9 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
+
+   
+
 
         [HttpDelete("{id}")]
 

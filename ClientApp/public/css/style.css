@@ -15,7 +15,26 @@ body {
 	font-family: "Roboto", sans-serif;
 	font: 'Times-Roman';
 }
+.modal {
+	overflow-y: auto
+}
+/*.modal-backdrop {
+	visibility: hidden !important;
+}
 
+.modal.in {
+	background-color: rgba(0,0,0,0.5);
+}*/
+/*.modal:after {
+	content: "";
+	display: block;
+	background: rgba(0,0,0, .5);
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	z-index: -1;
+}*/
 img {
 	max-width: 100%;
 }
@@ -36,7 +55,7 @@ h6 {
 h2 {
 	font-size: 36px;
 	color:#8675a9;
-	bold;
+	
 }
 
 p {
@@ -164,6 +183,7 @@ padding: 4px 4px;
 .spad {
 	padding-top: 95px;
 	padding-bottom: 95px;
+	text-align: center;
 }
 
 .section-title {
@@ -714,7 +734,7 @@ padding: 4px 4px;
 .service .icon,
 .icon-box .icon {
 	font-size: 40px;
-	margin-right: 30px;
+	margin-right: 0px;
 }
 
 .service .service-text h2,
@@ -1288,15 +1308,12 @@ padding: 4px 4px;
 	padding: 15px 20px;
 }
 
-.search-form input[type="text"]:focus,
-.search-form input[type="text"]:hover {
-	outline: none;
-}
+
 
 .search-form .search-btn {
 	position: absolute;
 	width: 50px;
-	height: 50px;
+	height: 55px;
 	display: block;
 	right: 0;
 	top: 0;
@@ -1305,10 +1322,7 @@ padding: 4px 4px;
 	color: #2be6ab;
 }
 
-.search-form .search-btn:focus,
-.search-form .search-btn:hover {
-	outline: none;
-}
+
 
 
 /*------------------------

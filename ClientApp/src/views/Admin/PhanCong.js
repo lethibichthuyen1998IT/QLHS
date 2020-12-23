@@ -104,6 +104,7 @@ class Phancong extends React.Component {
             progress: 0,
             status: '',
             nh: [],
+            nhmd:[],
             dm: [],
             modalDetails: false,
             user: JSON.parse(localStorage.getItem('user')),
@@ -131,7 +132,10 @@ class Phancong extends React.Component {
             },
             editdgkhoaModal: false,
             editdgbmModal: false,
-            alert:''
+            alert: '',
+            idnh: '',
+            idvc:'',
+            bmsource:[],
                 
 
         }
@@ -179,8 +183,8 @@ class Phancong extends React.Component {
 
         axios.get('/vienchucs/bomon/' + this.state.user.mabomon, { id: this.state.user.mabomon })
             .then((res) => this.setState({
-                vienchuc: res.data,
-
+                vcbm: res.data,
+                bmsource: res.data
             })
             );
         axios.get('/vienchucs/')
@@ -203,6 +207,13 @@ class Phancong extends React.Component {
 
             })
             );
+        axios.get('/namhocs/namhoc/')
+            .then((res) => this.setState({
+                nhmd: res.data,
+              
+
+            })
+        );
         axios.get('/namhocs/')
             .then((res) => this.setState({
                 nh: res.data,
@@ -214,12 +225,11 @@ class Phancong extends React.Component {
                 dm: res.data,
 
             })
-            );
-
+        );
 
     }
     selectFileHandler = (event) => {
-        const fileTypes = ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'pdf'];
+        const fileTypes = ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf'];
         let file = event.target.files;
         console.log(`File ${file}`);
         let errMessage = [];
@@ -283,6 +293,31 @@ class Phancong extends React.Component {
             valueSearch: search
         });
     }
+
+    handlebmSearch = (search) => {
+
+        let sourceArray = this.state.source;
+
+        let newArray = [];
+        if (search.length <= 0) {
+            newArray = sourceArray;
+        } else {
+
+            console.log(search);
+            for (let item of sourceArray) {
+
+                if (item.mavienchuc.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+                    newArray.push(item);
+                }
+            }
+
+        }
+
+        this.setState({
+            vcbm: newArray,
+            valueSearch: search
+        });
+    }
     //refesh
     refresh() {
         const nvs = JSON.parse(localStorage.getItem('user'));
@@ -290,7 +325,12 @@ class Phancong extends React.Component {
             vc: nvs
         });
         //hien thi danh sach
+        axios.get('/namhocs/namhoc/')
+            .then((res) => this.setState({
+                nhmd: res.data,
 
+            })
+            );
 
         axios.get('/phancongs/bomopc/' + this.state.user.mabomon, { id: this.state.user.mabomon })
             .then((res) => this.setState({
@@ -362,26 +402,29 @@ class Phancong extends React.Component {
 
         })
     }
-    toggleDetailsModal(idvc, idnamhoc) {
-        axios.get('/phancongs/' + idvc)
+    toggleDetailsModal(idvc) {
+        
+        this.state.idvc = idvc;
+        axios.get('/phancongs/' + idvc + "/" + this.state.idnh)
             .then((res) => {
                 this.setState({
                     chitietpc: res.data
-                  })
+                    
+                })
+               
              
             });
 
-        axios.get('/congviecs/' + idvc)
+        axios.get('/congviecs/' + idvc + "/" + this.state.idnh)
             .then((res) => {
-                this.setState({ chitietcv: res.data })
+                this.setState({ chitietcv: res.data})
             });
+       
         this.setState({
-            modalDetails: !this.state.modalDetails,
-            editdanhgiakhoa: {
-                mavienchuc: idvc, manamhoc: idnamhoc
-            }
+            modalDetails: true
 
-            });
+
+        })
 
 
     }
@@ -534,12 +577,12 @@ class Phancong extends React.Component {
         })
     }
     //edit cong viec
-    toggleEditCVModal() {
+    toggleDongCV() {
         this.setState({
             editCVModal: !this.state.editCVModal
         })
     }
-    editCV(macongviec, manamhoc, mavienchuc, masodanhmuc, tencongviec, ngaythuchien, diadiem, thoigian, filecongvec) {
+    toggleEditCVModal(macongviec, manamhoc, mavienchuc, masodanhmuc, tencongviec, ngaythuchien, diadiem, thoigian, filecongvec) {
         this.setState({
             editCVData: { macongviec, manamhoc, mavienchuc, masodanhmuc, tencongviec, ngaythuchien, diadiem, thoigian, filecongvec },
             editCVModal: !this.state.editCVModal
@@ -556,7 +599,7 @@ class Phancong extends React.Component {
     }
     updateCV() {
         let { macongviec, manamhoc, mavienchuc, masodanhmuc, tencongviec, ngaythuchien, diadiem, thoigian, filecongvec } = this.state.editCVData;
-        axios.put('/congviecs/' + Number.parseInt(this.state.editCVData.maphancong),
+        axios.put('/congviecs/' + Number.parseInt(this.state.editCVData.macongviec),
             { macongviec, manamhoc, mavienchuc, masodanhmuc, tencongviec, ngaythuchien, diadiem, thoigian, filecongvec }).then((response) => {
 
                 this.setState({
@@ -603,6 +646,13 @@ class Phancong extends React.Component {
             });
 
     }
+    //filter
+     onchange = e => {
+         this.setState({ idnh: e.target.value });
+         this.toggleDetailsModal.bind(this, this.state.idvc);
+      
+
+    }
     deleteCV = (macongviec, mavienchuc) => {
         const apiUrl = '/congviecs/' + macongviec.macongviec;
         axios.delete(apiUrl, { macongviec: macongviec.macongviec })
@@ -615,8 +665,6 @@ class Phancong extends React.Component {
             })
 
         //console.log(mavienchuc.mavienchuc);
-
-
 
     }
     handleXoa = (macongviec, tencongviec, mavienchuc) => {
@@ -662,10 +710,10 @@ class Phancong extends React.Component {
     //render
     render() {
 
-        const { phancong, vc, quyen, chucnang, errors, congviec, chitietcv, chitietpc, details, cvbomon, bomonpc, vienchuc, vcbm } = this.state;
+        const { vc, quyen, chucnang, errors, congviec, chitietcv, chitietpc, vienchuc, vcbm } = this.state;
 
         const cv = [...new Map(congviec.map(x => [x.mavienchuc, x])).values()];
-
+       
         let rules = [];
         quyen.forEach((e) => {
             if (e.machucvu.trim() === vc.machucvu.trim())
@@ -683,8 +731,10 @@ class Phancong extends React.Component {
             if (x.tenchucnang.toLowerCase() === name1.toLowerCase())
                 cn.push(x.machucnang);
         });
-
-        console.log(this.state.editdanhgiakhoa.manamhoc);
+      
+        console.log(this.state.idvc);
+        console.log(this.state.idnh);
+        console.log(chitietpc);
         return (
             <>
                 {
@@ -868,7 +918,7 @@ class Phancong extends React.Component {
                                                                 <div class="content-box color-effect-1" style={{ backgroundColor: '#229954', margin: '10px' }} >
                                                                     <h3> {emp.mavienchuc}</h3>
                                                                                 <div class="box-icon-wrap box-icon-effect-1 box-icon-effect-1a">
-                                                                        <a onClick={this.toggleDetailsModal.bind(this, emp.mavienchuc, emp.manamhoc)}> <div class="box-icon"> <i class="fa fa-user"></i></div> </a>
+                                                                        <a onClick={this.toggleDetailsModal.bind(this, emp.mavienchuc)}> <div class="box-icon"> <i class="fa fa-user"></i></div> </a>
                                                                     </div>
                                                                     <p>{emp.hoten}</p>
                                                                             </div>
@@ -890,7 +940,16 @@ class Phancong extends React.Component {
                                             <Tabs>
                                                 <p style={{ paddingLeft: '10px' }}><Button color="danger" onClick={this.toggleDongModal.bind(this)} style={{ width: '80px' }}>Đóng </Button> &nbsp;
                                                     <Button color="blue" style={{ width: '100px' }} onclick={this.toggleDongModal.bind(this)}>Đánh giá </Button></p>
-                                               
+                                                
+                                                <p> <Input type="select" id="mabomon" value={this.state.idnh} onChange={this.onchange} >
+                                                   
+                                                    {
+                                                        this.state.nh.map((nh) =>
+                                                            <option key={nh.manamhoc} value={nh.manamhoc}>{nh.tennamhoc}</option>)
+                                                    }
+
+                                                </Input>
+                                                    </p>
                                                 <TabList>
 
 
@@ -948,184 +1007,10 @@ class Phancong extends React.Component {
 
                                                                                 {(rules.find(x => x == cns)) ?
                                                                                     <td>
-                                                                                        <Button color="default" onClick={this.editCV.bind(this, emp.macongviec, emp.manamhoc, emp.mavienchuc, emp.masodanhmuc, emp.tencongviec, emp.ngaythuchien, emp.diadiem, emp.thoigian, emp.filecongvec)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
-                                                                 <Modal isOpen={this.state.editCVModal} toggle={this.toggleEditCVModal.bind(this)} size="lg" style={{ maxWidth: '800px', width: '100%' }}>
-
-                                                                                            <ModalHeader toggle={this.toggleEditCVModal.bind(this)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '400px', color: 'black', textAlign: 'center', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
-
-
-                                                                                            <ModalBody>
-
-                                                                                                <Row>
-                                                                                                    <Col md="12"> <p className="text-danger"> (*) Bắt buộc</p></Col>
-                                                                                                    <Col md="12" align="center">
-
-                                                                                                        {(errors) ?
-                                                                                                            <Alert color="warning">{errors}</Alert>
-                                                                                                            :
-                                                                                                            null
-                                                                                                        }
-                                                                                                    </Col>
-                                                                                                </Row>
-                                                                                                <Row>
-                                                                                                    <Col md="6">
-                                                                                                        <FormGroup>
-                                                                                                            <Label htmlFor="hoten">Năm học: </Label>
-                                                                                                            <Input id="tenchucvu" type="select" value={this.state.editCVData.manamhoc} onChange={(e) => {
-                                                                                                                let { editCVData } = this.state;
-                                                                                                                editCVData.manamhoc = Number.parseInt(e.target.value);
-                                                                                                                this.setState({ editCVData });
-                                                                                                            }} >
-                                                                                                                <option value='0' >--Năm học--</option>
-                                                                                                                {
-                                                                                                                    this.state.nh.map((nh) =>
-                                                                                                                        <option key={nh.manamhoc} value={nh.manamhoc}>{nh.tennamhoc}</option>)
-                                                                                                                }
-                                                                                                            </Input>
-
-
-                                                                                                        </FormGroup>
-                                                                                                    </Col>
-                                                                                            
-                                                                                                    <Col md="6">
-                                                                                                        <FormGroup>
-                                                                                                            <Label htmlFor="hoten">Viên chức: </Label>
-                                                                                                            <Input id="tenchucvu" type="select" value={this.state.editCVData.mavienchuc} onChange={(e) => {
-                                                                                                                let { editCVData } = this.state;
-                                                                                                                editCVData.mavienchuc = e.target.value;
-                                                                                                                this.setState({ editCVData });
-                                                                                                            }} >
-                                                                                                                <option value='0' >--Viên chức--</option>
-                                                                                                                {
-                                                                                                                    this.state.listVC.map((vchuc) =>
-                                                                                                                        <option key={vchuc.mavienchuc} value={vchuc.mavienchuc}>{vchuc.hoten}</option>)
-                                                                                                                }
-                                                                                                            </Input>
-
-
-                                                                                                        </FormGroup>
-                                                                                                    </Col>
-                                                                                                </Row>
-                                                                                                <Row>
-                                                                                                    <Col md="6">
-                                                                                                        <FormGroup>
-                                                                                                            <Label htmlFor="hoten">Danh mục: </Label>
-                                                                                                            <Input id="tenchucvu" type="select" value={this.state.editCVData.masodanhmuc} onChange={(e) => {
-                                                                                                                let { editCVData } = this.state;
-                                                                                                                editCVData.masodanhmuc = Number.parseInt(e.target.value);
-                                                                                                                this.setState({ editCVData });
-                                                                                                            }} >
-                                                                                                                <option value='0' >--Danh mục--</option>
-                                                                                                                {
-                                                                                                                    this.state.dm.map((dm) =>
-                                                                                                                        <option key={dm.masodanhmuc} value={dm.masodanhmuc}>{dm.tendanhmuc}</option>)
-                                                                                                                }
-                                                                                                            </Input>
-
-
-                                                                                                        </FormGroup>
-                                                                                                    </Col>
-                                                                                              
-                                                                                                    <Col md="6">
-                                                                                                        <FormGroup>
-                                                                                                            <Label htmlFor="hoten">Ngày thực hiện: </Label>
-                                                                                                            <Input id="tenchucvu" type="date" value={this.state.editCVData.ngaythuchien} onChange={(e) => {
-                                                                                                                let { editCVData } = this.state;
-                                                                                                                editCVData.ngaythuchien = e.target.value;
-                                                                                                                this.setState({ editCVData });
-                                                                                                            }} />
-
-                                                                                                        </FormGroup>
-                                                                                                    </Col>
-                                                                                                </Row>
-                                                                                                <Row>
-                                                                                                    <Col md="6">
-                                                                                                        <FormGroup>
-                                                                                                            <Label htmlFor="hoten">Địa điểm: </Label>
-                                                                                                            <Input id="tenchucvu" value={this.state.editCVData.diadiem} onChange={(e) => {
-                                                                                                                let { editCVData } = this.state;
-                                                                                                                editCVData.diadiem = e.target.value;
-                                                                                                                this.setState({ editCVData });
-                                                                                                            }} />
-
-                                                                                                        </FormGroup>
-                                                                                                    </Col>
-                                                                                            
-                                                                                                    <Col md="6">
-                                                                                                        <FormGroup>
-                                                                                                            <Label htmlFor="hoten">Thời gian: </Label>
-                                                                                                            <Input id="tenchucvu" value={this.state.editCVData.thoigian} onChange={(e) => {
-                                                                                                                let { editCVData } = this.state;
-                                                                                                                editCVData.thoigian = e.target.value;
-                                                                                                                this.setState({ editCVData });
-                                                                                                            }} />
-
-                                                                                                        </FormGroup>
-                                                                                                    </Col>
-
-
-                                                                                                </Row>
-                                                                                                <Row>
-                                                                                                    <Col md="12">
-                                                                                                        <FormGroup>
-                                                                                                            <Label htmlFor="hoten">File: </Label>
-                                                                                                            <Input value={this.state.editCVData.filecongvec} />
-                                                                                                            <Input id="file" type="file" onChange={this.selectFileHandler.bind(this)} />
-                                                                                                            <br />
-                                                                                                            <div>{this.state.progress}%</div>
-
-                                                                                                            <div>{this.state.status}</div>
-
-
-                                                                                                        </FormGroup>
-                                                                                                    </Col>
-                                                                                                </Row>
-
-
-
-
-
-
-
-
-
-
-                                                                                            </ModalBody>
-                                                                                            <ModalFooter>
-                                                                                                <Button color="primary" disabled={!(this.state.editCVData.mavienchuc.length != 0 && this.state.editCVData.masodanhmuc.length != 0 && this.state.editCVData.manamhoc.length != 0 && this.state.editCVData.ngaythuchien.length > 0 && this.state.editCVData.diadiem.length > 0 && this.state.editCVData.thoigian.length > 0)} onClick={this.updateCV.bind(this)}>Thực hiện lưu</Button>{' '}
-                                                                                                <Button color="danger" onClick={this.toggleEditCVModal.bind(this)}>Hủy bỏ</Button>
-                                                                                            </ModalFooter>
-
-                                                                                        </Modal>
+                                                                                        <Button color="default" onClick={this.toggleEditCVModal.bind(this, emp.macongviec, emp.manamhoc, emp.mavienchuc, emp.masodanhmuc, emp.tencongviec, emp.ngaythuchien, emp.diadiem, emp.thoigian, emp.filecongvec)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
+                                                               
                                                                                         <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleXoa.bind(this, emp.macongviec, emp.tencongviec, emp.mavienchuc)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
-                                                                                        <SweetAlert
-                                                                                            show={this.state.CVshowAlert}
-                                                                                            warning
-                                                                                            showCancel
-
-                                                                                            showCloseButton
-                                                                                            confirmBtnText="Đồng ý"
-                                                                                            confirmBtnBsStyle="danger"
-                                                                                            cancelBtnText="Không"
-                                                                                            cancelBtnBsStyle="light"
-                                                                                            title="Bạn có chắc chắn không?"
-
-                                                                                            onConfirm={() => this.deleteCV({ macongviec: this.state.xoacv.macongviec, mavienchuc: this.state.xoacv.mavienchuc })}
-
-                                                                                            onCancel={() => this.setState({ CVshowAlert: false })}
-                                                                                            focusCancelBtn
-                                                                                        >  {"Xóa công việc  " + this.state.xoacv.tencongviec + "của viên chức?"}
-                                                                                        </SweetAlert>
-                                                                                        <SweetAlert
-                                                                                            show={this.state.confirm}
-                                                                                            success
-                                                                                            confirmBtnText="Đồng ý"
-                                                                                            confirmBtnBsStyle="primary"
-                                                                                            onConfirm={() => this.handleConfirm()}
-
-
-                                                                                        >  Đã xóa thành công !!!
-                                                                </SweetAlert>
+                                                                                       
 
 
 
@@ -1136,7 +1021,182 @@ class Phancong extends React.Component {
                                                                         )
                                                                     })
                                                                 }
+                                                                <SweetAlert
+                                                                    show={this.state.CVshowAlert}
+                                                                    warning
+                                                                    showCancel
 
+                                                                    showCloseButton
+                                                                    confirmBtnText="Đồng ý"
+                                                                    confirmBtnBsStyle="danger"
+                                                                    cancelBtnText="Không"
+                                                                    cancelBtnBsStyle="light"
+                                                                    title="Bạn có chắc chắn không?"
+
+                                                                    onConfirm={() => this.deleteCV({ macongviec: this.state.xoacv.macongviec, mavienchuc: this.state.xoacv.mavienchuc })}
+
+                                                                    onCancel={() => this.setState({ CVshowAlert: false })}
+                                                                    focusCancelBtn
+                                                                >  {"Xóa công việc  " + this.state.xoacv.tencongviec + "của viên chức?"}
+                                                                </SweetAlert>
+                                                                <SweetAlert
+                                                                    show={this.state.confirm}
+                                                                    success
+                                                                    confirmBtnText="Đồng ý"
+                                                                    confirmBtnBsStyle="primary"
+                                                                    onConfirm={() => this.handleConfirm()}
+
+
+                                                                >  Đã xóa thành công !!!
+                                                                </SweetAlert>
+                                                                <Modal isOpen={this.state.editCVModal} toggle={this.toggleEditCVModal.bind(this, this.state.editCVData.macongviec, this.state.editCVData.macongviec, this.state.editCVData.manamhoc, this.state.editCVData.mavienchuc, this.state.editCVData.masodanhmuc, this.state.editCVData.tencongviec, this.state.editCVData.ngaythuchien, this.state.editCVData.thoigian, this.state.editCVData.filecongvec)} size="lg" style={{ maxWidth: '800px', width: '100%' }}>
+
+                                                                    <ModalHeader toggle={this.toggleEditCVModal.bind(this, this.state.editCVData.macongviec, this.state.editCVData.macongviec, this.state.editCVData.manamhoc, this.state.editCVData.mavienchuc, this.state.editCVData.masodanhmuc, this.state.editCVData.tencongviec, this.state.editCVData.ngaythuchien, this.state.editCVData.thoigian, this.state.editCVData.filecongvec)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '400px', color: 'black', textAlign: 'center', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
+
+
+                                                                    <ModalBody>
+
+                                                                        <Row>
+                                                                            <Col md="12"> <p className="text-danger"> (*) Bắt buộc</p></Col>
+                                                                            <Col md="12" align="center">
+
+                                                                                {(errors) ?
+                                                                                    <Alert color="warning">{errors}</Alert>
+                                                                                    :
+                                                                                    null
+                                                                                }
+                                                                            </Col>
+                                                                        </Row>
+                                                                        <Row>
+                                                                            <Col md="6">
+                                                                                <FormGroup>
+                                                                                    <Label htmlFor="hoten">Năm học: </Label>
+                                                                                    <Input id="tenchucvu" type="select" value={this.state.editCVData.manamhoc} onChange={(e) => {
+                                                                                        let { editCVData } = this.state;
+                                                                                        editCVData.manamhoc = Number.parseInt(e.target.value);
+                                                                                        this.setState({ editCVData });
+                                                                                    }} >
+                                                                                        <option value='0' >--Năm học--</option>
+                                                                                        {
+                                                                                            this.state.nh.map((nh) =>
+                                                                                                <option key={nh.manamhoc} value={nh.manamhoc}>{nh.tennamhoc}</option>)
+                                                                                        }
+                                                                                    </Input>
+
+
+                                                                                </FormGroup>
+                                                                            </Col>
+
+                                                                            <Col md="6">
+                                                                                <FormGroup>
+                                                                                    <Label htmlFor="hoten">Viên chức: </Label>
+                                                                                    <Input id="tenchucvu" type="select" value={this.state.editCVData.mavienchuc} onChange={(e) => {
+                                                                                        let { editCVData } = this.state;
+                                                                                        editCVData.mavienchuc = e.target.value;
+                                                                                        this.setState({ editCVData });
+                                                                                    }} >
+                                                                                        <option value='0' >--Viên chức--</option>
+                                                                                        {
+                                                                                            this.state.listVC.map((vchuc) =>
+                                                                                                <option key={vchuc.mavienchuc} value={vchuc.mavienchuc}>{vchuc.hoten}</option>)
+                                                                                        }
+                                                                                    </Input>
+
+
+                                                                                </FormGroup>
+                                                                            </Col>
+                                                                        </Row>
+                                                                        <Row>
+                                                                            <Col md="6">
+                                                                                <FormGroup>
+                                                                                    <Label htmlFor="hoten">Danh mục: </Label>
+                                                                                    <Input id="tenchucvu" type="select" value={this.state.editCVData.masodanhmuc} onChange={(e) => {
+                                                                                        let { editCVData } = this.state;
+                                                                                        editCVData.masodanhmuc = Number.parseInt(e.target.value);
+                                                                                        this.setState({ editCVData });
+                                                                                    }} >
+                                                                                        <option value='0' >--Danh mục--</option>
+                                                                                        {
+                                                                                            this.state.dm.map((dm) =>
+                                                                                                <option key={dm.masodanhmuc} value={dm.masodanhmuc}>{dm.tendanhmuc}</option>)
+                                                                                        }
+                                                                                    </Input>
+
+
+                                                                                </FormGroup>
+                                                                            </Col>
+
+                                                                            <Col md="6">
+                                                                                <FormGroup>
+                                                                                    <Label htmlFor="hoten">Ngày thực hiện: </Label>
+                                                                                    <Input id="tenchucvu" type="date" value={this.state.editCVData.ngaythuchien} onChange={(e) => {
+                                                                                        let { editCVData } = this.state;
+                                                                                        editCVData.ngaythuchien = e.target.value;
+                                                                                        this.setState({ editCVData });
+                                                                                    }} />
+
+                                                                                </FormGroup>
+                                                                            </Col>
+                                                                        </Row>
+                                                                        <Row>
+                                                                            <Col md="6">
+                                                                                <FormGroup>
+                                                                                    <Label htmlFor="hoten">Địa điểm: </Label>
+                                                                                    <Input id="tenchucvu" value={this.state.editCVData.diadiem} onChange={(e) => {
+                                                                                        let { editCVData } = this.state;
+                                                                                        editCVData.diadiem = e.target.value;
+                                                                                        this.setState({ editCVData });
+                                                                                    }} />
+
+                                                                                </FormGroup>
+                                                                            </Col>
+
+                                                                            <Col md="6">
+                                                                                <FormGroup>
+                                                                                    <Label htmlFor="hoten">Thời gian: </Label>
+                                                                                    <Input id="tenchucvu" value={this.state.editCVData.thoigian} onChange={(e) => {
+                                                                                        let { editCVData } = this.state;
+                                                                                        editCVData.thoigian = e.target.value;
+                                                                                        this.setState({ editCVData });
+                                                                                    }} />
+
+                                                                                </FormGroup>
+                                                                            </Col>
+
+
+                                                                        </Row>
+                                                                        <Row>
+                                                                            <Col md="12">
+                                                                                <FormGroup>
+                                                                                    <Label htmlFor="hoten">File: </Label>
+                                                                                    <Input value={this.state.editCVData.filecongvec} />
+                                                                                    <Input id="file" type="file" onChange={this.selectFileHandler.bind(this)} />
+                                                                                    <br />
+                                                                                    <div>{this.state.progress}%</div>
+
+                                                                                    <div>{this.state.status}</div>
+
+
+                                                                                </FormGroup>
+                                                                            </Col>
+                                                                        </Row>
+
+
+
+
+
+
+
+
+
+
+                                                                    </ModalBody>
+                                                                    <ModalFooter>
+                                                                        <Button color="primary" disabled={!(this.state.editCVData.mavienchuc.length != 0 && this.state.editCVData.masodanhmuc.length != 0 && this.state.editCVData.manamhoc.length != 0 && this.state.editCVData.ngaythuchien.length > 0 && this.state.editCVData.diadiem.length > 0 && this.state.editCVData.thoigian.length > 0)} onClick={this.updateCV.bind(this)}>Thực hiện lưu</Button>{' '}
+                                                                        <Button color="danger" onClick={this.toggleDongCV.bind(this)}>Hủy bỏ</Button>
+                                                                    </ModalFooter>
+
+                                                                </Modal>
                                                             </tbody>
                                                         </Table>
 

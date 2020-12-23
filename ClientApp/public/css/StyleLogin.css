@@ -162,7 +162,7 @@ span {
     }
 
     .content-box h3 {
-        line-height: 16px;
+        line-height: 28px;
         padding-bottom: 8px;
         color: #fff;
         font-weight: 400
@@ -271,6 +271,9 @@ span {
 }*/
 a:link {
     text-decoration: none
+}
+.ReactModal_Overlay {
+    z-index: 1000;
 }
 
 @media screen and (max-width: 500px) {

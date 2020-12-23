@@ -40,13 +40,20 @@ class User extends React.Component {
             passwordold: '',
             retype: '',
             mavienchuc: '',
-           vc: JSON.parse(localStorage.getItem('user'))
+           vc:[],
            
         }
         this.logout = this.logout.bind(this);
         this.refresh = this.refresh.bind(this);
     }
-   
+    componentDidMount() {
+
+        //hien thi danh sach
+        const nvs = JSON.parse(localStorage.getItem('user'));
+        this.setState({
+            vc: nvs
+        });
+    }
     
     logout() {
         localStorage.clear('user');
@@ -146,9 +153,9 @@ class User extends React.Component {
     }
     refresh() {
         
+        const nvs = JSON.parse(localStorage.getItem('user'));
         this.setState({
-            vc: JSON.parse(localStorage.getItem('user')),
-           
+            vc: nvs
         });
 
       
@@ -221,9 +228,9 @@ class User extends React.Component {
                                                     vc.gioitinh = e.target.value;
                                                     this.setState({ vc });
                                                 }} >
-                                              
-                                                <option value='false'>Nữ </option>
                                                 <option value='true'>Nam </option>
+                                                <option value='false'>Nữ </option>
+                                                
                                                 
                                             </Input>
                                         </GridItem>
@@ -321,7 +328,7 @@ class User extends React.Component {
                                             
                                                 <Col md="6">
                                                     <FormGroup>
-                                                    <Label htmlFor="gt" style={{ color: 'black', fontWeight: 'bold' }}>Giới tính: </Label> {(vc.gioitinh=='true') ? 'Nam' : 'Nữ'}
+                                                    <Label htmlFor="gt" style={{ color: 'black', fontWeight: 'bold' }}>Giới tính: </Label> {(vc.gioitinh=="true") ? 'Nam' : 'Nữ'}
 
                                                     </FormGroup>
 

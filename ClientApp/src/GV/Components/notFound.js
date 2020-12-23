@@ -15,6 +15,7 @@ import {
         ModalBody,
         Input, Label, Form, FormGroup, Alert
 } from "reactstrap";
+import { Link, NavLink } from "react-router-dom";
 class notFound extends Component {
     render() {
         return (
@@ -27,8 +28,9 @@ class notFound extends Component {
                         <br />
                     <h3>ERROR 404! 
             <br />Không tìm thấy trang yêu cầu</h3>
-                        <br />
-                    <a className="buton" href="https://localhost:44374/">TRỞ VỀ TRANG CHỦ</a>
+                    <br />
+                    
+                    <Link to="/trangchu"> <a className="buton">TRỞ VỀ TRANG CHỦ</a></Link>
                     </div>
                 </body404>
 

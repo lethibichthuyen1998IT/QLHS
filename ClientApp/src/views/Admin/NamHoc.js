@@ -192,12 +192,12 @@ class Namhoc extends React.Component {
 
 
     //edit
-    toggleEditModal() {
+    toggleDong() {
         this.setState({
             editModal: !this.state.editModal
         })
     }
-    edit(manamhoc, tennamhoc) {
+    toggleEditModal(manamhoc, tennamhoc) {
         this.setState({
             editData: { manamhoc, tennamhoc },
             editModal: !this.state.editModal
@@ -369,85 +369,10 @@ class Namhoc extends React.Component {
                                                             <td>{emp.tennamhoc}</td>
                                                             {(rules.find(x => x == cns)) ?
                                                                 <td>
-                                                                    <Button color="default" onClick={this.edit.bind(this, emp.manamhoc, emp.tennamhoc)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
-                                                                 <Modal isOpen={this.state.editModal} toggle={this.toggleEditModal.bind(this)} style={{ width: '500px' }}>
-
-                                                                        <ModalHeader toggle={this.toggleEditModal.bind(this)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '400px', color: 'black', paddingLeft: '100px', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
-
-
-                                                                        <ModalBody>
-
-                                                                            <Row>
-                                                                                <Col md="12"> <p className="text-danger"> (*) Bắt buộc</p></Col>
-                                                                                <Col md="12" align="center">
-
-                                                                                    {(errors) ?
-                                                                                        <Alert color="warning">{errors}</Alert>
-                                                                                        :
-                                                                                        null
-                                                                                    }
-                                                                                </Col>
-                                                                            </Row>
-
-                                                                            <Row>
-                                                                                <Col md="12">
-                                                                                    <FormGroup>
-                                                                                        <Label htmlFor="hoten">Năm học<strong className="text-danger">(*) </strong></Label>
-                                                                                        <Input id="hoten" required value={this.state.editData.tennamhoc} onChange={(e) => {
-                                                                                            let { editData } = this.state;
-                                                                                            editData.tennamhoc = e.target.value;
-                                                                                            this.setState({ editData });
-                                                                                        }} />
-                                                                                    </FormGroup>
-                                                                                </Col>
-                                                                            </Row>
-
-
-
-
-
-
-
-
-
-
-                                                                        </ModalBody>
-                                                                        <ModalFooter>
-                                                                            <Button color="primary" disabled={!(this.state.editData.tennamhoc.length > 0)} onClick={this.updateNH.bind(this)}>Thực hiện lưu</Button>{' '}
-                                                                            <Button color="danger" onClick={this.toggleEditModal.bind(this)}>Hủy bỏ</Button>
-                                                                        </ModalFooter>
-
-                                                                    </Modal>
+                                                                    <Button color="default" onClick={this.toggleEditModal.bind(this, emp.manamhoc, emp.tennamhoc)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
+                                                                 
                                                                     <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.manamhoc, emp.tennamhoc)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
-                                                                    <SweetAlert
-                                                                        show={this.state.showAlert}
-                                                                        warning
-                                                                        showCancel
-
-                                                                        showCloseButton
-                                                                        confirmBtnText="Đồng ý"
-                                                                        confirmBtnBsStyle="danger"
-                                                                        cancelBtnText="Không"
-                                                                        cancelBtnBsStyle="light"
-                                                                        title="Bạn có chắc chắn không?"
-
-                                                                        onConfirm={() => this.deleteNH({ manamhoc: this.state.xoa.manamhoc })}
-
-                                                                        onCancel={() => this.setState({ showAlert: false })}
-                                                                        focusCancelBtn
-                                                                    >  {"Năm học " + this.state.xoa.tennamhoc + " sẽ bị xóa khỏi hệ thống"}
-                                                                    </SweetAlert>
-                                                                    <SweetAlert
-                                                                        show={this.state.confirm}
-                                                                        success
-                                                                        confirmBtnText="Đồng ý"
-                                                                        confirmBtnBsStyle="primary"
-                                                                        onConfirm={() => this.handleConfirm()}
-
-
-                                                                    >  Đã xóa thành công !!!
-                                                                </SweetAlert>
-
+                                                                  
 
 
                                                                 </td>
@@ -458,6 +383,83 @@ class Namhoc extends React.Component {
                                                     )
                                                 })
                                             }
+                                            <Modal isOpen={this.state.editModal} toggle={this.toggleEditModal.bind(this, this.state.editData.manamhoc, this.state.editData.tennamhoc)} style={{ width: '500px' }}>
+
+                                                <ModalHeader toggle={this.toggleEditModal.bind(this, this.state.editData.manamhoc, this.state.editData.tennamhoc)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '400px', color: 'black', paddingLeft: '100px', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
+
+
+                                                <ModalBody>
+
+                                                    <Row>
+                                                        <Col md="12"> <p className="text-danger"> (*) Bắt buộc</p></Col>
+                                                        <Col md="12" align="center">
+
+                                                            {(errors) ?
+                                                                <Alert color="warning">{errors}</Alert>
+                                                                :
+                                                                null
+                                                            }
+                                                        </Col>
+                                                    </Row>
+
+                                                    <Row>
+                                                        <Col md="12">
+                                                            <FormGroup>
+                                                                <Label htmlFor="hoten">Năm học<strong className="text-danger">(*) </strong></Label>
+                                                                <Input id="hoten" required value={this.state.editData.tennamhoc} onChange={(e) => {
+                                                                    let { editData } = this.state;
+                                                                    editData.tennamhoc = e.target.value;
+                                                                    this.setState({ editData });
+                                                                }} />
+                                                            </FormGroup>
+                                                        </Col>
+                                                    </Row>
+
+
+
+
+
+
+
+
+
+
+                                                </ModalBody>
+                                                <ModalFooter>
+                                                    <Button color="primary" disabled={!(this.state.editData.tennamhoc.length > 0)} onClick={this.updateNH.bind(this)}>Thực hiện lưu</Button>{' '}
+                                                    <Button color="danger" onClick={this.toggleDong.bind(this)}>Hủy bỏ</Button>
+                                                </ModalFooter>
+
+                                            </Modal>
+                                            <SweetAlert
+                                                show={this.state.showAlert}
+                                                warning
+                                                showCancel
+
+                                                showCloseButton
+                                                confirmBtnText="Đồng ý"
+                                                confirmBtnBsStyle="danger"
+                                                cancelBtnText="Không"
+                                                cancelBtnBsStyle="light"
+                                                title="Bạn có chắc chắn không?"
+
+                                                onConfirm={() => this.deleteNH({ manamhoc: this.state.xoa.manamhoc })}
+
+                                                onCancel={() => this.setState({ showAlert: false })}
+                                                focusCancelBtn
+                                            >  {"Năm học " + this.state.xoa.tennamhoc + " sẽ bị xóa khỏi hệ thống"}
+                                            </SweetAlert>
+                                            <SweetAlert
+                                                show={this.state.confirm}
+                                                success
+                                                confirmBtnText="Đồng ý"
+                                                confirmBtnBsStyle="primary"
+                                                onConfirm={() => this.handleConfirm()}
+
+
+                                            >  Đã xóa thành công !!!
+                                                                </SweetAlert>
+
 
                                         </tbody>
                                     </Table>

@@ -213,19 +213,19 @@ class Bomon extends React.Component {
 
 
     //edit
-    toggleEditModal() {
+    toggleEditModal(makhoa, mabomon, tenbomon) {
         this.setState({
-            editModal: !this.state.editModal
+            editModal: !this.state.editModal,
+            editData: { makhoa, mabomon, tenbomon }
         })
     }
-    edit (makhoa, mabomon, tenbomon ) {
+    toggleDong() {
         this.setState({
-            editData: { makhoa, mabomon, tenbomon  },
             editModal: !this.state.editModal
-
-        });
-
+          
+        })
     }
+   
     updateBM() {
         let { makhoa,mabomon, tenbomon } = this.state.editData;
         axios.put('/bomons/' + this.state.editData.mabomon,
@@ -423,86 +423,88 @@ class Bomon extends React.Component {
                                                                 (rules.find(x => x == cns)) ?
                                                                     <td>
 
-                                                                        <Button color="default" onClick={this.edit.bind(this,emp.makhoa,emp.mabomon, emp.tenbomon)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
+                                                                        <Button color="default" onClick={this.toggleEditModal.bind(this,emp.makhoa,emp.mabomon, emp.tenbomon)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
 
 
-                                                                    <Modal isOpen={this.state.editModal} toggle={this.toggleEditModal.bind(this)}>
-                                                                            <ModalHeader toggle={this.toggleEditModal.bind(this)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '400px', color: 'black', paddingLeft: '100px', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
-                                                                            <ModalBody>
-
-                                                                                <Form>
-                                                                                    <FormGroup>
-                                                                                        <Label for="tencn">Mã khoa</Label>
-                                                                                        <Input id="tencn" value={this.state.editData.makhoa} onChange={(e) => {
-                                                                                            let { editData } = this.state;
-                                                                                            editData.mabomon = e.target.value;
-                                                                                            this.setState({ editData });
-                                                                                        }} disabled />
-                                                                                    </FormGroup>
-                                                                                    
-                                                                                    <FormGroup>
-                                                                                        <Label for="tencn">Mã bộ môn</Label>
-                                                                                        <Input id="tencn" value={this.state.editData.mabomon} onChange={(e) => {
-                                                                                            let { editData } = this.state;
-                                                                                            editData.mabomon = e.target.value;
-                                                                                            this.setState({ editData });
-                                                                                        }} />
-                                                                                    </FormGroup>
-                                                                                </Form>
-                                                                                <Form>
-
-                                                                                    <FormGroup>
-                                                                                        <Label for="tencn">Tên bộ môn</Label>
-                                                                                        <Input id="tencn" value={this.state.editData.tenbomon} onChange={(e) => {
-                                                                                            let { editData } = this.state;
-                                                                                            editData.tenbomon = e.target.value;
-                                                                                            this.setState({ editData });
-                                                                                        }} />
-                                                                                    </FormGroup>
-                                                                                </Form>
-                                                                            </ModalBody>
-                                                                            <ModalFooter>
-                                                                                <Button color="primary" disabled={!(this.state.editData.mabomon.length > 0 && this.state.editData.tenbomon.length > 0)} onClick={this.updateBM.bind(this)}>Thực hiện lưu</Button>
-                                                                                <Button color="secondary" onClick={this.toggleEditModal.bind(this)}>Hủy bỏ</Button>
-                                                                            </ModalFooter>
-                                                                        </Modal>
+                                                                  
                                                                         <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.mabomon, emp.tenbomon)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
 
-                                                                        <SweetAlert
-                                                                            show={this.state.showAlert}
-                                                                            warning
-                                                                            showCancel
-
-                                                                            showCloseButton
-                                                                            confirmBtnText="Đồng ý"
-                                                                            confirmBtnBsStyle="danger"
-                                                                            cancelBtnText="Không"
-                                                                            cancelBtnBsStyle="light"
-                                                                            title="Bạn có chắc chắn không?"
-
-                                                                            onConfirm={() => this.deleteBM({ mabomon: this.state.xoa.mabomon })}
-
-                                                                            onCancel={() => this.setState({ showAlert: false })}
-                                                                            focusCancelBtn
-                                                                        >  {"Chức vụ  " + this.state.xoa.tenbomon + " sẽ bị xóa khỏi hệ thống"}
-                                                                        </SweetAlert>
-                                                                        <SweetAlert
-                                                                            show={this.state.confirm}
-                                                                            success
-                                                                            confirmBtnText="Đồng ý"
-                                                                            confirmBtnBsStyle="primary"
-                                                                            onConfirm={() => this.handleConfirm()}
-
-
-                                                                        >  Đã xóa thành công !!!
-                                                                </SweetAlert>
+                                                                       
                                                                     </td> : null
                                                             }
-
+                                                           
                                                         </tr>
                                                     )
                                                 })
                                             }
+                                            <Modal isOpen={this.state.editModal} toggle={this.toggleEditModal.bind(this, this.state.editData.makhoa, this.state.editData.mabomon, this.state.editData.tenbomon)}>
+                                                <ModalHeader toggle={this.toggleEditModal.bind(this, this.state.editData.makhoa, this.state.editData.mabomon, this.state.editData.tenbomon)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '400px', color: 'black', paddingLeft: '100px', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
+                                                <ModalBody>
+
+                                                    <Form>
+                                                        <FormGroup>
+                                                            <Label for="tencn">Mã khoa</Label>
+                                                            <Input id="tencn" value={this.state.editData.makhoa} onChange={(e) => {
+                                                                let { editData } = this.state;
+                                                                editData.mabomon = e.target.value;
+                                                                this.setState({ editData });
+                                                            }} disabled />
+                                                        </FormGroup>
+
+                                                        <FormGroup>
+                                                            <Label for="tencn">Mã bộ môn</Label>
+                                                            <Input id="tencn" value={this.state.editData.mabomon} onChange={(e) => {
+                                                                let { editData } = this.state;
+                                                                editData.mabomon = e.target.value;
+                                                                this.setState({ editData });
+                                                            }} />
+                                                        </FormGroup>
+                                                    </Form>
+                                                    <Form>
+
+                                                        <FormGroup>
+                                                            <Label for="tencn">Tên bộ môn</Label>
+                                                            <Input id="tencn" value={this.state.editData.tenbomon} onChange={(e) => {
+                                                                let { editData } = this.state;
+                                                                editData.tenbomon = e.target.value;
+                                                                this.setState({ editData });
+                                                            }} />
+                                                        </FormGroup>
+                                                    </Form>
+                                                </ModalBody>
+                                                <ModalFooter>
+                                                    <Button color="primary" disabled={!(this.state.editData.mabomon.length > 0 && this.state.editData.tenbomon.length > 0)} onClick={this.updateBM.bind(this)}>Thực hiện lưu</Button>
+                                                    <Button color="secondary" onClick={this.toggleDong.bind(this)}>Hủy bỏ</Button>
+                                                </ModalFooter>
+                                            </Modal>
+                                            <SweetAlert
+                                                show={this.state.showAlert}
+                                                warning
+                                                showCancel
+
+                                                showCloseButton
+                                                confirmBtnText="Đồng ý"
+                                                confirmBtnBsStyle="danger"
+                                                cancelBtnText="Không"
+                                                cancelBtnBsStyle="light"
+                                                title="Bạn có chắc chắn không?"
+
+                                                onConfirm={() => this.deleteBM({ mabomon: this.state.xoa.mabomon })}
+
+                                                onCancel={() => this.setState({ showAlert: false })}
+                                                focusCancelBtn
+                                            >  {"Chức vụ  " + this.state.xoa.tenbomon + " sẽ bị xóa khỏi hệ thống"}
+                                            </SweetAlert>
+                                            <SweetAlert
+                                                show={this.state.confirm}
+                                                success
+                                                confirmBtnText="Đồng ý"
+                                                confirmBtnBsStyle="primary"
+                                                onConfirm={() => this.handleConfirm()}
+
+
+                                            >  Đã xóa thành công !!!
+                                                                </SweetAlert>
 
                                         </tbody>
                                     </Table>

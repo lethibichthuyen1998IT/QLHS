@@ -235,12 +235,12 @@ class ChucVu extends React.Component {
 
 
     //edit
-    toggleEditModal() {
+    toggleDong() {
         this.setState({
             editModal: !this.state.editModal
         })
     }
-    edit(machucvu, tenchucvu) {
+    toggleEditModal(machucvu, tenchucvu) {
         this.setState({
             editData: {machucvu, tenchucvu},
             editModal: !this.state.editModal
@@ -473,67 +473,12 @@ class ChucVu extends React.Component {
                                                                 (rules.find(x => x == cns)) ?
                                                                     <td>
 
-                                                                        <Button color="default" onClick={this.edit.bind(this, cv.machucvu, cv.tenchucvu)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
+                                                                        <Button color="default" onClick={this.toggleEditModal.bind(this, cv.machucvu, cv.tenchucvu)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
                                                                         
 
-                                                                        <Modal isOpen={this.state.editModal} toggle={this.toggleEditModal.bind(this)}>
-                                                                            <ModalHeader toggle={this.toggleEditModal.bind(this)}>Chỉnh sửa</ModalHeader>
-                                                                            <ModalBody>
-                                                                                <Form>
-                                                                                    <FormGroup>
-                                                                                        <Label for="tenvaitro">Mã chức vụ</Label>
-                                                                                        <Input id="tenvaitro" value={this.state.editData.machucvu} onChange={(e) => {
-                                                                                            let { editData } = this.state;
-                                                                                            editData.machucvu = e.target.value;
-                                                                                            this.setState({ editData });
-                                                                                        }} />
-                                                                                    </FormGroup>
-
-                                                                                    <FormGroup>
-                                                                                        <Label for="tenvaitro">Tên chức vụ</Label>
-                                                                                        <Input id="tenvaitro" value={this.state.editData.tenchucvu} onChange={(e) => {
-                                                                                            let { editData } = this.state;
-                                                                                            editData.tenchucvu = e.target.value;
-                                                                                            this.setState({ editData });
-                                                                                        }} />
-                                                                                    </FormGroup>
-                                                                                </Form>
-                                                                            </ModalBody>
-                                                                            <ModalFooter>
-                                                                                <Button color="primary" disabled={!(this.state.editData.tenchucvu.length > 0 && this.state.editData.machucvu.length > 0)} onClick={this.updateCV.bind(this)}>Thực hiện lưu</Button>
-                                                                                <Button color="secondary" onClick={this.toggleEditModal.bind(this)}>Hủy bỏ</Button>
-                                                                            </ModalFooter>
-                                                                        </Modal>
+                                                                     
                                                                         <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, cv.machucvu, cv.tenchucvu)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
-                                                                        
-                                                                        <SweetAlert
-                                                                            show={this.state.showAlert}
-                                                                            warning
-                                                                            showCancel
-
-                                                                            showCloseButton
-                                                                            confirmBtnText="Đồng ý"
-                                                                            confirmBtnBsStyle="danger"
-                                                                            cancelBtnText="Không"
-                                                                            cancelBtnBsStyle="light"
-                                                                            title="Bạn có chắc chắn không?"
-
-                                                                            onConfirm={() => this.deleteCV({ machucvu: this.state.xoa.machucvu })}
-
-                                                                            onCancel={() => this.setState({ showAlert: false })}
-                                                                            focusCancelBtn
-                                                                        >  {"Chức vụ  " + this.state.xoa.tenchucvu + " sẽ bị xóa khỏi hệ thống"}
-                                                                        </SweetAlert>
-                                                                        <SweetAlert
-                                                                            show={this.state.confirm}
-                                                                            success
-                                                                            confirmBtnText="Đồng ý"
-                                                                            confirmBtnBsStyle="primary"
-                                                                            onConfirm={() => this.handleConfirm()}
-
-
-                                                                        >  Đã xóa thành công !!!
-                                                                </SweetAlert>
+                                                                       
 
                                                                     </td>
                                                                     : null
@@ -542,7 +487,63 @@ class ChucVu extends React.Component {
                                                     )
                                                 })
                                             }
+                                            <Modal isOpen={this.state.editModal} toggle={this.toggleEditModal.bind(this, this.state.editData.machucvu, this.state.editData.tenchucvu)}>
+                                                <ModalHeader toggle={this.toggleEditModal.bind(this, this.state.editData.machucvu, this.state.editData.tenchucvu)}>Chỉnh sửa</ModalHeader>
+                                                <ModalBody>
+                                                    <Form>
+                                                        <FormGroup>
+                                                            <Label for="tenvaitro">Mã chức vụ</Label>
+                                                            <Input id="tenvaitro" value={this.state.editData.machucvu} onChange={(e) => {
+                                                                let { editData } = this.state;
+                                                                editData.machucvu = e.target.value;
+                                                                this.setState({ editData });
+                                                            }} />
+                                                        </FormGroup>
 
+                                                        <FormGroup>
+                                                            <Label for="tenvaitro">Tên chức vụ</Label>
+                                                            <Input id="tenvaitro" value={this.state.editData.tenchucvu} onChange={(e) => {
+                                                                let { editData } = this.state;
+                                                                editData.tenchucvu = e.target.value;
+                                                                this.setState({ editData });
+                                                            }} />
+                                                        </FormGroup>
+                                                    </Form>
+                                                </ModalBody>
+                                                <ModalFooter>
+                                                    <Button color="primary" disabled={!(this.state.editData.tenchucvu.length > 0 && this.state.editData.machucvu.length > 0)} onClick={this.updateCV.bind(this)}>Thực hiện lưu</Button>
+                                                    <Button color="secondary" onClick={this.toggleDong.bind(this)}>Hủy bỏ</Button>
+                                                </ModalFooter>
+                                            </Modal>
+
+                                            <SweetAlert
+                                                show={this.state.showAlert}
+                                                warning
+                                                showCancel
+
+                                                showCloseButton
+                                                confirmBtnText="Đồng ý"
+                                                confirmBtnBsStyle="danger"
+                                                cancelBtnText="Không"
+                                                cancelBtnBsStyle="light"
+                                                title="Bạn có chắc chắn không?"
+
+                                                onConfirm={() => this.deleteCV({ machucvu: this.state.xoa.machucvu })}
+
+                                                onCancel={() => this.setState({ showAlert: false })}
+                                                focusCancelBtn
+                                            >  {"Chức vụ  " + this.state.xoa.tenchucvu + " sẽ bị xóa khỏi hệ thống"}
+                                            </SweetAlert>
+                                            <SweetAlert
+                                                show={this.state.confirm}
+                                                success
+                                                confirmBtnText="Đồng ý"
+                                                confirmBtnBsStyle="primary"
+                                                onConfirm={() => this.handleConfirm()}
+
+
+                                            >  Đã xóa thành công !!!
+                                                                </SweetAlert>
                                         </tbody>
                                     </Table>
                                 </CardBody>

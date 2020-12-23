@@ -22,7 +22,7 @@ import Search from 'components/Search';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { TextareaAutosize } from '@material-ui/core';
 
-
+var date = new Date();
 class Thongbao extends React.Component {
 
     constructor(props) {
@@ -42,7 +42,8 @@ class Thongbao extends React.Component {
                 makhoa: 'CIT',
                 tieudethongbao: '',
                 noidungthongbao: '',
-                filethongbao:''
+                filethongbao: '',
+                ngaytb: date
 
             },
             editData: {
@@ -50,9 +51,11 @@ class Thongbao extends React.Component {
                 makhoa: 'CIT',
                 tieudethongbao: '',
                 noidungthongbao: '',
-                filethongbao: ''
+                filethongbao: '',
+                ngaytb:''
 
             },
+            
 
 
             xoa: {
@@ -67,7 +70,10 @@ class Thongbao extends React.Component {
             errors: '',
             selectedFile: '',
             progress: 0,
-            status: ''
+            status: '',
+            ct: [],
+            idxemct:[],
+            detailsModal:false
         }
 
         this.refresh = this.refresh.bind(this);
@@ -142,7 +148,7 @@ class Thongbao extends React.Component {
 
     //them file
     selectFileHandler = (event) => {
-        const fileTypes = ['application/vnd.openxmlformats-officedocument.wordprocessingml.document','pdf'];
+        const fileTypes = ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf', 'image/png', 'image/jpeg'];
         let file = event.target.files;
         console.log(`File ${file}`);
         let errMessage = [];
@@ -235,7 +241,8 @@ class Thongbao extends React.Component {
                 MAKHOA: this.state.newtb.makhoa,
                 TIEUDETHONGBAO: this.state.newtb.tieudethongbao,
                 NOIDUNGTHONGBAO: this.state.newtb.noidungthongbao,
-                FILETHONGBAO: this.state.newtb.filethongbao
+                FILETHONGBAO: this.state.newtb.filethongbao,
+                NGAYTB: this.state.newtb.ngaytb
 
             }).then((response) => {
                 //console.log(response.data);
@@ -247,7 +254,8 @@ class Thongbao extends React.Component {
                         makhoa: 'CIT',
                         tieudethongbao: '',
                         noidungthongbao: '',
-                        filethongbao: ''
+                        filethongbao: '',
+                        ngaytb:date
 
                     },
                     errors: '',
@@ -263,25 +271,44 @@ class Thongbao extends React.Component {
         }
     }
 
+    toggledetailsModal(id) {
+        axios.get('/thongbaos/' + id)
+            .then((res) => this.setState({
+                ct: res.data,
+                idxemct:id
 
+            })
+
+            );
+        this.setState({
+            detailsModal: !this.state.detailsModal
+        })
+    }
+
+    toggleDongTB() {
+        this.setState({
+            detailsModal: !this.state.detailsModal
+        })
+    }
     //edit
-    toggleEditModal() {
+    toggleDong() {
         this.setState({
             editModal: !this.state.editModal
         })
     }
-    edit(mathongbao,makhoa, tieudethongbao, noidungthongbao, filethongbao) {
+  
+    toggleEditModal(mathongbao, makhoa, tieudethongbao, noidungthongbao, filethongbao,ngaytb) {
         this.setState({
-            editData: { mathongbao, makhoa, tieudethongbao, noidungthongbao, filethongbao },
+            editData: { mathongbao, makhoa, tieudethongbao, noidungthongbao, filethongbao, ngaytb},
             editModal: !this.state.editModal
 
         });
 
     }
     updateTB() {
-        let { mathongbao, makhoa, tieudethongbao, noidungthongbao, filethongbao } = this.state.editData;
+        let { mathongbao, makhoa, tieudethongbao, noidungthongbao, filethongbao,ngaytb } = this.state.editData;
         axios.put('/thongbaos/' + this.state.editData.mathongbao,
-            { mathongbao, makhoa, tieudethongbao, noidungthongbao, filethongbao }).then((response) => {
+            { mathongbao, makhoa, tieudethongbao, noidungthongbao, filethongbao,ngaytb }).then((response) => {
 
                 this.setState({
                     editModal: false,
@@ -290,7 +317,8 @@ class Thongbao extends React.Component {
                         makhoa: 'CIT',
                         tieudethongbao: '',
                         noidungthongbao: '',
-                        filethongbao: ''
+                        filethongbao: '',
+                        ngaytb:''
                     },
                 });
                 this.refresh();
@@ -336,7 +364,7 @@ class Thongbao extends React.Component {
 
         
        
-        const { thongbao, vc, quyen, chucnang, errors } = this.state;
+        const { thongbao, vc, quyen, chucnang, errors,ct} = this.state;
         let rules = [];
         quyen.forEach((e) => {
             if (e.machucvu.trim() === vc.machucvu.trim())
@@ -439,6 +467,7 @@ class Thongbao extends React.Component {
                                                     </FormGroup>
                                                 </Col>
                                             </Row>
+                                         
 
 
 
@@ -482,15 +511,20 @@ class Thongbao extends React.Component {
                                                         <div class="content-box color-effect-1">
                                                             <p style={{ textAlign:'right', marginTop: '-30px', marginRight: '-20px', }}>  <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.mathongbao, emp.tieudethongbao)} >X </Button></p>
                                                                     <h3>{emp.tieudethongbao}</h3>
-                                                                    <div class="box-icon-wrap box-icon-effect-1 box-icon-effect-1a">
-                                                                <div class="box-icon"><i class="fa fa-bell"></i></div>
+                                                            <div class="box-icon-wrap box-icon-effect-1 box-icon-effect-1a">
+                                                                <a onClick={this.toggledetailsModal.bind(this, emp.mathongbao)}><div class="box-icon"><i class="fa fa-bell"></i></div></a>
                                                                     </div>
                                                             <p>{emp.noidungthongbao}</p>
-                                                            <Button color="light"  onClick={this.edit.bind(this, emp.mathongbao, emp.makhoa, emp.tieudethongbao, emp.noidungthongbao, emp.filethongbao)}>
+                                                            <Button color="light" onClick={this.toggleEditModal.bind(this, emp.mathongbao, emp.makhoa, emp.tieudethongbao, emp.noidungthongbao, emp.filethongbao, emp.ngaytb)}>
                                                                 Chỉnh sửa</Button>  &nbsp;
                                                            
                                                         </div>
-                                                      
+                                                    </Col>
+                                                )
+                                            })
+                                            }
+                                        </Row>
+                                    </div>
                                                   
                                                         <SweetAlert
                                                             show={this.state.showAlert}
@@ -510,6 +544,7 @@ class Thongbao extends React.Component {
                                                             focusCancelBtn
                                                         >  {"Thông báo  " + this.state.xoa.tieudethongbao + " sẽ bị xóa khỏi hệ thống"}
                                                     </SweetAlert>
+
                                                     <SweetAlert
                                                         show={this.state.confirm}
                                                         success
@@ -519,12 +554,12 @@ class Thongbao extends React.Component {
 
 
                                                     >  Đã xóa thành công !!!
-                                                                </SweetAlert>
-                                                        <Modal isOpen={this.state.editModal} toggle={this.toggleEditModal.bind(this)} size="lg" style={{ maxWidth: '700px', width: '100%' }}>
+                                                            </SweetAlert>
+                                                        <Modal isOpen={this.state.editModal} toggle={this.toggleEditModal.bind(this, this.state.editData.mathongbao, this.state.editData.makhoa, this.state.editData.tieudethongbao, this.state.editData.noidungthongbao, this.state.editData.filethongbao)} size="lg" style={{ maxWidth: '700px', width: '100%' }}>
 
-                                                            <ModalHeader toggle={this.toggleEditModal.bind(this)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '600px', color: 'black', textAlign:'center', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
+                                                            <ModalHeader toggle={this.toggleEditModal.bind(this, this.state.editData.mathongbao, this.state.editData.makhoa, this.state.editData.tieudethongbao, this.state.editData.noidungthongbao, this.state.editData.filethongbao)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '600px', color: 'black', textAlign:'center', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p>
 
-
+                                                         </ModalHeader>
                                                             <ModalBody>
 
                                                                 <Row>
@@ -555,29 +590,25 @@ class Thongbao extends React.Component {
                                                                 <Row md="12">
                                                                     <Col md="12">
                                                                     <Label htmlFor="hoten">Nội dung: </Label>
-                                                                   
+                                                                    <textarea cols="80" rows="8" id="tenchucvu" value={this.state.editData.noidungthongbao} onChange={(e) => {
+                                                                        let { editData } = this.state;
+                                                        editData.noidungthongbao = e.target.value;
+                                                                        this.setState({ editData });
+                                                                    }} />
+
                                                                     </Col>
 
 
                                                                 </Row>
-                                                                <Row md="12">
-                                                                    <Col md="12">
-                                                                        <textarea cols="80" rows="8" value={this.state.editData.noidungthongbao} onChange={(e) => {
-                                                                                let { editData } = this.state;
-                                                                                editData.noidungthongbao = e.target.value;
-                                                                                this.setState({ editData });
-                                                                        }} />
-                                                                        </Col>
-
-                                                                       
-                                                                 
-                                                                </Row>
+                                                               
                                                                 <Row>
                                                                     <Col md="12">
                                                                         <FormGroup>
-                                                                            <Label htmlFor="hoten">File đính kèm: </Label>
-                                                                            <Input required id="file" type="text" value={(this.state.editData.filethongbao).split('\\').pop()} />
-                                                                            <Input required id="file" type="file" onChange={this.selectFileHandler.bind(this)} />
+                                                        <Label htmlFor="hoten">File đính kèm: </Label>
+                                                        {(this.state.editData.filethongbao != null) ?
+                                                            <Input required id="file" type="text" value={(this.state.editData.filethongbao).split('\\').pop()} /> : null}
+                                                      
+                                                            <Input required id="file" type="file" onChange={this.selectFileHandler.bind(this)} /> 
                                                                             <br />
                                                                             <div>{this.state.progress}%</div>
 
@@ -587,24 +618,75 @@ class Thongbao extends React.Component {
                                                                     </Col>
                                                                 </Row>
 
+                                                        <Row>
+                                                            <Col md="12">
+                                                                <FormGroup>
+                                                        <Label htmlFor="hoten">Tiêu đề: </Label>
+                                                        <Input tyep="date" id="tenchucvu" value={moment(this.state.editData.ngaytb).format("YYYY-MM-DD")} onChange={(e) => {
+                                                                        let { editData } = this.state;
+                                                            editData.ngaytb = e.target.value;
+                                                                        this.setState({ editData });
+                                                                    }} />
 
+                                                                </FormGroup>
+                                                            </Col>
+                                                        </Row>
 
                                                             </ModalBody>
                                                             <ModalFooter>
-                                                                <Button color="primary" disabled={!(this.state.editData.makhoa.length > 0 && this.state.editData.tieudethongbao.length > 0 && this.state.editData.noidungthongbao.length > 0 && this.state.editData.filethongbao.length > 0)} onClick={this.updateTB.bind(this)}>Thực hiện lưu</Button>{' '}
-                                                                <Button color="danger" onClick={this.toggleEditModal.bind(this)}>Hủy bỏ</Button>
+                                                                <Button color="primary" disabled={!(this.state.editData.makhoa.length > 0 && this.state.editData.tieudethongbao.length > 0 && this.state.editData.noidungthongbao.length > 0)} onClick={this.updateTB.bind(this)}>Thực hiện lưu</Button>{' '}
+                                                                <Button color="danger" onClick={this.toggleDong.bind(this)}>Hủy bỏ</Button>
                                                             </ModalFooter>
 
-                                                        </Modal>
-                                                    </Col>
+                                    </Modal>
+                                    <Modal isOpen={this.state.detailsModal} toggle={this.toggledetailsModal.bind(this, this.state.idxemct)} size="lg" style={{ maxWidth: '500px', width: '100%' }}>
+
+                                        <ModalHeader toggle={this.toggledetailsModal.bind(this, this.state.idxemct)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '400px', color: 'black', textAlign: 'center', paddingTop: '20px', fontSize: '25px' }}><b>CHI TIẾT THÔNG BÁO</b></p>
+
+                                        </ModalHeader>
+                                        <ModalBody>
+
+                                           
+                                            <Row>
+                                                <Col md="12">
+                                                    <Label htmlFor="bm" style={{ color: 'black', fontWeight: 'bold' }}>Tiêu đề: </Label>{ct.tieudethongbao}
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col md="12">
+                                                    <Label htmlFor="bm" style={{ color: 'black', fontWeight: 'bold' }}>Nội dung thông báo:</Label>  {ct.noidungthongbao}
+                                                </Col>
+                                            </Row>
+
+                                            <Row>
+                                                <Col md="12">
+                                                    <Label htmlFor="bm" style={{ color: 'black', fontWeight: 'bold' }}>Hình ảnh:</Label>
+                                                    {(ct.filethongbao != null) ?
+                                                        <img src={"/UploadedFiles/" + (ct.filethongbao).split('\\').pop()} />
+                                                        : null
+                                                    }
+                                                        </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col md="12">
+                                                    <Label htmlFor="bm" style={{ color: 'black', fontWeight: 'bold' }}>Ngày thông báo:</Label>  {moment(ct.ngaytb).format("DD-MM-YYYY")}
+                                                </Col>
+                                            </Row>
+
+
+
+                                        </ModalBody>
+                                        <ModalFooter>
+                                            
+                                            <Button color="danger" onClick={this.toggleDongTB.bind(this)}>Đóng</Button>
+                                        </ModalFooter>
+
+                                    </Modal>
                                                     
                                                      
                                                   
-                                                )
-                                            })
-                                            }
-                                        </Row>
-                                        </div>
+                                                
+                                            
                                   
                                 </CardBody>
                             </Card>

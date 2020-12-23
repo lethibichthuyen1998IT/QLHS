@@ -71,23 +71,27 @@ namespace QuanLyHieuSuat.Controllers
 
         [HttpDelete("{id}")]
 
-        public int Delete(string id)
+        public IActionResult Delete(string id)
         {
             try
             {
 
-                Chucdanh cd = db.Chucdanh.Find(id);
+                Chucdanh cn = db.Chucdanh.Find(id);
 
-                if (cd != null)
+                if (cn != null)
                 {
+                    if (db.Vienchuc.Where(x => x.Machucdanh == cn.Machucdanh).Count() > 0)
+                    {
+                        return BadRequest();
+                    }
 
-                    db.Chucdanh.Remove(cd);
+                    db.Chucdanh.Remove(cn);
                     db.SaveChanges();
-                    return 1;
+                    return Ok();
                 }
                 else
                 {
-                    return 0;
+                    return BadRequest("Không tìm thấy id này!");
                 }
             }
             catch
@@ -98,5 +102,5 @@ namespace QuanLyHieuSuat.Controllers
 
 
 
-    }
+        }
 }

@@ -15,6 +15,7 @@ import routes from "routes.js";
 
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 import PhieuDanhGia from 'views/Admin/PhieuDanhGia.js';
+import EditDG from 'views/Admin/EditDG.js';
 import bgImage from "assets/img/1.jpg";
 import logo from "assets/img/logo2.png";
 import { withWidth } from "@material-ui/core";
@@ -36,6 +37,7 @@ const switchRoutes = (
       return null;
     })}
         <Route path="/admin/xemct/:id" component={PhieuDanhGia} />
+        <Route path="/admin/khoadg/:id" component={EditDG} />
         <Redirect from="/admin" to="/admin/dashboard" />
        
   </Switch>

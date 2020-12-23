@@ -13,7 +13,7 @@ namespace QuanLyHieuSuat.DTO
         public string Tenchucvu { get; set; }
         public string Machucdanh { get; set; }
         public string Tenchucdanh { get; set; }
-        public int Manamhoc { get; set; }
+        public int? Manamhoc { get; set; }
         public string Hangchucdanh { get; set; }
         public string Mabomon { get; set; }
         public string Tenbomon { get; set; }

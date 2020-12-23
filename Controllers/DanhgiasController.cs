@@ -51,7 +51,7 @@ namespace QuanLyHieuSuat.Controllers
                 var dg = from a in db.Danhgia
                          join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
                          join c in db.Namhoc on a.Manamhoc equals c.Manamhoc
-
+                         
                          select new DanhGiaDTO()
                          {
                              Masodanhgia = a.Masodanhgia,
@@ -353,6 +353,57 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
+        [HttpGet("Vienchuc/{idvc}/{idnh}")]
+        public DanhGiaDTO ctvienchuc(string idvc, int idnh)
+        {
+            try
+            {
+                var dg = from a in db.Danhgia
+                         join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
+                         join c in db.Namhoc on a.Manamhoc equals c.Manamhoc
+                         join d in db.Chucdanh on b.Machucdanh equals d.Machucdanh
+                         join e in db.Bomon on b.Mabomon equals e.Mabomon
+                         join f in db.Khoa on e.Makhoa equals f.Makhoa
+                         where a.Mavienchuc ==idvc && a.Manamhoc==idnh
+                         select new DanhGiaDTO()
+                         {
+                             Machucdanh = d.Machucdanh,
+                             Tenchucdanh = d.Tenchucdanh,
+                             Tenkhoa = f.Tenkhoa,
+                             Hangchucdanh = d.Hangchucdanh,
+                             Tenbomon = e.Tenbomon,
+                             Masodanhgia = a.Masodanhgia,
+                             Manamhoc = c.Manamhoc,
+                             Tennamhoc = c.Tennamhoc,
+                             Mavienchuc = b.Mavienchuc,
+                             Hoten = b.Hoten,
+                             Kqth = a.Kqth,
+                             Daoduc = a.Daoduc,
+                             Trachnhiem = a.Trachnhiem,
+                             Khac = a.Khac,
+                             Uudiem = a.Uudiem,
+                             Nhuocdiem = a.Nhuocdiem,
+                             Loai = a.Loai,
+                             Ykbm = a.Ykbm,
+
+                             Bomon = a.Bomon,
+
+                             Ykienkhoa = a.Ykienkhoa,
+                             Khoa = a.Khoa,
+                             Ngayvcdg = a.Ngayvcdg,
+                             Ngaybmdg = a.Ngaybmdg,
+                             Ngaykhoadg = a.Ngaykhoadg
+
+
+
+                         };
+                return dg.SingleOrDefault();
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
 
         [HttpPost]
@@ -379,12 +430,12 @@ namespace QuanLyHieuSuat.Controllers
 
 
 
-        [HttpPut("Vienchuc/{idvc}/{idnh}")]
-        public int Edit(Danhgia dg, string idvc, int idnh)
+        [HttpPut("{id}")]
+        public int Edit(Danhgia dg)
         {
             try
             {
-                Danhgia dgia = db.Danhgia.SingleOrDefault(x => x.Mavienchuc == idvc && x.Manamhoc == idnh);
+                Danhgia dgia = db.Danhgia.Find(dg.Masodanhgia);
                 dgia.Masodanhgia = dgia.Masodanhgia;
                 dgia.Manamhoc = dgia.Manamhoc;
                 dgia.Mavienchuc = dgia.Mavienchuc;

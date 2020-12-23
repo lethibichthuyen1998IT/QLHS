@@ -20,9 +20,25 @@ namespace QuanLyHieuSuat.Controllers
         [HttpGet]
         public IEnumerable<Namhoc> Index()
         {
+            var nh = (from a in db.Namhoc orderby a.Manamhoc descending select a);
             try
             {
-                return db.Namhoc.ToList();
+             
+                return nh.ToList();
+                
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        [HttpGet("namhoc")]
+        public Namhoc nhcuoi()
+        {
+            try
+            {
+                var nh = (from a in db.Namhoc orderby a.Manamhoc descending select a);
+                return nh.FirstOrDefault();
             }
             catch
             {

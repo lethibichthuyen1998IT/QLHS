@@ -20,6 +20,8 @@ import moment from 'moment';
 import Search from 'components/Search';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import Pagination from "react-paginate";
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css'
 
 
 class DanhmucVienchuc extends React.Component {
@@ -28,9 +30,16 @@ class DanhmucVienchuc extends React.Component {
 
         super(props);
         this.state = {
-            vienchuc: [],
+            vienchuc:[],
+            thud: [],
+            cntt: [],
+            mmt: [],
+            khmt: [],
+            cnpm: [],
+            httt:[],
             vc:[],
             source: [],
+          
             showAlert: false,
             confirm: false,
             activePage: 1,
@@ -62,24 +71,7 @@ class DanhmucVienchuc extends React.Component {
                 ngaylamviec: ''
              
             },
-            detailsData: {
-                Mavienchuc: '',
-                Mabomon: '',
-                Tenbomon:'',
-                Machucvu: '',
-                Tenchucvu: '',
-                Machucdanh: '',
-                Tenchucdanh:'',
-                Hoten: '',
-                Sdt: '',
-                Ngaysinh: '',
-                Gioitinh: '',
-                Diachi: '',
-                Mail: '',
-                Matkhau: '',
-                Ngaylamviec: ''
-               
-            },
+            detailsData: [],
             user: JSON.parse(localStorage.getItem('user')),
             quyen: [],
             chucnang:[],
@@ -93,6 +85,7 @@ class DanhmucVienchuc extends React.Component {
             detailModal: false,
             valueSearch: '',
             errors: '',
+            idxemct:'',
             vcbm:[]
         }
         this.refresh = this.refresh.bind(this);
@@ -111,13 +104,50 @@ class DanhmucVienchuc extends React.Component {
                 vcbm: res.data,
                 source: res.data,
             })
-            );
+        );
         axios.get('/Vienchucs/')
             .then((res) => this.setState({
                 vienchuc: res.data,
                 source: res.data,
             })
+            );
+        axios.get('/Vienchucs/cntt')
+            .then((res) => this.setState({
+                cntt: res.data,
+               
+            })
         );
+             
+        axios.get('/Vienchucs/thud')
+            .then((res) => this.setState({
+                thud: res.data,
+              
+            })
+        );
+        axios.get('/Vienchucs/cnpm')
+            .then((res) => this.setState({
+                cnpm: res.data,
+               
+            })
+        );
+        axios.get('/Vienchucs/khmt')
+            .then((res) => this.setState({
+                khmt: res.data,
+                
+            })
+        );
+        axios.get('/Vienchucs/mtt')
+            .then((res) => this.setState({
+                mmt: res.data,
+               
+            })
+        );
+        axios.get('/Vienchucs/httt')
+            .then((res) => this.setState({
+                httt: res.data,
+                
+            })
+            );
         axios.get('/quyens/')
             .then((res) => this.setState({
                 quyen: res.data,
@@ -186,6 +216,7 @@ class DanhmucVienchuc extends React.Component {
             valueSearch: search
         });
     }
+
     //search bm
     handleSearchBM = (search) => {
 
@@ -223,13 +254,49 @@ class DanhmucVienchuc extends React.Component {
                 source: res.data,
             })
             );
-        axios.get('/vienchucs')
+        axios.get('/Vienchucs/')
             .then((res) => this.setState({
                 vienchuc: res.data,
-                showAlert: false,
-                activePage:1
-            }));
-      
+                source: res.data,
+            })
+            );
+        axios.get('/Vienchucs/cntt')
+            .then((res) => this.setState({
+                cntt: res.data,
+
+            })
+            );
+
+        axios.get('/Vienchucs/thud')
+            .then((res) => this.setState({
+                thud: res.data,
+
+            })
+            );
+        axios.get('/Vienchucs/cnpm')
+            .then((res) => this.setState({
+                cnpm: res.data,
+
+            })
+            );
+        axios.get('/Vienchucs/khmt')
+            .then((res) => this.setState({
+                khmt: res.data,
+
+            })
+            );
+        axios.get('/Vienchucs/mtt')
+            .then((res) => this.setState({
+                mmt: res.data,
+
+            })
+            );
+        axios.get('/Vienchucs/httt')
+            .then((res) => this.setState({
+                httt: res.data,
+
+            })
+            );
         axios.get('/quyens/')
             .then((res) => this.setState({
                 quyen: res.data,
@@ -270,13 +337,38 @@ class DanhmucVienchuc extends React.Component {
             AddModal: !this.state.AddModal
         })
     }
-    addVC() {
-       
-     
+
+toggleDetailsModal(id) {
+    axios.get('/Vienchucs/' + id)
+        .then((res) => {
+            this.setState({ detailsData: res.data })
+        });
+    this.setState({
+        detailModal: !this.state.detailModal,
+        idxemct: id
+
+
+    })
+    }
+    toggleDongDetails() {
+        this.setState({
+            detailModal: !this.state.detailModal,
+            idxemct: ''
+
+
+        })
+    }
+    toggleDongEdit() {
+        this.setState({
+            editModal: !this.state.editModal,
             
-        
-                axios.post('/vienchucs', {
-                 
+
+
+        })
+    }
+
+
+    addVC(){       axios.post('/vienchucs/', {
                     MABOMON: this.state.newvc.Mabomon,
                     MACHUCDANH: this.state.newvc.Machucdanh,
                     MACHUCVU: this.state.newvc.Machucvu,
@@ -323,22 +415,26 @@ class DanhmucVienchuc extends React.Component {
 
 
     //edit
-    toggleEditModal() {
+    toggleEditModal(Mavienchuc, Mabomon, Machucdanh, Machucvu, Hoten, Diachi, Gioitinh, Sdt, Ngaysinh, Ngaylamviec) {
         this.setState({
             editModal: !this.state.editModal,
+            editData: {
+                mavienchuc: Mavienchuc,
+                mabomon: Mabomon,
+                machucdanh: Machucdanh,
+                machucvu: Machucvu,
+                hoten: Hoten,
+                diachi: Diachi,
+                gioitinh: Gioitinh,
+                sdt: Sdt,
+                ngaysinh: Ngaysinh,
+                ngaylamviec: Ngaylamviec
+            }
+            
           
         })
     }
-    edit(mavienchuc, mabomon, machucdanh, machucvu, hoten, diachi, gioitinh, sdt, ngaysinh,ngaylamviec) {
-        this.setState({
-            editData: {
-                mavienchuc, mabomon, machucdanh, machucvu, hoten, diachi, gioitinh, sdt, ngaysinh, ngaylamviec
-            },
-            editModal: !this.state.editModal
-
-        });
-       
-    }
+   
     updateVC() {
       
         let { mavienchuc, mabomon, machucdanh, machucvu, hoten, diachi, gioitinh, sdt, ngaysinh, ngaylamviec } = this.state.editData;
@@ -347,7 +443,7 @@ class DanhmucVienchuc extends React.Component {
         else {
             gt = true;
         }
-        axios.put('/vienchucs/' + this.state.editData.mavienchuc,
+        axios.put('/vienchucs/' + mavienchuc,
             {
                 mavienchuc: mavienchuc,
                 mabomon: mabomon,
@@ -385,29 +481,13 @@ class DanhmucVienchuc extends React.Component {
 
     }
 
-    //details
-    toggleDetailModal() {
-      
-        this.setState({
-
-            detailModal: !this.state.detailModal
-
-
-        });
-    }
-    details(mavienchuc, mabomon,machucdanh,machucvu , tenchucvu, tenchucdanh, tenbomon, hoten,diachi, gioitinh, sdt, ngaysinh, ngaylamviec, mail, matkhau) {
-
-        this.setState({
-            detailsData: {mavienchuc, mabomon, machucdanh, machucvu, tenchucvu, tenchucdanh, tenbomon, hoten, diachi, gioitinh, sdt, ngaysinh, ngaylamviec, mail, matkhau},
-            detailModal: !this.state.detailModal,
-           
-        });
+   
 
 
 
 
 
-    }
+    
 
     //delete
     deleteVC = (mavienchuc) => {
@@ -433,7 +513,7 @@ class DanhmucVienchuc extends React.Component {
     handleShowAlert = (mavienchuc, hoten) => {
         this.setState({
             showAlert: !this.state.showAlert,
-            xoa: { mavienchuc: mavienchuc, hoten }
+            xoa: { mavienchuc: mavienchuc, hoten: hoten }
         });
     }
         
@@ -452,7 +532,7 @@ class DanhmucVienchuc extends React.Component {
     //render
     render() {
 
-        const { vienchuc, vcbm } = this.state;
+        const { vienchuc, vcbm, detailsData,thud,mmt,cntt,httt,khmt,cnpm } = this.state;
         const { errors, msg } = this.state;
         const { vc, quyen, chucnang } = this.state;
         const ar = [];
@@ -474,8 +554,10 @@ class DanhmucVienchuc extends React.Component {
             if (x.tenchucnang.toLowerCase() === name1.toLowerCase())
                 cn.push(x.machucnang);
         });
-        console.log(cns);
+        console.log(detailsData);
+        console.log(vienchuc);
 
+       
       
     return(
         <>
@@ -601,7 +683,7 @@ class DanhmucVienchuc extends React.Component {
                                                         <Col className="pl-1" md="4">
                                                             <FormGroup>
                                                                 <Label htmlFor="sdt">Số điện thoại <strong className="text-danger">(*) </strong></Label>
-                                                            <Input id="sdt" type="tel" value={this.state.newvc.Sdt} onChange={(e) => {
+                                                            <Input id="sdt" type="number" value={this.state.newvc.Sdt} onChange={(e) => {
                                                                 let { newvc } = this.state;
                                                                 newvc.Sdt = e.target.value;
                                                                 if (this.state.newvc.Sdt.length > 11 || this.state.newvc.Sdt.length < 10) {
@@ -707,7 +789,21 @@ class DanhmucVienchuc extends React.Component {
 
                                             </Modal>
                                         </CardHeader>
-                                        <CardBody>
+                                    <CardBody>
+                                        <Tabs>
+                                        <TabList>
+
+                                            <Tab>Tất cả viên chức</Tab>
+                                            <Tab>Công nghệ thông tin</Tab>
+                                            <Tab>Tin học ứng dụng</Tab>
+                                            <Tab>Công nghệ phần mền</Tab>
+                                            <Tab>Mạng máy tính và truyền thông</Tab>
+                                            <Tab>Khoa học máy tính</Tab>
+                                            <Tab>Hệ thống thông tin</Tab>
+
+                                        </TabList>
+                                        <TabPanel>
+                                                
                                             <Table className="table table-hover">
                                                 <thead className="text-primary">
                                                     <tr>
@@ -740,297 +836,17 @@ class DanhmucVienchuc extends React.Component {
                                                                         <td>
 
 
-                                                                            <Button color="warning" onClick={this.details.bind(this, emp.mavienchuc, emp.mabomon, emp.machucdanh, emp.machucvu, emp.tenchucvu, emp.tenchucdanh, emp.tenbomon, emp.hoten, emp.diachi, emp.gioitinh, emp.sdt, emp.ngaysinh, emp.ngaylamviec, emp.mail, emp.matkhau)} style={{ width: '40px' }}> <i className="fa fa-info" aria-hidden="true"></i></Button> &nbsp;
+                                                                            <Button  color="warning" onClick={this.toggleDetailsModal.bind(this, emp.mavienchuc)} style={{ width: '40px' }}> <i className="fa fa-info" aria-hidden="true"></i></Button> &nbsp;
 
-                                                                <Modal isOpen={this.state.detailModal} toggle={this.toggleDetailModal.bind(this)}>
-                                                                                <ModalHeader toggle={this.toggleDetailModal.bind(this)} style={{ backgroundColor: '#D6EAF8', height: '80px' }} > <p style={{ width: '430px', color: 'black', paddingLeft: '10px', paddingTop: '10px', fontSize: '25px' }}><b>THÔNG TIN CHI TIẾT VIÊN CHỨC</b></p></ModalHeader>
+                                                                
 
-                                                                                <Form>
-
-
-                                                                                    <ModalBody>
-                                                                                        <Row>
-                                                                                            <Col md="6">
-                                                                                                <FormGroup>
-                                                                                                    <Label htmlFor="hoten" style={{ color: 'black', fontWeight: 'bold' }}>Mã số cán bộ: </Label> {this.state.detailsData.mavienchuc}
-
-                                                                                                </FormGroup>
-                                                                                            </Col>
-
-
-                                                                                            <Col md="6">
-                                                                                                <FormGroup>
-
-                                                                                                    <Label htmlFor="bm" style={{ color: 'black', fontWeight: 'bold' }}>Bộ môn: </Label> {this.state.detailsData.tenbomon}
-
-                                                                                                </FormGroup>
-
-                                                                                            </Col>
-                                                                                        </Row>
-                                                                                        <Row>
-                                                                                            <Col md="6">
-                                                                                                <FormGroup>
-                                                                                                    <Label htmlFor="hoten" style={{ color: 'black', fontWeight: 'bold' }}>Họ và tên: </Label> {this.state.detailsData.hoten}
-
-                                                                                                </FormGroup>
-                                                                                            </Col>
-
-                                                                                            <Col md="6">
-                                                                                                <FormGroup>
-
-                                                                                                    <Label htmlFor="cd" style={{ color: 'black', fontWeight: 'bold' }}>Chức danh: </Label> {this.state.detailsData.tenchucdanh}
-
-                                                                                                </FormGroup>
-                                                                                            </Col>
-                                                                                        </Row>
-
-                                                                                        <Row>
-                                                                                            <Col md="6">
-                                                                                                <FormGroup>
-                                                                                                    <Label htmlFor="gt" style={{ color: 'black', fontWeight: 'bold' }}>Giới tính: </Label> {this.state.detailsData.gioitinh ? 'Nam' : 'Nữ'}
-
-                                                                                                </FormGroup>
-
-                                                                                            </Col>
-
-                                                                                            <Col className="pr-1" md="6">
-                                                                                                <FormGroup>
-
-                                                                                                    <Label htmlFor="cvu" style={{ color: 'black', fontWeight: 'bold' }}>Chức vụ: </Label> {this.state.detailsData.tenchucvu}
-
-                                                                                                </FormGroup>
-                                                                                            </Col>
-                                                                                        </Row>
-                                                                                        <Row>
-                                                                                            <Col className="pr-1" md="6">
-                                                                                                <FormGroup>
-                                                                                                    <Label htmlFor="ngaysinh" style={{ color: 'black', fontWeight: 'bold' }}>Ngày sinh: </Label> {moment(this.state.detailsData.ngaysinh).format("DD-MM-YYYY")}
-
-                                                                                                </FormGroup>
-
-                                                                                            </Col>
-                                                                                            <Col className="pr-1" md="6">
-                                                                                                <FormGroup>
-
-                                                                                                    <Label htmlFor="nlv" style={{ color: 'black', fontWeight: 'bold' }}>Ngày làm việc: </Label> {moment(this.state.detailsData.ngaylamviec).format("DD-MM-YYYY")}
-
-                                                                                                </FormGroup>
-                                                                                            </Col>
-                                                                                        </Row>
-                                                                                        <Row>
-                                                                                            <Col md="6">
-                                                                                                <FormGroup>
-                                                                                                    <Label htmlFor="sdt" style={{ color: 'black', fontWeight: 'bold' }}>Số điện thoại: </Label> {this.state.detailsData.sdt}
-
-                                                                                                </FormGroup>
-                                                                                            </Col>
-                                                                                            <Col md="6">
-                                                                                                <FormGroup>
-                                                                                                    <Label htmlFor="mail" style={{ color: 'black', fontWeight: 'bold' }}>Mail: </Label> {this.state.detailsData.mail}
-
-                                                                                                </FormGroup>
-                                                                                            </Col>
-                                                                                        </Row>
-                                                                                        <Row>
-                                                                                            <Col md="12">
-                                                                                                <FormGroup>
-
-                                                                                                    <Label htmlFor="diachi" style={{ color: 'black', fontWeight: 'bold' }}>Địa chỉ: </Label> {this.state.detailsData.diachi}
-
-                                                                                                </FormGroup>
-                                                                                            </Col>
-                                                                                        </Row>
-
-
-
-                                                                                    </ModalBody>
-
-                                                                                    <ModalFooter>
-
-
-
-                                                                                        <Button color="danger" onClick={this.toggleDetailModal.bind(this)}>Trở về</Button>
-                                                                                    </ModalFooter>
-
-
-
-
-
-
-                                                                                </Form>
-
-
-                                                                            </Modal>
-
-                                                                            <Modal isOpen={this.state.editModal} toggle={this.toggleEditModal.bind(this)} size="lg" style={{ maxWidth: '900px', width: '100%', marginLeft: '300px' }}>
-
-                                                                                <ModalHeader toggle={this.toggleEditModal.bind(this)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '800px', color: 'black', textAlign: 'center', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
-
-
-                                                                                <ModalBody>
-
-                                                                                    <Row>
-                                                                                        <Col md="12"> <p className="text-danger"> (*) Bắt buộc</p></Col>
-
-                                                                                        <Col className="pr-1" md="4">
-                                                                                            <FormGroup>
-                                                                                                <Label htmlFor="iddonvi">Bộ môn <strong className="text-danger">(*) </strong></Label>
-                                                                                                <Input type="select" id="mabomon" value={this.state.user.mabomon} onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.mabomon = e.target.value;
-                                                                                                    this.setState({ editData });
-                                                                                                }} >
-                                                                                                    <option value='0' >--Chọn bộ môn--</option>
-                                                                                                    {
-                                                                                                        this.state.listBomon.map((bm) =>
-                                                                                                            <option key={bm.mabomon} value={bm.mabomon}>{bm.tenbomon}</option>)
-                                                                                                    }
-                                                                                                </Input>
-                                                                                            </FormGroup>
-                                                                                        </Col>
-                                                                                        <Col className="pl-3" md="4">
-                                                                                            <FormGroup>
-                                                                                                <Label htmlFor="iddonvi">Chức vụ <strong className="text-danger">(*) </strong></Label>
-                                                                                                <Input type="select" id="machucvu" value={this.state.editData.machucvu} onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.machucvu = e.target.value;
-                                                                                                    this.setState({ editData });
-                                                                                                }} >
-                                                                                                    <option value='0' >--Chọn chức vụ--</option>
-                                                                                                    {
-                                                                                                        this.state.listChucvu.map((cvu) =>
-                                                                                                            <option key={cvu.machucvu} value={cvu.machucvu}>{cvu.tenchucvu}</option>)
-                                                                                                    }
-                                                                                                </Input>
-                                                                                            </FormGroup>
-
-                                                                                        </Col>
-
-                                                                                        <Col className="pl-1" md="4">
-                                                                                            <FormGroup>
-                                                                                                <Label htmlFor="iddonvi">Chức danh <strong className="text-danger">(*) </strong></Label>
-                                                                                                <Input type="select" id="machucdanh" value={this.state.editData.machucdanh} onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.machucdanh = e.target.value;
-                                                                                                    this.setState({ editData });
-                                                                                                }} >
-                                                                                                    <option value='0' >--Chọn chức danh--</option>
-                                                                                                    {
-                                                                                                        this.state.listChucdanh.map((cd) =>
-                                                                                                            <option key={cd.machucdanh} value={cd.machucdanh}>{cd.tenchucdanh}</option>)
-                                                                                                    }
-                                                                                                </Input>
-                                                                                            </FormGroup>
-                                                                                        </Col>
-                                                                                    </Row>
-                                                                                    <Row>
-                                                                                        <Col className="pr-1" md="2">
-                                                                                            <FormGroup>
-
-                                                                                                <Label htmlFor="diachi">Giới tính</Label>
-                                                                                                <Input type="select" id="gioitinh" value={this.state.editData.gioitinh} onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.gioitinh = e.target.value;
-                                                                                                    this.setState({ editData });
-                                                                                                }} >
-                                                                                                   
-                                                                                                    <option value='true'>Nam </option>
-                                                                                                    <option value='false'>Nữ </option>
-                                                                                                </Input>
-
-                                                                                            </FormGroup>
-                                                                                        </Col>
-
-                                                                                        <Col className="pl-3" md="6" style={{ marginTop: '-7px' }}>
-                                                                                            <FormGroup>
-                                                                                                <Label htmlFor="hoten">Họ tên <strong className="text-danger">(*) </strong></Label>
-                                                                                                <Input id="hoten" required value={this.state.editData.hoten} onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.hoten = e.target.value;
-                                                                                                    this.setState({ editData });
-                                                                                                }} placeholder="Nhập họ tên" />
-                                                                                            </FormGroup>
-                                                                                        </Col>
-
-                                                                                        <Col className="pl-1" md="4">
-                                                                                            <FormGroup>
-                                                                                                <Label htmlFor="sdt">Số điện thoại <strong className="text-danger">(*) </strong></Label>
-                                                                                                <Input id="sdt" type="tel" value={this.state.editData.sdt} onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.sdt = e.target.value;
-                                                                                                    if (this.state.editData.sdt.length > 11 || this.state.editData.sdt.length < 10) {
-                                                                                                        this.setState({
-                                                                                                            msg: "Số điện thoại từ 10 đến 11 chữ số",
-                                                                                                        })
-                                                                                                    }
-                                                                                                    else {
-                                                                                                        this.setState({ editData, msg: '' });
-                                                                                                    }
-                                                                                                }} placeholder="Nhập số điện thoại" />
-                                                                                                {
-                                                                                                    (msg) ?
-                                                                                                        <p className="text-danger">{msg}</p> : null
-                                                                                                }
-
-                                                                                            </FormGroup>
-                                                                                        </Col>
-
-                                                                                    </Row>
-                                                                                    <Row>
-                                                                                        <Col className="pr-1" md="6">
-                                                                                            <FormGroup>
-                                                                                                <Label htmlFor="ngaysinh">Ngày sinh <strong className="text-danger">(*) </strong></Label>
-                                                                                                <Input type="date" id="ngaysinh" value={moment(this.state.editData.ngaysinh).format("YYYY-MM-DD")}  onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.ngaysinh = e.target.value;
-                                                                                                    this.setState({ editData });
-                                                                                                }} />
-                                                                                            </FormGroup>
-                                                                                        </Col>
-
-
-                                                                                        <Col className="pr-1" md="6">
-                                                                                            <FormGroup>
-                                                                                                <Label htmlFor="ngaylamviec">Ngày bắt đầu làm việc <strong className="text-danger">(*) </strong></Label>
-                                                                                                <Input type="date" id="ngaylamvec" value={moment(this.state.editData.ngaylamviec).format("YYYY-MM-DD")}  onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.ngaylamviec = e.target.value;
-                                                                                                    this.setState({ editData });
-                                                                                                }} />
-                                                                                            </FormGroup>
-                                                                                        </Col>
-                                                                                    </Row>
-
-                                                                                    <Row>
-                                                                                        <Col md="12">
-                                                                                            <FormGroup>
-
-                                                                                                <Label htmlFor="diachi">Địa chỉ <strong className="text-danger">(*) </strong></Label>
-                                                                                                <Input type="textarea" id="diachi" value={this.state.editData.diachi} onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.diachi = e.target.value;
-                                                                                                    this.setState({ editData });
-                                                                                                }} placeholder="Nhập địa chỉ" />
-                                                                                            </FormGroup>
-                                                                                        </Col>
-                                                                                    </Row>
-
-                                                                                  
-
-
-                                                                                </ModalBody>
-                                                                                <ModalFooter>
-                                                                                    <Button color="primary" disabled={!(this.state.editData.machucdanh.length > 0 && this.state.editData.machucvu.length > 0 && this.state.editData.hoten.length > 0 && this.state.editData.sdt.length > 0 &&  this.state.editData.ngaylamviec.length > 0 && this.state.editData.ngaysinh.length > 0 && this.state.editData.diachi.length > 0)} onClick={this.updateVC.bind(this)}>Thực hiện lưu</Button>{' '}
-                                                                                    <Button color="danger" onClick={this.toggleEditModal.bind(this)}>Hủy bỏ</Button>
-                                                                                </ModalFooter>
-
-                                                                            </Modal>
+                                                                           
 
 
                                                                             {(this.state.user.mavienchuc == emp.mavienchuc)
                                                                                 ? <strong>(Tôi)</strong> :
 
-                                                                                <strong><Button color="default" onClick={this.edit.bind(this, emp.mavienchuc, emp.mabomon, emp.machucdanh, emp.machucvu, emp.hoten, emp.diachi, emp.gioitinh, emp.sdt, emp.ngaysinh, emp.ngaylamviec)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
+                                                                                <strong><Button color="default" onClick={this.toggleEditModal.bind(this, emp.mavienchuc, emp.mabomon, emp.machucdanh, emp.machucvu, emp.hoten, emp.diachi, emp.gioitinh, emp.sdt, emp.ngaysinh, emp.ngaylamviec)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
                                                                     <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.mavienchuc, emp.hoten)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
                                                                                 </strong>
                                                                             }
@@ -1039,46 +855,730 @@ class DanhmucVienchuc extends React.Component {
 
 
 
-                                                                            <SweetAlert
-                                                                                show={this.state.showAlert}
-                                                                                warning
-                                                                                showCancel
-
-                                                                                showCloseButton
-                                                                                confirmBtnText="Đồng ý"
-                                                                                confirmBtnBsStyle="danger"
-                                                                                cancelBtnText="Không"
-                                                                                cancelBtnBsStyle="light"
-                                                                                title="Bạn có chắc chắn không?"
-
-                                                                                onConfirm={() => this.deleteVC({ mavienchuc: this.state.xoa.mavienchuc })}
-
-                                                                                onCancel={() => this.setState({ showAlert: false })}
-                                                                                focusCancelBtn
-                                                                            >  {"Toàn bộ thông tin của  " + this.state.xoa.hoten + " (" + this.state.xoa.mavienchuc + ") sẽ bị xóa khỏi hệ thống"}
-                                                                            </SweetAlert>
-
-                                                                            <SweetAlert
-                                                                                show={this.state.confirm}
-                                                                                success
-                                                                                confirmBtnText="Đồng ý"
-                                                                                confirmBtnBsStyle="primary"
-                                                                                onConfirm={() => this.handleConfirm()}
-
-
-                                                                            >  Đã xóa thành công !!!
-                                                                </SweetAlert>
+                                                                           
 
                                                                         </td> : null}
 
                                                                 </tr>
                                                             )
                                                         })
-                                                    }
 
-                                                </tbody>
-                                            </Table>
-                                        </CardBody>
+                                                    
+                                                }
+                                            </tbody>
+                                                </Table>
+                                            </TabPanel>
+                                            <TabPanel>
+
+                                                <Table className="table table-hover">
+                                                    <thead className="text-primary">
+                                                        <tr>
+                                                            <th>STT</th>
+                                                            <th>Mã số</th>
+                                                            <th>Họ tên</th>
+                                                            <th>Giới tính</th>
+                                                            <th>Chức danh</th>
+                                                            <th>Chức vụ</th>
+                                                            <th>Bộ môn</th>
+
+                                                            {(rules.find(x => x == cns)) ?
+                                                                <th>Thao tác</th> : null}
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {
+                                                            cntt.map((emp, index) => {
+                                                                return (
+                                                                    <tr key={emp.mavienchuc}>
+                                                                        <td>{index + 1}</td>
+                                                                        <td> {emp.mavienchuc}</td>
+                                                                        <td>{emp.hoten}</td>
+                                                                        <td>{emp.gioitinh ? 'Nam' : 'Nữ'}</td>
+                                                                        <td>{emp.tenchucdanh}</td>
+                                                                        <td>{emp.tenchucvu}</td>
+                                                                        <td>{emp.tenbomon}</td>
+                                                                        {(rules.find(x => x == cns)) ?
+                                                                            <td>
+
+
+                                                                                <Button color="warning" onClick={this.toggleDetailsModal.bind(this, emp.mavienchuc)} style={{ width: '40px' }}> <i className="fa fa-info" aria-hidden="true"></i></Button> &nbsp;
+
+
+
+
+
+
+                                                                            {(this.state.user.mavienchuc == emp.mavienchuc)
+                                                                                    ? <strong>(Tôi)</strong> :
+
+                                                                                    <strong><Button color="default" onClick={this.toggleEditModal.bind(this, emp.mavienchuc, emp.mabomon, emp.machucdanh, emp.machucvu, emp.hoten, emp.diachi, emp.gioitinh, emp.sdt, emp.ngaysinh, emp.ngaylamviec)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
+                                                                    <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.mavienchuc, emp.hoten)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
+                                                                                    </strong>
+                                                                                }
+
+
+
+
+
+
+
+                                                                            </td> : null}
+
+                                                                    </tr>
+                                                                )
+                                                            })
+
+
+                                                        }
+                                                    </tbody>
+                                                </Table>
+                                            </TabPanel>
+                                            <TabPanel>
+
+                                                <Table className="table table-hover">
+                                                    <thead className="text-primary">
+                                                        <tr>
+                                                            <th>STT</th>
+                                                            <th>Mã số</th>
+                                                            <th>Họ tên</th>
+                                                            <th>Giới tính</th>
+                                                            <th>Chức danh</th>
+                                                            <th>Chức vụ</th>
+                                                            <th>Bộ môn</th>
+
+                                                            {(rules.find(x => x == cns)) ?
+                                                                <th>Thao tác</th> : null}
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {
+                                                            thud.map((emp, index) => {
+                                                                return (
+                                                                    <tr key={emp.mavienchuc}>
+                                                                        <td>{index + 1}</td>
+                                                                        <td> {emp.mavienchuc}</td>
+                                                                        <td>{emp.hoten}</td>
+                                                                        <td>{emp.gioitinh ? 'Nam' : 'Nữ'}</td>
+                                                                        <td>{emp.tenchucdanh}</td>
+                                                                        <td>{emp.tenchucvu}</td>
+                                                                        <td>{emp.tenbomon}</td>
+                                                                        {(rules.find(x => x == cns)) ?
+                                                                            <td>
+
+
+                                                                                <Button color="warning" onClick={this.toggleDetailsModal.bind(this, emp.mavienchuc)} style={{ width: '40px' }}> <i className="fa fa-info" aria-hidden="true"></i></Button> &nbsp;
+
+
+
+
+
+
+                                                                            {(this.state.user.mavienchuc == emp.mavienchuc)
+                                                                                    ? <strong>(Tôi)</strong> :
+
+                                                                                    <strong><Button color="default" onClick={this.toggleEditModal.bind(this, emp.mavienchuc, emp.mabomon, emp.machucdanh, emp.machucvu, emp.hoten, emp.diachi, emp.gioitinh, emp.sdt, emp.ngaysinh, emp.ngaylamviec)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
+                                                                    <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.mavienchuc, emp.hoten)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
+                                                                                    </strong>
+                                                                                }
+
+
+
+
+
+
+
+                                                                            </td> : null}
+
+                                                                    </tr>
+                                                                )
+                                                            })
+
+
+                                                        }
+                                                    </tbody>
+                                                </Table>
+                                            </TabPanel>
+                                            <TabPanel>
+
+                                                <Table className="table table-hover">
+                                                    <thead className="text-primary">
+                                                        <tr>
+                                                            <th>STT</th>
+                                                            <th>Mã số</th>
+                                                            <th>Họ tên</th>
+                                                            <th>Giới tính</th>
+                                                            <th>Chức danh</th>
+                                                            <th>Chức vụ</th>
+                                                            <th>Bộ môn</th>
+
+                                                            {(rules.find(x => x == cns)) ?
+                                                                <th>Thao tác</th> : null}
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {
+                                                            cnpm.map((emp, index) => {
+                                                                return (
+                                                                    <tr key={emp.mavienchuc}>
+                                                                        <td>{index + 1}</td>
+                                                                        <td> {emp.mavienchuc}</td>
+                                                                        <td>{emp.hoten}</td>
+                                                                        <td>{emp.gioitinh ? 'Nam' : 'Nữ'}</td>
+                                                                        <td>{emp.tenchucdanh}</td>
+                                                                        <td>{emp.tenchucvu}</td>
+                                                                        <td>{emp.tenbomon}</td>
+                                                                        {(rules.find(x => x == cns)) ?
+                                                                            <td>
+
+
+                                                                                <Button color="warning" onClick={this.toggleDetailsModal.bind(this, emp.mavienchuc)} style={{ width: '40px' }}> <i className="fa fa-info" aria-hidden="true"></i></Button> &nbsp;
+
+
+
+
+
+
+                                                                            {(this.state.user.mavienchuc == emp.mavienchuc)
+                                                                                    ? <strong>(Tôi)</strong> :
+
+                                                                                    <strong><Button color="default" onClick={this.toggleEditModal.bind(this, emp.mavienchuc, emp.mabomon, emp.machucdanh, emp.machucvu, emp.hoten, emp.diachi, emp.gioitinh, emp.sdt, emp.ngaysinh, emp.ngaylamviec)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
+                                                                    <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.mavienchuc, emp.hoten)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
+                                                                                    </strong>
+                                                                                }
+
+
+
+
+
+
+
+                                                                            </td> : null}
+
+                                                                    </tr>
+                                                                )
+                                                            })
+
+
+                                                        }
+                                                    </tbody>
+                                                </Table>
+                                            </TabPanel>
+                                            <TabPanel>
+
+                                                <Table className="table table-hover">
+                                                    <thead className="text-primary">
+                                                        <tr>
+                                                            <th>STT</th>
+                                                            <th>Mã số</th>
+                                                            <th>Họ tên</th>
+                                                            <th>Giới tính</th>
+                                                            <th>Chức danh</th>
+                                                            <th>Chức vụ</th>
+                                                            <th>Bộ môn</th>
+
+                                                            {(rules.find(x => x == cns)) ?
+                                                                <th>Thao tác</th> : null}
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {
+                                                            mmt.map((emp, index) => {
+                                                                return (
+                                                                    <tr key={emp.mavienchuc}>
+                                                                        <td>{index + 1}</td>
+                                                                        <td> {emp.mavienchuc}</td>
+                                                                        <td>{emp.hoten}</td>
+                                                                        <td>{emp.gioitinh ? 'Nam' : 'Nữ'}</td>
+                                                                        <td>{emp.tenchucdanh}</td>
+                                                                        <td>{emp.tenchucvu}</td>
+                                                                        <td>{emp.tenbomon}</td>
+                                                                        {(rules.find(x => x == cns)) ?
+                                                                            <td>
+
+
+                                                                                <Button color="warning" onClick={this.toggleDetailsModal.bind(this, emp.mavienchuc)} style={{ width: '40px' }}> <i className="fa fa-info" aria-hidden="true"></i></Button> &nbsp;
+
+
+
+
+
+
+                                                                            {(this.state.user.mavienchuc == emp.mavienchuc)
+                                                                                    ? <strong>(Tôi)</strong> :
+
+                                                                                    <strong><Button color="default" onClick={this.toggleEditModal.bind(this, emp.mavienchuc, emp.mabomon, emp.machucdanh, emp.machucvu, emp.hoten, emp.diachi, emp.gioitinh, emp.sdt, emp.ngaysinh, emp.ngaylamviec)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
+                                                                    <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.mavienchuc, emp.hoten)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
+                                                                                    </strong>
+                                                                                }
+
+
+
+
+
+
+
+                                                                            </td> : null}
+
+                                                                    </tr>
+                                                                )
+                                                            })
+
+
+                                                        }
+                                                    </tbody>
+                                                </Table>
+                                            </TabPanel>
+                                            <TabPanel>
+
+                                                <Table className="table table-hover">
+                                                    <thead className="text-primary">
+                                                        <tr>
+                                                            <th>STT</th>
+                                                            <th>Mã số</th>
+                                                            <th>Họ tên</th>
+                                                            <th>Giới tính</th>
+                                                            <th>Chức danh</th>
+                                                            <th>Chức vụ</th>
+                                                            <th>Bộ môn</th>
+
+                                                            {(rules.find(x => x == cns)) ?
+                                                                <th>Thao tác</th> : null}
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {
+                                                            khmt.map((emp, index) => {
+                                                                return (
+                                                                    <tr key={emp.mavienchuc}>
+                                                                        <td>{index + 1}</td>
+                                                                        <td> {emp.mavienchuc}</td>
+                                                                        <td>{emp.hoten}</td>
+                                                                        <td>{emp.gioitinh ? 'Nam' : 'Nữ'}</td>
+                                                                        <td>{emp.tenchucdanh}</td>
+                                                                        <td>{emp.tenchucvu}</td>
+                                                                        <td>{emp.tenbomon}</td>
+                                                                        {(rules.find(x => x == cns)) ?
+                                                                            <td>
+
+
+                                                                                <Button color="warning" onClick={this.toggleDetailsModal.bind(this, emp.mavienchuc)} style={{ width: '40px' }}> <i className="fa fa-info" aria-hidden="true"></i></Button> &nbsp;
+
+
+
+
+
+
+                                                                            {(this.state.user.mavienchuc == emp.mavienchuc)
+                                                                                    ? <strong>(Tôi)</strong> :
+
+                                                                                    <strong><Button color="default" onClick={this.toggleEditModal.bind(this, emp.mavienchuc, emp.mabomon, emp.machucdanh, emp.machucvu, emp.hoten, emp.diachi, emp.gioitinh, emp.sdt, emp.ngaysinh, emp.ngaylamviec)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
+                                                                    <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.mavienchuc, emp.hoten)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
+                                                                                    </strong>
+                                                                                }
+
+
+
+
+
+
+
+                                                                            </td> : null}
+
+                                                                    </tr>
+                                                                )
+                                                            })
+
+
+                                                        }
+                                                    </tbody>
+                                                </Table>
+                                            </TabPanel>
+                                            <TabPanel>
+
+                                                <Table className="table table-hover">
+                                                    <thead className="text-primary">
+                                                        <tr>
+                                                            <th>STT</th>
+                                                            <th>Mã số</th>
+                                                            <th>Họ tên</th>
+                                                            <th>Giới tính</th>
+                                                            <th>Chức danh</th>
+                                                            <th>Chức vụ</th>
+                                                            <th>Bộ môn</th>
+
+                                                            {(rules.find(x => x == cns)) ?
+                                                                <th>Thao tác</th> : null}
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {
+                                                            httt.map((emp, index) => {
+                                                                return (
+                                                                    <tr key={emp.mavienchuc}>
+                                                                        <td>{index + 1}</td>
+                                                                        <td> {emp.mavienchuc}</td>
+                                                                        <td>{emp.hoten}</td>
+                                                                        <td>{emp.gioitinh ? 'Nam' : 'Nữ'}</td>
+                                                                        <td>{emp.tenchucdanh}</td>
+                                                                        <td>{emp.tenchucvu}</td>
+                                                                        <td>{emp.tenbomon}</td>
+                                                                        {(rules.find(x => x == cns)) ?
+                                                                            <td>
+
+
+                                                                                <Button color="warning" onClick={this.toggleDetailsModal.bind(this, emp.mavienchuc)} style={{ width: '40px' }}> <i className="fa fa-info" aria-hidden="true"></i></Button> &nbsp;
+
+
+
+
+
+
+                                                                            {(this.state.user.mavienchuc == emp.mavienchuc)
+                                                                                    ? <strong>(Tôi)</strong> :
+
+                                                                                    <strong><Button color="default" onClick={this.toggleEditModal.bind(this, emp.mavienchuc, emp.mabomon, emp.machucdanh, emp.machucvu, emp.hoten, emp.diachi, emp.gioitinh, emp.sdt, emp.ngaysinh, emp.ngaylamviec)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
+                                                                    <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.mavienchuc, emp.hoten)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
+                                                                                    </strong>
+                                                                                }
+
+
+
+
+
+
+
+                                                                            </td> : null}
+
+                                                                    </tr>
+                                                                )
+                                                            })
+
+
+                                                        }
+                                                    </tbody>
+                                                </Table>
+                                            </TabPanel>
+                                        </Tabs>
+                                             
+                                                <Modal isOpen={this.state.detailModal} toggle={this.toggleDetailsModal.bind(this, this.state.idxemct)}>
+                                                    <ModalHeader toggle={this.toggleDetailsModal.bind(this, this.state.idxemct)} style={{ backgroundColor: '#D6EAF8', height: '80px' }} > <p style={{ width: '430px', color: 'black', paddingLeft: '10px', paddingTop: '10px', fontSize: '25px' }}><b>THÔNG TIN CHI TIẾT VIÊN CHỨC</b></p></ModalHeader>
+                                                 
+                                                    <Form>
+
+
+                                                        <ModalBody>
+                                                            <Row>
+                                                                <Col md="6">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="hoten" style={{ color: 'black', fontWeight: 'bold' }}>Mã số cán bộ: </Label> {detailsData.mavienchuc}
+
+                                                                    </FormGroup>
+                                                                </Col>
+
+
+                                                                <Col md="6">
+                                                                    <FormGroup>
+
+                                                                        <Label htmlFor="bm" style={{ color: 'black', fontWeight: 'bold' }}>Bộ môn: </Label> {detailsData.tenbomon}
+
+                                                                    </FormGroup>
+
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col md="6">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="hoten" style={{ color: 'black', fontWeight: 'bold' }}>Họ và tên: </Label> {detailsData.hoten}
+
+                                                                    </FormGroup>
+                                                                </Col>
+
+                                                                <Col md="6">
+                                                                    <FormGroup>
+
+                                                                        <Label htmlFor="cd" style={{ color: 'black', fontWeight: 'bold' }}>Chức danh: </Label> {detailsData.tenchucdanh}
+
+                                                                    </FormGroup>
+                                                                </Col>
+                                                            </Row>
+
+                                                            <Row>
+                                                                <Col md="6">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="gt" style={{ color: 'black', fontWeight: 'bold' }}>Giới tính: </Label> {detailsData.gioitinh ? 'Nam' : 'Nữ'}
+
+                                                                    </FormGroup>
+
+                                                                </Col>
+
+                                                                <Col className="pr-1" md="6">
+                                                                    <FormGroup>
+
+                                                                        <Label htmlFor="cvu" style={{ color: 'black', fontWeight: 'bold' }}>Chức vụ: </Label> {detailsData.tenchucvu}
+
+                                                                    </FormGroup>
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col className="pr-1" md="6">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="ngaysinh" style={{ color: 'black', fontWeight: 'bold' }}>Ngày sinh: </Label> {moment(detailsData.ngaysinh).format("DD-MM-YYYY")}
+
+                                                                    </FormGroup>
+
+                                                                </Col>
+                                                                <Col className="pr-1" md="6">
+                                                                    <FormGroup>
+
+                                                                        <Label htmlFor="nlv" style={{ color: 'black', fontWeight: 'bold' }}>Ngày làm việc: </Label> {moment(detailsData.ngaylamviec).format("DD-MM-YYYY")}
+
+                                                                    </FormGroup>
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col md="6">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="sdt" style={{ color: 'black', fontWeight: 'bold' }}>Số điện thoại: </Label> {detailsData.sdt}
+
+                                                                    </FormGroup>
+                                                                </Col>
+                                                                <Col md="6">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="mail" style={{ color: 'black', fontWeight: 'bold' }}>Mail: </Label> {detailsData.mail}
+
+                                                                    </FormGroup>
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col md="12">
+                                                                    <FormGroup>
+
+                                                                        <Label htmlFor="diachi" style={{ color: 'black', fontWeight: 'bold' }}>Địa chỉ: </Label> {detailsData.diachi}
+
+                                                                    </FormGroup>
+                                                                </Col>
+                                                            </Row>
+
+
+
+                                                        </ModalBody>
+
+                                                        <ModalFooter>
+
+
+
+                                                            <Button color="danger" onClick={this.toggleDongDetails.bind(this)}>Trở về</Button>
+                                                        </ModalFooter>
+
+
+
+
+
+
+                                                    </Form>
+
+
+                                                </Modal>
+                                                <Modal isOpen={this.state.editModal} toggle={this.toggleEditModal.bind(this, this.state.editData.mavienchuc, this.state.editData.mabomon, this.state.editData.machucdanh, this.state.editData.machucvu, this.state.editData.hoten, this.state.editData.diachi, this.state.editData.gioitinh, this.state.editData.sdt, this.state.editData.ngaysinh, this.state.editData.ngaylamviec)} size="lg" style={{ maxWidth: '900px', width: '100%', marginLeft: '300px' }}>
+
+                                                    <ModalHeader toggle={this.toggleEditModal.bind(this, this.state.editData.mavienchuc, this.state.editData.mabomon, this.state.editData.machucdanh, this.state.editData.machucvu, this.state.editData.hoten, this.state.editData.diachi, this.state.editData.gioitinh, this.state.editData.sdt, this.state.editData.ngaysinh, this.state.editData.ngaylamviec)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '800px', color: 'black', textAlign: 'center', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
+
+
+                                                    <ModalBody>
+
+                                                        <Row>
+                                                            <Col md="12"> <p className="text-danger"> (*) Bắt buộc</p></Col>
+
+                                                            <Col className="pr-1" md="4">
+                                                                <FormGroup>
+                                                                    <Label htmlFor="iddonvi">Bộ môn <strong className="text-danger">(*) </strong></Label>
+                                                                    <Input type="select" id="mabomon" value={this.state.editData.mabomon} onChange={(e) => {
+                                                                        let { editData } = this.state;
+                                                                        editData.mabomon = e.target.value;
+                                                                        this.setState({ editData });
+                                                                    }} >
+                                                                        <option value='0' >--Chọn bộ môn--</option>
+                                                                        {
+                                                                            this.state.listBomon.map((bm) =>
+                                                                                <option key={bm.mabomon} value={bm.mabomon}>{bm.tenbomon}</option>)
+                                                                        }
+                                                                    </Input>
+                                                                </FormGroup>
+                                                            </Col>
+                                                            <Col className="pl-3" md="4">
+                                                                <FormGroup>
+                                                                    <Label htmlFor="iddonvi">Chức vụ <strong className="text-danger">(*) </strong></Label>
+                                                                    <Input type="select" id="machucvu" value={this.state.editData.machucvu} onChange={(e) => {
+                                                                        let { editData } = this.state;
+                                                                        editData.machucvu = e.target.value;
+                                                                        this.setState({ editData });
+                                                                    }} >
+                                                                        <option value='0' >--Chọn chức vụ--</option>
+                                                                        {
+                                                                            this.state.listChucvu.map((cvu) =>
+                                                                                <option key={cvu.machucvu} value={cvu.machucvu}>{cvu.tenchucvu}</option>)
+                                                                        }
+                                                                    </Input>
+                                                                </FormGroup>
+
+                                                            </Col>
+
+                                                            <Col className="pl-1" md="4">
+                                                                <FormGroup>
+                                                                    <Label htmlFor="iddonvi">Chức danh <strong className="text-danger">(*) </strong></Label>
+                                                                    <Input type="select" id="machucdanh" value={this.state.editData.machucdanh} onChange={(e) => {
+                                                                        let { editData } = this.state;
+                                                                        editData.machucdanh = e.target.value;
+                                                                        this.setState({ editData });
+                                                                    }} >
+                                                                        <option value='0' >--Chọn chức danh--</option>
+                                                                        {
+                                                                            this.state.listChucdanh.map((cd) =>
+                                                                                <option key={cd.machucdanh} value={cd.machucdanh}>{cd.tenchucdanh}</option>)
+                                                                        }
+                                                                    </Input>
+                                                                </FormGroup>
+                                                            </Col>
+                                                        </Row>
+                                                        <Row>
+                                                            <Col className="pr-1" md="2">
+                                                                <FormGroup>
+
+                                                                    <Label htmlFor="diachi">Giới tính</Label>
+                                                                    <Input type="select" id="gioitinh" value={this.state.editData.gioitinh} onChange={(e) => {
+                                                                        let { editData } = this.state;
+                                                                        editData.gioitinh = e.target.value;
+                                                                        this.setState({ editData });
+                                                                    }} >
+
+                                                                        <option value='true'>Nam </option>
+                                                                        <option value='false'>Nữ </option>
+                                                                    </Input>
+
+                                                                </FormGroup>
+                                                            </Col>
+
+                                                            <Col className="pl-3" md="6" style={{ marginTop: '-7px' }}>
+                                                                <FormGroup>
+                                                                    <Label htmlFor="hoten">Họ tên <strong className="text-danger">(*) </strong></Label>
+                                                                    <Input id="hoten" required value={this.state.editData.hoten} onChange={(e) => {
+                                                                        let { editData } = this.state;
+                                                                        editData.hoten = e.target.value;
+                                                                        this.setState({ editData });
+                                                                    }} placeholder="Nhập họ tên" />
+                                                                </FormGroup>
+                                                            </Col>
+
+                                                            <Col className="pl-1" md="4">
+                                                                <FormGroup>
+                                                                    <Label htmlFor="sdt">Số điện thoại <strong className="text-danger">(*) </strong></Label>
+                                                                    <Input id="sdt" type="number" value={this.state.editData.sdt} onChange={(e) => {
+                                                                        let { editData } = this.state;
+                                                                        editData.sdt = e.target.value;
+                                                                        if (this.state.editData.sdt.length > 11 || this.state.editData.sdt.length < 10) {
+                                                                            this.setState({
+                                                                                msg: "Số điện thoại từ 10 đến 11 chữ số",
+                                                                            })
+                                                                        }
+                                                                        else {
+                                                                            this.setState({ editData, msg: '' });
+                                                                        }
+                                                                    }} placeholder="Nhập số điện thoại" />
+                                                                    {
+                                                                        (msg) ?
+                                                                            <p className="text-danger">{msg}</p> : null
+                                                                    }
+
+                                                                </FormGroup>
+                                                            </Col>
+
+                                                        </Row>
+                                                        <Row>
+                                                            <Col className="pr-1" md="6">
+                                                                <FormGroup>
+                                                                    <Label htmlFor="ngaysinh">Ngày sinh <strong className="text-danger">(*) </strong></Label>
+                                                                    <Input type="date" id="ngaysinh" value={moment(this.state.editData.ngaysinh).format("YYYY-MM-DD")} onChange={(e) => {
+                                                                        let { editData } = this.state;
+                                                                        editData.ngaysinh = e.target.value;
+                                                                        this.setState({ editData });
+                                                                    }} />
+                                                                </FormGroup>
+                                                            </Col>
+
+
+                                                            <Col className="pr-1" md="6">
+                                                                <FormGroup>
+                                                                    <Label htmlFor="ngaylamviec">Ngày bắt đầu làm việc <strong className="text-danger">(*) </strong></Label>
+                                                                    <Input type="date" id="ngaylamvec" value={moment(this.state.editData.ngaylamviec).format("YYYY-MM-DD")} onChange={(e) => {
+                                                                        let { editData } = this.state;
+                                                                        editData.ngaylamviec = e.target.value;
+                                                                        this.setState({ editData });
+                                                                    }} />
+                                                                </FormGroup>
+                                                            </Col>
+                                                        </Row>
+
+                                                        <Row>
+                                                            <Col md="12">
+                                                                <FormGroup>
+
+                                                                    <Label htmlFor="diachi">Địa chỉ <strong className="text-danger">(*) </strong></Label>
+                                                                    <Input type="textarea" id="diachi" value={this.state.editData.diachi} onChange={(e) => {
+                                                                        let { editData } = this.state;
+                                                                        editData.diachi = e.target.value;
+                                                                        this.setState({ editData });
+                                                                    }} placeholder="Nhập địa chỉ" />
+                                                                </FormGroup>
+                                                            </Col>
+                                                        </Row>
+
+
+
+
+                                                    </ModalBody>
+                                                    <ModalFooter>
+                                                        <Button color="primary" disabled={!(this.state.editData.machucdanh.length > 0 && this.state.editData.machucvu.length > 0 && this.state.editData.hoten.length > 0 && this.state.editData.sdt.length > 0 && this.state.editData.ngaylamviec.length > 0 && this.state.editData.ngaysinh.length > 0 && this.state.editData.diachi.length > 0)} onClick={this.updateVC.bind(this)}>Thực hiện lưu</Button>{' '}
+                                                        <Button color="danger" onClick={this.toggleDongEdit.bind(this)}>Hủy bỏ</Button>
+                                                    </ModalFooter>
+
+                                                </Modal>
+                                                <SweetAlert
+                                                    show={this.state.showAlert}
+                                                    warning
+                                                    showCancel
+
+                                                    showCloseButton
+                                                    confirmBtnText="Đồng ý"
+                                                    confirmBtnBsStyle="danger"
+                                                    cancelBtnText="Không"
+                                                    cancelBtnBsStyle="light"
+                                                    title="Bạn có chắc chắn không?"
+
+                                                    onConfirm={() => this.deleteVC({ mavienchuc: this.state.xoa.mavienchuc })}
+
+                                                    onCancel={() => this.setState({ showAlert: false })}
+                                                    focusCancelBtn
+                                                >  {"Toàn bộ thông tin của  " + this.state.xoa.hoten + " (" + this.state.xoa.mavienchuc + ") sẽ bị xóa khỏi hệ thống"}
+                                                </SweetAlert>
+
+                                                <SweetAlert
+                                                    show={this.state.confirm}
+                                                    success
+                                                    confirmBtnText="Đồng ý"
+                                                    confirmBtnBsStyle="primary"
+                                                    onConfirm={() => this.handleConfirm()}
+
+
+                                                >  Đã xóa thành công !!!
+                                                                </SweetAlert>
+                                               
+                                       </CardBody>
                                         <CardFooter style={{ paddingLeft: '450px' }}>
                                             </CardFooter>
                                     </Card>
@@ -1108,7 +1608,7 @@ class DanhmucVienchuc extends React.Component {
                                                     <Col md="4">
                                                         <Search
                                                             valueSearch={this.state.valueSearch}
-                                                            handleSearch={this.handleSearchBM} />
+                                                            handleSearch={this.handleSearch} />
                                                     </Col>
 
                                                 </Row>
@@ -1206,7 +1706,7 @@ class DanhmucVienchuc extends React.Component {
                                                         <Col className="pl-1" md="4">
                                                             <FormGroup>
                                                                 <Label htmlFor="sdt">Số điện thoại <strong className="text-danger">(*) </strong></Label>
-                                                                <Input id="sdt" type="tel" value={this.state.newvc.Sdt} onChange={(e) => {
+                                                                <Input id="sdt" type="number" value={this.state.newvc.Sdt} onChange={(e) => {
                                                                     let { newvc } = this.state;
                                                                     newvc.Sdt = e.target.value;
                                                                     if (this.state.newvc.Sdt.length > 11 || this.state.newvc.Sdt.length < 10) {
@@ -1313,6 +1813,10 @@ class DanhmucVienchuc extends React.Component {
                                             </Modal>
                                         </CardHeader>
                                         <CardBody>
+                                            
+
+
+                                          
                                             <Table className="table table-hover">
                                                 <thead className="text-primary">
                                                     <tr>
@@ -1345,297 +1849,17 @@ class DanhmucVienchuc extends React.Component {
                                                                         <td>
 
 
-                                                                            <Button color="warning" onClick={this.details.bind(this, emp.mavienchuc, emp.mabomon, emp.machucdanh, emp.machucvu, emp.tenchucvu, emp.tenchucdanh, emp.tenbomon, emp.hoten, emp.diachi, emp.gioitinh, emp.sdt, emp.ngaysinh, emp.ngaylamviec, emp.mail, emp.matkhau)} style={{ width: '40px' }}> <i className="fa fa-info" aria-hidden="true"></i></Button> &nbsp;
+                                                                            <Button color="warning" onClick={this.toggleDetailsModal.bind(this, emp.mavienchuc)} style={{ width: '40px' }}> <i className="fa fa-info" aria-hidden="true"></i></Button> &nbsp;
 
-                                                                <Modal isOpen={this.state.detailModal} toggle={this.toggleDetailModal.bind(this)}>
-                                                                                <ModalHeader toggle={this.toggleDetailModal.bind(this)} style={{ backgroundColor: '#D6EAF8', height: '80px' }} > <p style={{ width: '430px', color: 'black', paddingLeft: '10px', paddingTop: '10px', fontSize: '25px' }}><b>THÔNG TIN CHI TIẾT VIÊN CHỨC</b></p></ModalHeader>
 
-                                                                                <Form>
 
 
-                                                                                    <ModalBody>
-                                                                                        <Row>
-                                                                                            <Col md="6">
-                                                                                                <FormGroup>
-                                                                                                    <Label htmlFor="hoten" style={{ color: 'black', fontWeight: 'bold' }}>Mã số cán bộ: </Label> {this.state.detailsData.mavienchuc}
-
-                                                                                                </FormGroup>
-                                                                                            </Col>
-
-
-                                                                                            <Col md="6">
-                                                                                                <FormGroup>
-
-                                                                                                    <Label htmlFor="bm" style={{ color: 'black', fontWeight: 'bold' }}>Bộ môn: </Label> {this.state.detailsData.tenbomon}
-
-                                                                                                </FormGroup>
-
-                                                                                            </Col>
-                                                                                        </Row>
-                                                                                        <Row>
-                                                                                            <Col md="6">
-                                                                                                <FormGroup>
-                                                                                                    <Label htmlFor="hoten" style={{ color: 'black', fontWeight: 'bold' }}>Họ và tên: </Label> {this.state.detailsData.hoten}
-
-                                                                                                </FormGroup>
-                                                                                            </Col>
-
-                                                                                            <Col md="6">
-                                                                                                <FormGroup>
-
-                                                                                                    <Label htmlFor="cd" style={{ color: 'black', fontWeight: 'bold' }}>Chức danh: </Label> {this.state.detailsData.tenchucdanh}
-
-                                                                                                </FormGroup>
-                                                                                            </Col>
-                                                                                        </Row>
-
-                                                                                        <Row>
-                                                                                            <Col md="6">
-                                                                                                <FormGroup>
-                                                                                                    <Label htmlFor="gt" style={{ color: 'black', fontWeight: 'bold' }}>Giới tính: </Label> {this.state.detailsData.gioitinh ? 'Nam' : 'Nữ'}
-
-                                                                                                </FormGroup>
-
-                                                                                            </Col>
-
-                                                                                            <Col className="pr-1" md="6">
-                                                                                                <FormGroup>
-
-                                                                                                    <Label htmlFor="cvu" style={{ color: 'black', fontWeight: 'bold' }}>Chức vụ: </Label> {this.state.detailsData.tenchucvu}
-
-                                                                                                </FormGroup>
-                                                                                            </Col>
-                                                                                        </Row>
-                                                                                        <Row>
-                                                                                            <Col className="pr-1" md="6">
-                                                                                                <FormGroup>
-                                                                                                    <Label htmlFor="ngaysinh" style={{ color: 'black', fontWeight: 'bold' }}>Ngày sinh: </Label> {moment(this.state.detailsData.ngaysinh).format("DD-MM-YYYY")}
-
-                                                                                                </FormGroup>
-
-                                                                                            </Col>
-                                                                                            <Col className="pr-1" md="6">
-                                                                                                <FormGroup>
-
-                                                                                                    <Label htmlFor="nlv" style={{ color: 'black', fontWeight: 'bold' }}>Ngày làm việc: </Label> {moment(this.state.detailsData.ngaylamviec).format("DD-MM-YYYY")}
-
-                                                                                                </FormGroup>
-                                                                                            </Col>
-                                                                                        </Row>
-                                                                                        <Row>
-                                                                                            <Col md="6">
-                                                                                                <FormGroup>
-                                                                                                    <Label htmlFor="sdt" style={{ color: 'black', fontWeight: 'bold' }}>Số điện thoại: </Label> {this.state.detailsData.sdt}
-
-                                                                                                </FormGroup>
-                                                                                            </Col>
-                                                                                            <Col md="6">
-                                                                                                <FormGroup>
-                                                                                                    <Label htmlFor="mail" style={{ color: 'black', fontWeight: 'bold' }}>Mail: </Label> {this.state.detailsData.mail}
-
-                                                                                                </FormGroup>
-                                                                                            </Col>
-                                                                                        </Row>
-                                                                                        <Row>
-                                                                                            <Col md="12">
-                                                                                                <FormGroup>
-
-                                                                                                    <Label htmlFor="diachi" style={{ color: 'black', fontWeight: 'bold' }}>Địa chỉ: </Label> {this.state.detailsData.diachi}
-
-                                                                                                </FormGroup>
-                                                                                            </Col>
-                                                                                        </Row>
-
-
-
-                                                                                    </ModalBody>
-
-                                                                                    <ModalFooter>
-
-
-
-                                                                                        <Button color="danger" onClick={this.toggleDetailModal.bind(this)}>Trở về</Button>
-                                                                                    </ModalFooter>
-
-
-
-
-
-
-                                                                                </Form>
-
-
-                                                                            </Modal>
-
-                                                                            <Modal isOpen={this.state.editModal} toggle={this.toggleEditModal.bind(this)} size="lg" style={{ maxWidth: '900px', width: '100%', marginLeft: '300px' }}>
-
-                                                                                <ModalHeader toggle={this.toggleEditModal.bind(this)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '800px', color: 'black', textAlign: 'center', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
-
-
-                                                                                <ModalBody>
-
-                                                                                    <Row>
-                                                                                        <Col md="12"> <p className="text-danger"> (*) Bắt buộc</p></Col>
-
-                                                                                        <Col className="pr-1" md="4">
-                                                                                            <FormGroup>
-                                                                                                <Label htmlFor="iddonvi">Bộ môn <strong className="text-danger">(*) </strong></Label>
-                                                                                                <Input type="select" id="mabomon" value={this.state.editData.mabomon} onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.mabomon = e.target.value;
-                                                                                                    this.setState({ editData });
-                                                                                                }} disabled>
-                                                                                                    <option value='0' >--Chọn bộ môn--</option>
-                                                                                                    {
-                                                                                                        this.state.listBomon.map((bm) =>
-                                                                                                            <option key={bm.mabomon} value={bm.mabomon}>{bm.tenbomon}</option>)
-                                                                                                    }
-                                                                                                </Input>
-                                                                                            </FormGroup>
-                                                                                        </Col>
-                                                                                        <Col className="pl-3" md="4">
-                                                                                            <FormGroup>
-                                                                                                <Label htmlFor="iddonvi">Chức vụ <strong className="text-danger">(*) </strong></Label>
-                                                                                                <Input type="select" id="machucvu" value={this.state.editData.machucvu} onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.machucvu = e.target.value;
-                                                                                                    this.setState({ editData });
-                                                                                                }} >
-                                                                                                    <option value='0' >--Chọn chức vụ--</option>
-                                                                                                    {
-                                                                                                        this.state.listChucvu.map((cvu) =>
-                                                                                                            <option key={cvu.machucvu} value={cvu.machucvu}>{cvu.tenchucvu}</option>)
-                                                                                                    }
-                                                                                                </Input>
-                                                                                            </FormGroup>
-
-                                                                                        </Col>
-
-                                                                                        <Col className="pl-1" md="4">
-                                                                                            <FormGroup>
-                                                                                                <Label htmlFor="iddonvi">Chức danh <strong className="text-danger">(*) </strong></Label>
-                                                                                                <Input type="select" id="machucdanh" value={this.state.editData.machucdanh} onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.machucdanh = e.target.value;
-                                                                                                    this.setState({ editData });
-                                                                                                }} >
-                                                                                                    <option value='0' >--Chọn chức danh--</option>
-                                                                                                    {
-                                                                                                        this.state.listChucdanh.map((cd) =>
-                                                                                                            <option key={cd.machucdanh} value={cd.machucdanh}>{cd.tenchucdanh}</option>)
-                                                                                                    }
-                                                                                                </Input>
-                                                                                            </FormGroup>
-                                                                                        </Col>
-                                                                                    </Row>
-                                                                                    <Row>
-                                                                                        <Col className="pr-1" md="2">
-                                                                                            <FormGroup>
-
-                                                                                                <Label htmlFor="diachi">Giới tính</Label>
-                                                                                                <Input type="select" id="gioitinh" value={this.state.editData.gioitinh} onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.gioitinh = e.target.value;
-                                                                                                    this.setState({ editData });
-                                                                                                }} >
-
-                                                                                                    <option value='true'>Nam </option>
-                                                                                                    <option value='false'>Nữ </option>
-                                                                                                </Input>
-
-                                                                                            </FormGroup>
-                                                                                        </Col>
-
-                                                                                        <Col className="pl-3" md="6" style={{ marginTop: '-7px' }}>
-                                                                                            <FormGroup>
-                                                                                                <Label htmlFor="hoten">Họ tên <strong className="text-danger">(*) </strong></Label>
-                                                                                                <Input id="hoten" required value={this.state.editData.hoten} onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.hoten = e.target.value;
-                                                                                                    this.setState({ editData });
-                                                                                                }} placeholder="Nhập họ tên" />
-                                                                                            </FormGroup>
-                                                                                        </Col>
-
-                                                                                        <Col className="pl-1" md="4">
-                                                                                            <FormGroup>
-                                                                                                <Label htmlFor="sdt">Số điện thoại <strong className="text-danger">(*) </strong></Label>
-                                                                                                <Input id="sdt" type="tel" value={this.state.editData.sdt} onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.sdt = e.target.value;
-                                                                                                    if (this.state.editData.sdt.length > 11 || this.state.editData.sdt.length < 10) {
-                                                                                                        this.setState({
-                                                                                                            msg: "Số điện thoại từ 10 đến 11 chữ số",
-                                                                                                        })
-                                                                                                    }
-                                                                                                    else {
-                                                                                                        this.setState({ editData, msg: '' });
-                                                                                                    }
-                                                                                                }} placeholder="Nhập số điện thoại" />
-                                                                                                {
-                                                                                                    (msg) ?
-                                                                                                        <p className="text-danger">{msg}</p> : null
-                                                                                                }
-
-                                                                                            </FormGroup>
-                                                                                        </Col>
-
-                                                                                    </Row>
-                                                                                    <Row>
-                                                                                        <Col className="pr-1" md="6">
-                                                                                            <FormGroup>
-                                                                                                <Label htmlFor="ngaysinh">Ngày sinh <strong className="text-danger">(*) </strong></Label>
-                                                                                                <Input type="date" id="ngaysinh" value={moment(this.state.editData.ngaysinh).format("YYYY-MM-DD")} onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.ngaysinh = e.target.value;
-                                                                                                    this.setState({ editData });
-                                                                                                }} />
-                                                                                            </FormGroup>
-                                                                                        </Col>
-
-
-                                                                                        <Col className="pr-1" md="6">
-                                                                                            <FormGroup>
-                                                                                                <Label htmlFor="ngaylamviec">Ngày bắt đầu làm việc <strong className="text-danger">(*) </strong></Label>
-                                                                                                <Input type="date" id="ngaylamvec" value={moment(this.state.editData.ngaylamviec).format("YYYY-MM-DD")} onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.ngaylamviec = e.target.value;
-                                                                                                    this.setState({ editData });
-                                                                                                }} />
-                                                                                            </FormGroup>
-                                                                                        </Col>
-                                                                                    </Row>
-
-                                                                                    <Row>
-                                                                                        <Col md="12">
-                                                                                            <FormGroup>
-
-                                                                                                <Label htmlFor="diachi">Địa chỉ <strong className="text-danger">(*) </strong></Label>
-                                                                                                <Input type="textarea" id="diachi" value={this.state.editData.diachi} onChange={(e) => {
-                                                                                                    let { editData } = this.state;
-                                                                                                    editData.diachi = e.target.value;
-                                                                                                    this.setState({ editData });
-                                                                                                }} placeholder="Nhập địa chỉ" />
-                                                                                            </FormGroup>
-                                                                                        </Col>
-                                                                                    </Row>
-
-
-
-
-                                                                                </ModalBody>
-                                                                                <ModalFooter>
-                                                                                    <Button color="primary" disabled={!(this.state.editData.machucdanh.length > 0 && this.state.editData.machucvu.length > 0 && this.state.editData.hoten.length > 0 && this.state.editData.sdt.length > 0 && this.state.editData.ngaylamviec.length > 0 && this.state.editData.ngaysinh.length > 0 && this.state.editData.diachi.length > 0)} onClick={this.updateVC.bind(this)}>Thực hiện lưu</Button>{' '}
-                                                                                    <Button color="danger" onClick={this.toggleEditModal.bind(this)}>Hủy bỏ</Button>
-                                                                                </ModalFooter>
-
-                                                                            </Modal>
 
 
                                                                             {(this.state.user.mavienchuc == emp.mavienchuc)
                                                                                 ? <strong>(Tôi)</strong> :
 
-                                                                                <strong><Button color="default" onClick={this.edit.bind(this, emp.mavienchuc, emp.mabomon, emp.machucdanh, emp.machucvu, emp.hoten, emp.diachi, emp.gioitinh, emp.sdt, emp.ngaysinh, emp.ngaylamviec)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
+                                                                                <strong><Button color="default" onClick={this.toggleEditModal.bind(this, emp.mavienchuc, emp.mabomon, emp.machucdanh, emp.machucvu, emp.hoten, emp.diachi, emp.gioitinh, emp.sdt, emp.ngaysinh, emp.ngaylamviec)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
                                                                     <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.mavienchuc, emp.hoten)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
                                                                                 </strong>
                                                                             }
@@ -1644,43 +1868,328 @@ class DanhmucVienchuc extends React.Component {
 
 
 
-                                                                            <SweetAlert
-                                                                                show={this.state.showAlert}
-                                                                                warning
-                                                                                showCancel
 
-                                                                                showCloseButton
-                                                                                confirmBtnText="Đồng ý"
-                                                                                confirmBtnBsStyle="danger"
-                                                                                cancelBtnText="Không"
-                                                                                cancelBtnBsStyle="light"
-                                                                                title="Bạn có chắc chắn không?"
-
-                                                                                onConfirm={() => this.deleteVC({ mavienchuc: this.state.xoa.mavienchuc })}
-
-                                                                                onCancel={() => this.setState({ showAlert: false })}
-                                                                                focusCancelBtn
-                                                                            >  {"Toàn bộ thông tin của  " + this.state.xoa.hoten + " (" + this.state.xoa.mavienchuc + ") sẽ bị xóa khỏi hệ thống"}
-                                                                            </SweetAlert>
-
-                                                                            <SweetAlert
-                                                                                show={this.state.confirm}
-                                                                                success
-                                                                                confirmBtnText="Đồng ý"
-                                                                                confirmBtnBsStyle="primary"
-                                                                                onConfirm={() => this.handleConfirm()}
-
-
-                                                                            >  Đã xóa thành công !!!
-                                                                </SweetAlert>
 
                                                                         </td> : null}
 
                                                                 </tr>
                                                             )
                                                         })
+
+
                                                     }
 
+                                                    <Modal isOpen={this.state.detailModal} toggle={this.toggleDetailsModal.bind(this, this.state.idxemct)}>
+                                                        <ModalHeader toggle={this.toggleDetailsModal.bind(this, this.state.idxemct)} style={{ backgroundColor: '#D6EAF8', height: '80px' }} > <p style={{ width: '430px', color: 'black', paddingLeft: '10px', paddingTop: '10px', fontSize: '25px' }}><b>THÔNG TIN CHI TIẾT VIÊN CHỨC</b></p></ModalHeader>
+
+                                                        <Form>
+
+
+                                                            <ModalBody>
+                                                                <Row>
+                                                                    <Col md="6">
+                                                                        <FormGroup>
+                                                                            <Label htmlFor="hoten" style={{ color: 'black', fontWeight: 'bold' }}>Mã số cán bộ: </Label> {detailsData.mavienchuc}
+
+                                                                        </FormGroup>
+                                                                    </Col>
+
+
+                                                                    <Col md="6">
+                                                                        <FormGroup>
+
+                                                                            <Label htmlFor="bm" style={{ color: 'black', fontWeight: 'bold' }}>Bộ môn: </Label> {detailsData.tenbomon}
+
+                                                                        </FormGroup>
+
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row>
+                                                                    <Col md="6">
+                                                                        <FormGroup>
+                                                                            <Label htmlFor="hoten" style={{ color: 'black', fontWeight: 'bold' }}>Họ và tên: </Label> {detailsData.hoten}
+
+                                                                        </FormGroup>
+                                                                    </Col>
+
+                                                                    <Col md="6">
+                                                                        <FormGroup>
+
+                                                                            <Label htmlFor="cd" style={{ color: 'black', fontWeight: 'bold' }}>Chức danh: </Label> {detailsData.tenchucdanh}
+
+                                                                        </FormGroup>
+                                                                    </Col>
+                                                                </Row>
+
+                                                                <Row>
+                                                                    <Col md="6">
+                                                                        <FormGroup>
+                                                                            <Label htmlFor="gt" style={{ color: 'black', fontWeight: 'bold' }}>Giới tính: </Label> {detailsData.gioitinh ? 'Nam' : 'Nữ'}
+
+                                                                        </FormGroup>
+
+                                                                    </Col>
+
+                                                                    <Col className="pr-1" md="6">
+                                                                        <FormGroup>
+
+                                                                            <Label htmlFor="cvu" style={{ color: 'black', fontWeight: 'bold' }}>Chức vụ: </Label> {detailsData.tenchucvu}
+
+                                                                        </FormGroup>
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row>
+                                                                    <Col className="pr-1" md="6">
+                                                                        <FormGroup>
+                                                                            <Label htmlFor="ngaysinh" style={{ color: 'black', fontWeight: 'bold' }}>Ngày sinh: </Label> {moment(detailsData.ngaysinh).format("DD-MM-YYYY")}
+
+                                                                        </FormGroup>
+
+                                                                    </Col>
+                                                                    <Col className="pr-1" md="6">
+                                                                        <FormGroup>
+
+                                                                            <Label htmlFor="nlv" style={{ color: 'black', fontWeight: 'bold' }}>Ngày làm việc: </Label> {moment(detailsData.ngaylamviec).format("DD-MM-YYYY")}
+
+                                                                        </FormGroup>
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row>
+                                                                    <Col md="6">
+                                                                        <FormGroup>
+                                                                            <Label htmlFor="sdt" style={{ color: 'black', fontWeight: 'bold' }}>Số điện thoại: </Label> {detailsData.sdt}
+
+                                                                        </FormGroup>
+                                                                    </Col>
+                                                                    <Col md="6">
+                                                                        <FormGroup>
+                                                                            <Label htmlFor="mail" style={{ color: 'black', fontWeight: 'bold' }}>Mail: </Label> {detailsData.mail}
+
+                                                                        </FormGroup>
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row>
+                                                                    <Col md="12">
+                                                                        <FormGroup>
+
+                                                                            <Label htmlFor="diachi" style={{ color: 'black', fontWeight: 'bold' }}>Địa chỉ: </Label> {detailsData.diachi}
+
+                                                                        </FormGroup>
+                                                                    </Col>
+                                                                </Row>
+
+
+
+                                                            </ModalBody>
+
+                                                            <ModalFooter>
+
+
+
+                                                                <Button color="danger" onClick={this.toggleDongDetails.bind(this)}>Trở về</Button>
+                                                            </ModalFooter>
+
+
+
+
+
+
+                                                        </Form>
+
+
+                                                    </Modal>
+                                                    <Modal isOpen={this.state.editModal} toggle={this.toggleEditModal.bind(this, this.state.editData.mavienchuc, this.state.editData.mabomon, this.state.editData.machucdanh, this.state.editData.machucvu, this.state.editData.hoten, this.state.editData.diachi, this.state.editData.gioitinh, this.state.editData.sdt, this.state.editData.ngaysinh, this.state.editData.ngaylamviec)} size="lg" style={{ maxWidth: '900px', width: '100%', marginLeft: '300px' }}>
+
+                                                        <ModalHeader toggle={this.toggleEditModal.bind(this, this.state.editData.mavienchuc, this.state.editData.mabomon, this.state.editData.machucdanh, this.state.editData.machucvu, this.state.editData.hoten, this.state.editData.diachi, this.state.editData.gioitinh, this.state.editData.sdt, this.state.editData.ngaysinh, this.state.editData.ngaylamviec)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '800px', color: 'black', textAlign: 'center', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
+
+
+                                                        <ModalBody>
+
+                                                            <Row>
+                                                                <Col md="12"> <p className="text-danger"> (*) Bắt buộc</p></Col>
+
+                                                                <Col className="pr-1" md="4">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="iddonvi">Bộ môn <strong className="text-danger">(*) </strong></Label>
+                                                                        <Input type="select" id="mabomon" value={this.state.user.mabomon} onChange={(e) => {
+                                                                            let { editData } = this.state;
+                                                                            editData.mabomon = e.target.value;
+                                                                            this.setState({ editData });
+                                                                        }} disabled>
+                                                                            <option value='0' >--Chọn bộ môn--</option>
+                                                                            {
+                                                                                this.state.listBomon.map((bm) =>
+                                                                                    <option key={bm.mabomon} value={bm.mabomon}>{bm.tenbomon}</option>)
+                                                                            }
+                                                                        </Input>
+                                                                    </FormGroup>
+                                                                </Col>
+                                                                <Col className="pl-3" md="4">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="iddonvi">Chức vụ <strong className="text-danger">(*) </strong></Label>
+                                                                        <Input type="select" id="machucvu" value={this.state.editData.machucvu} onChange={(e) => {
+                                                                            let { editData } = this.state;
+                                                                            editData.machucvu = e.target.value;
+                                                                            this.setState({ editData });
+                                                                        }} >
+                                                                            <option value='0' >--Chọn chức vụ--</option>
+                                                                            {
+                                                                                this.state.listChucvu.map((cvu) =>
+                                                                                    <option key={cvu.machucvu} value={cvu.machucvu}>{cvu.tenchucvu}</option>)
+                                                                            }
+                                                                        </Input>
+                                                                    </FormGroup>
+
+                                                                </Col>
+
+                                                                <Col className="pl-1" md="4">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="iddonvi">Chức danh <strong className="text-danger">(*) </strong></Label>
+                                                                        <Input type="select" id="machucdanh" value={this.state.editData.machucdanh} onChange={(e) => {
+                                                                            let { editData } = this.state;
+                                                                            editData.machucdanh = e.target.value;
+                                                                            this.setState({ editData });
+                                                                        }} >
+                                                                            <option value='0' >--Chọn chức danh--</option>
+                                                                            {
+                                                                                this.state.listChucdanh.map((cd) =>
+                                                                                    <option key={cd.machucdanh} value={cd.machucdanh}>{cd.tenchucdanh}</option>)
+                                                                            }
+                                                                        </Input>
+                                                                    </FormGroup>
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col className="pr-1" md="2">
+                                                                    <FormGroup>
+
+                                                                        <Label htmlFor="diachi">Giới tính</Label>
+                                                                        <Input type="select" id="gioitinh" value={this.state.editData.gioitinh} onChange={(e) => {
+                                                                            let { editData } = this.state;
+                                                                            editData.gioitinh = e.target.value;
+                                                                            this.setState({ editData });
+                                                                        }} >
+
+                                                                            <option value='true'>Nam </option>
+                                                                            <option value='false'>Nữ </option>
+                                                                        </Input>
+
+                                                                    </FormGroup>
+                                                                </Col>
+
+                                                                <Col className="pl-3" md="6" style={{ marginTop: '-7px' }}>
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="hoten">Họ tên <strong className="text-danger">(*) </strong></Label>
+                                                                        <Input id="hoten" required value={this.state.editData.hoten} onChange={(e) => {
+                                                                            let { editData } = this.state;
+                                                                            editData.hoten = e.target.value;
+                                                                            this.setState({ editData });
+                                                                        }} placeholder="Nhập họ tên" />
+                                                                    </FormGroup>
+                                                                </Col>
+
+                                                                <Col className="pl-1" md="4">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="sdt">Số điện thoại <strong className="text-danger">(*) </strong></Label>
+                                                                        <Input id="sdt" type="number" value={this.state.editData.sdt} onChange={(e) => {
+                                                                            let { editData } = this.state;
+                                                                            editData.sdt = e.target.value;
+                                                                            if (this.state.editData.sdt.length > 11 || this.state.editData.sdt.length < 10) {
+                                                                                this.setState({
+                                                                                    msg: "Số điện thoại từ 10 đến 11 chữ số",
+                                                                                })
+                                                                            }
+                                                                            else {
+                                                                                this.setState({ editData, msg: '' });
+                                                                            }
+                                                                        }} placeholder="Nhập số điện thoại" />
+                                                                        {
+                                                                            (msg) ?
+                                                                                <p className="text-danger">{msg}</p> : null
+                                                                        }
+
+                                                                    </FormGroup>
+                                                                </Col>
+
+                                                            </Row>
+                                                            <Row>
+                                                                <Col className="pr-1" md="6">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="ngaysinh">Ngày sinh <strong className="text-danger">(*) </strong></Label>
+                                                                        <Input type="date" id="ngaysinh" value={moment(this.state.editData.ngaysinh).format("YYYY-MM-DD")} onChange={(e) => {
+                                                                            let { editData } = this.state;
+                                                                            editData.ngaysinh = e.target.value;
+                                                                            this.setState({ editData });
+                                                                        }} />
+                                                                    </FormGroup>
+                                                                </Col>
+
+
+                                                                <Col className="pr-1" md="6">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="ngaylamviec">Ngày bắt đầu làm việc <strong className="text-danger">(*) </strong></Label>
+                                                                        <Input type="date" id="ngaylamvec" value={moment(this.state.editData.ngaylamviec).format("YYYY-MM-DD")} onChange={(e) => {
+                                                                            let { editData } = this.state;
+                                                                            editData.ngaylamviec = e.target.value;
+                                                                            this.setState({ editData });
+                                                                        }} />
+                                                                    </FormGroup>
+                                                                </Col>
+                                                            </Row>
+
+                                                            <Row>
+                                                                <Col md="12">
+                                                                    <FormGroup>
+
+                                                                        <Label htmlFor="diachi">Địa chỉ <strong className="text-danger">(*) </strong></Label>
+                                                                        <Input type="textarea" id="diachi" value={this.state.editData.diachi} onChange={(e) => {
+                                                                            let { editData } = this.state;
+                                                                            editData.diachi = e.target.value;
+                                                                            this.setState({ editData });
+                                                                        }} placeholder="Nhập địa chỉ" />
+                                                                    </FormGroup>
+                                                                </Col>
+                                                            </Row>
+
+
+
+
+                                                        </ModalBody>
+                                                        <ModalFooter>
+                                                            <Button color="primary" disabled={!(this.state.editData.machucdanh.length > 0 && this.state.editData.machucvu.length > 0 && this.state.editData.hoten.length > 0 && this.state.editData.sdt.length > 0 && this.state.editData.ngaylamviec.length > 0 && this.state.editData.ngaysinh.length > 0 && this.state.editData.diachi.length > 0)} onClick={this.updateVC.bind(this)}>Thực hiện lưu</Button>{' '}
+                                                            <Button color="danger" onClick={this.toggleDongEdit.bind(this)}>Hủy bỏ</Button>
+                                                        </ModalFooter>
+
+                                                    </Modal>
+                                                    <SweetAlert
+                                                        show={this.state.showAlert}
+                                                        warning
+                                                        showCancel
+
+                                                        showCloseButton
+                                                        confirmBtnText="Đồng ý"
+                                                        confirmBtnBsStyle="danger"
+                                                        cancelBtnText="Không"
+                                                        cancelBtnBsStyle="light"
+                                                        title="Bạn có chắc chắn không?"
+
+                                                        onConfirm={() => this.deleteVC({ mavienchuc: this.state.xoa.mavienchuc })}
+
+                                                        onCancel={() => this.setState({ showAlert: false })}
+                                                        focusCancelBtn
+                                                    >  {"Toàn bộ thông tin của  " + this.state.xoa.hoten + " (" + this.state.xoa.mavienchuc + ") sẽ bị xóa khỏi hệ thống"}
+                                                    </SweetAlert>
+
+                                                    <SweetAlert
+                                                        show={this.state.confirm}
+                                                        success
+                                                        confirmBtnText="Đồng ý"
+                                                        confirmBtnBsStyle="primary"
+                                                        onConfirm={() => this.handleConfirm()}
+
+
+                                                    >  Đã xóa thành công !!!
+                                                                </SweetAlert>
                                                 </tbody>
                                             </Table>
                                         </CardBody>

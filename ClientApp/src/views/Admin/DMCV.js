@@ -277,12 +277,12 @@ class DMCV extends React.Component {
 
 
     //edit dm
-    toggleEditModal() {
+    toggleDongDM() {
         this.setState({
             editModal: !this.state.editModal
         })
     }
-    edit(masodanhmuc, masolinhvuc, tendanhmuc) {
+    toggleEditModal(masodanhmuc, masolinhvuc, tendanhmuc) {
         this.setState({
             editData: { masodanhmuc, masolinhvuc, tendanhmuc },
             editModal: !this.state.editModal
@@ -314,13 +314,13 @@ class DMCV extends React.Component {
 
     }
     //edit lv
-    toggleEditLVModal() {
+    toggleDongLV() {
         this.setState({
             editlvModal: !this.state.editlvModal
         })
     }
     
-    editlv( masolinhvuc, tenlinhvuc) {
+    toggleEditLVModal( masolinhvuc, tenlinhvuc) {
         this.setState({
             editlvData: { masolinhvuc, tenlinhvuc },
             editlvModal: !this.state.editlvModal
@@ -611,102 +611,10 @@ class DMCV extends React.Component {
 
 
                                                                     <td>
-                                                                        <Button color="default" onClick={this.edit.bind(this, emp.masodanhmuc, emp.masolinhvuc, emp.tendanhmuc)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
-                                                                 <Modal isOpen={this.state.editModal} toggle={this.toggleEditModal.bind(this)} style={{ width: '500px' }}>
-
-                                                                            <ModalHeader toggle={this.toggleEditModal.bind(this)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '400px', color: 'black', paddingLeft: '100px', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
-
-
-                                                                            <ModalBody>
-
-                                                                                <Row>
-                                                                                    <Col md="12"> <p className="text-danger"> (*) Bắt buộc</p></Col>
-                                                                                    <Col md="12" align="center">
-
-                                                                                        {(errors) ?
-                                                                                            <Alert color="warning">{errors}</Alert>
-                                                                                            :
-                                                                                            null
-                                                                                        }
-                                                                                    </Col>
-                                                                                </Row>
-
-                                                                                <Row>
-                                                                                    <Col md="12">
-                                                                                        <FormGroup>
-                                                                                            <Label htmlFor="LV">Lĩnh vực<strong className="text-danger">(*) </strong></Label>
-                                                                                            <Input type="select" id="lv" value={this.state.editData.masolinhvuc} onChange={(e) => {
-                                                                                                let { editData } = this.state;
-                                                                                                editData.masolinhvuc = Number.parseInt(e.target.value);
-                                                                                                this.setState({ editData });
-                                                                                            }} required >
-                                                                                                <option value='0' >--Chọn lĩnh vực--</option>
-                                                                                                {
-                                                                                                    this.state.listlv.map((lv) =>
-                                                                                                        <option key={lv.masolinhvuc} value={lv.masolinhvuc}>{lv.tenlinhvuc}</option>)
-                                                                                                }
-                                                                                            </Input>
-                                                                                        </FormGroup>
-                                                                                    </Col>
-                                                                                </Row>
-                                                                                <Row>
-                                                                                    <Col md="12">
-                                                                                        <FormGroup>
-                                                                                            <Label htmlFor="DM">Tên danh mục<strong className="text-danger">(*) </strong></Label>
-                                                                                            <Input id="dm" value={this.state.editData.tendanhmuc} onChange={(e) => {
-                                                                                                let { editData } = this.state;
-                                                                                                editData.tendanhmuc = e.target.value;
-                                                                                                this.setState({ editData });
-                                                                                            }} />
-                                                                                        </FormGroup>
-                                                                                    </Col>
-                                                                                </Row>
-
-
-
-
-
-
-
-
-
-
-                                                                            </ModalBody>
-                                                                            <ModalFooter>
-                                                                                <Button color="primary" disabled={!(this.state.editData.tendanhmuc.length > 0)} onClick={this.updateDM.bind(this)}>Thực hiện lưu</Button>{' '}
-                                                                                <Button color="danger" onClick={this.toggleEditModal.bind(this)}>Hủy bỏ</Button>
-                                                                            </ModalFooter>
-
-                                                                        </Modal>
+                                                                        <Button color="default" onClick={this.toggleEditModal.bind(this, emp.masodanhmuc, emp.masolinhvuc, emp.tendanhmuc)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
+                                                                
                                                                         <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.masodanhmuc, emp.tendanhmuc)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
-                                                                        <SweetAlert
-                                                                            show={this.state.showAlert}
-                                                                            warning
-                                                                            showCancel
-
-                                                                            showCloseButton
-                                                                            confirmBtnText="Đồng ý"
-                                                                            confirmBtnBsStyle="danger"
-                                                                            cancelBtnText="Không"
-                                                                            cancelBtnBsStyle="light"
-                                                                            title="Bạn có chắc chắn không?"
-
-                                                                            onConfirm={() => this.deleteDM({ masodanhmuc: this.state.xoa.masodanhmuc })}
-
-                                                                            onCancel={() => this.setState({ showAlert: false })}
-                                                                            focusCancelBtn
-                                                                        >  {"Danh mục  " + this.state.xoa.tendanhmuc + " sẽ bị xóa khỏi hệ thống"}
-                                                                        </SweetAlert>
-                                                                        <SweetAlert
-                                                                            show={this.state.confirm}
-                                                                            success
-                                                                            confirmBtnText="Đồng ý"
-                                                                            confirmBtnBsStyle="primary"
-                                                                            onConfirm={() => this.handleConfirm()}
-
-
-                                                                        >  Đã xóa thành công !!!
-                                                                </SweetAlert>
+                                                                        
 
 
 
@@ -717,7 +625,101 @@ class DMCV extends React.Component {
                                                         </tr>
                                                     )
                                                 })
-                                            }
+                                                    }
+                                                    <Modal isOpen={this.state.editModal} toggle={this.toggleEditModal.bind(this, this.state.editData.masodanhmuc, this.state.editData.masolinhvuc, this.state.editData.tendanhmuc)} style={{ width: '500px' }}>
+
+                                                        <ModalHeader toggle={this.toggleEditModal.bind(this, this.state.editData.masodanhmuc, this.state.editData.masolinhvuc, this.state.editData.tendanhmuc)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '400px', color: 'black', paddingLeft: '100px', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
+
+
+                                                        <ModalBody>
+
+                                                            <Row>
+                                                                <Col md="12"> <p className="text-danger"> (*) Bắt buộc</p></Col>
+                                                                <Col md="12" align="center">
+
+                                                                    {(errors) ?
+                                                                        <Alert color="warning">{errors}</Alert>
+                                                                        :
+                                                                        null
+                                                                    }
+                                                                </Col>
+                                                            </Row>
+
+                                                            <Row>
+                                                                <Col md="12">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="LV">Lĩnh vực<strong className="text-danger">(*) </strong></Label>
+                                                                        <Input type="select" id="lv" value={this.state.editData.masolinhvuc} onChange={(e) => {
+                                                                            let { editData } = this.state;
+                                                                            editData.masolinhvuc = Number.parseInt(e.target.value);
+                                                                            this.setState({ editData });
+                                                                        }} required >
+                                                                            <option value='0' >--Chọn lĩnh vực--</option>
+                                                                            {
+                                                                                this.state.listlv.map((lv) =>
+                                                                                    <option key={lv.masolinhvuc} value={lv.masolinhvuc}>{lv.tenlinhvuc}</option>)
+                                                                            }
+                                                                        </Input>
+                                                                    </FormGroup>
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col md="12">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="DM">Tên danh mục<strong className="text-danger">(*) </strong></Label>
+                                                                        <Input id="dm" value={this.state.editData.tendanhmuc} onChange={(e) => {
+                                                                            let { editData } = this.state;
+                                                                            editData.tendanhmuc = e.target.value;
+                                                                            this.setState({ editData });
+                                                                        }} />
+                                                                    </FormGroup>
+                                                                </Col>
+                                                            </Row>
+
+
+
+
+
+
+
+
+
+
+                                                        </ModalBody>
+                                                        <ModalFooter>
+                                                            <Button color="primary" disabled={!(this.state.editData.tendanhmuc.length > 0)} onClick={this.updateDM.bind(this)}>Thực hiện lưu</Button>{' '}
+                                                            <Button color="danger" onClick={this.toggleDongDM.bind(this)}>Hủy bỏ</Button>
+                                                        </ModalFooter>
+
+                                                    </Modal>
+                                                    <SweetAlert
+                                                        show={this.state.showAlert}
+                                                        warning
+                                                        showCancel
+
+                                                        showCloseButton
+                                                        confirmBtnText="Đồng ý"
+                                                        confirmBtnBsStyle="danger"
+                                                        cancelBtnText="Không"
+                                                        cancelBtnBsStyle="light"
+                                                        title="Bạn có chắc chắn không?"
+
+                                                        onConfirm={() => this.deleteDM({ masodanhmuc: this.state.xoa.masodanhmuc })}
+
+                                                        onCancel={() => this.setState({ showAlert: false })}
+                                                        focusCancelBtn
+                                                    >  {"Danh mục  " + this.state.xoa.tendanhmuc + " sẽ bị xóa khỏi hệ thống"}
+                                                    </SweetAlert>
+                                                    <SweetAlert
+                                                        show={this.state.confirm}
+                                                        success
+                                                        confirmBtnText="Đồng ý"
+                                                        confirmBtnBsStyle="primary"
+                                                        onConfirm={() => this.handleConfirm()}
+
+
+                                                    >  Đã xóa thành công !!!
+                                                                </SweetAlert>
 
                                         </tbody>
                                             </Table>
@@ -758,82 +760,10 @@ class DMCV extends React.Component {
                                                             <td>{lv.tenlinhvuc}</td>
                                                             {(rules.find(x => x == cns)) ?
                                                             <td>
-                                                                <Button color="default" onClick={this.editlv.bind(this, lv.masolinhvuc, lv.tenlinhvuc)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button> &nbsp;
-                                                                 <Modal isOpen={this.state.editlvModal} toggle={this.toggleEditLVModal.bind(this)} style={{ width: '500px' }}>
-
-                                                                    <ModalHeader toggle={this.toggleEditLVModal.bind(this)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '400px', color: 'black', paddingLeft: '100px', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
-                                                                    <ModalBody>
-
-                                                                        <Row>
-                                                                            <Col md="12"> <p className="text-danger"> (*) Bắt buộc</p></Col>
-                                                                            <Col md="12" align="center">
-
-                                                                                {(errors) ?
-                                                                                    <Alert color="warning">{errors}</Alert>
-                                                                                    :
-                                                                                    null
-                                                                                }
-                                                                            </Col>
-                                                                        </Row>
-                                                                        <Row>
-                                                                            <Col md="12">
-                                                                                <FormGroup>
-                                                                                    <Label htmlFor="telinhvuc">Tên lĩnh vực<strong className="text-danger">(*) </strong></Label>
-                                                                                    <Input id="telinhvuc" required value={this.state.editlvData.tenlinhvuc} onChange={(e) => {
-                                                                                        let { editlvData } = this.state;
-                                                                                        editlvData.tenlinhvuc = e.target.value;
-                                                                                        this.setState({ editlvData });
-                                                                                    }} />
-                                                                                </FormGroup>
-                                                                            </Col>
-                                                                        </Row>
-                                                                        
-
-
-
-
-
-
-
-
-
-
-                                                                    </ModalBody>
-                                                                    <ModalFooter>
-                                                                        <Button color="primary" disabled={!(this.state.editlvData.tenlinhvuc.length > 0)} onClick={this.updateLV.bind(this)}>Thực hiện lưu</Button>{' '}
-                                                                        <Button color="danger" onClick={this.toggleEditLVModal.bind(this)}>Hủy bỏ</Button>
-                                                                    </ModalFooter>
-
-                                                                </Modal>
+                                                                    <Button color="default" onClick={this.toggleEditLVModal.bind(this, lv.masolinhvuc, lv.tenlinhvuc)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button> &nbsp;
+                                                               
                                                                 <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.xoalv.bind(this, lv.masolinhvuc, lv.tenlinhvuc)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
-                                                                <SweetAlert
-                                                                    show={this.state.xoalvAlert}
-                                                                    warning
-                                                                    showCancel
-
-                                                                    showCloseButton
-                                                                    confirmBtnText="Đồng ý"
-                                                                    confirmBtnBsStyle="danger"
-                                                                    cancelBtnText="Không"
-                                                                    cancelBtnBsStyle="light"
-                                                                    title="Bạn có chắc chắn không?"
-
-                                                                    onConfirm={() => this.deleteLV({ masolinhvuc: this.state.xoalv.masolinhvuc })}
-
-                                                                    onCancel={() => this.setState({ xoalvAlert: false })}
-                                                                    focusCancelBtn
-                                                                >  {"Lĩnh vực  " + this.state.xoalv.tenlinhvuc + " sẽ bị xóa khỏi hệ thống"}
-                                                                </SweetAlert>
-                                                                <SweetAlert
-                                                                    show={this.state.confirm}
-                                                                    success
-                                                                    confirmBtnText="Đồng ý"
-                                                                    confirmBtnBsStyle="primary"
-                                                                    onConfirm={() => this.handleConfirm()}
-
-
-                                                                >  Đã xóa thành công !!!
-                                                                </SweetAlert>
+                                                                
 
 
 
@@ -844,8 +774,81 @@ class DMCV extends React.Component {
                                                         </tr>
                                                     )
                                                 })
-                                            }
+                                                    }
+                                                    <Modal isOpen={this.state.editlvModal} toggle={this.toggleEditLVModal.bind(this, this.state.editlvData.masolinhvuc, this.state.editlvData.tenlinhvuc)} style={{ width: '500px' }}>
 
+                                                        <ModalHeader toggle={this.toggleEditLVModal.bind(this, this.state.editlvData.masolinhvuc, this.state.editlvData.tenlinhvuc)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '400px', color: 'black', paddingLeft: '100px', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
+                                                        <ModalBody>
+
+                                                            <Row>
+                                                                <Col md="12"> <p className="text-danger"> (*) Bắt buộc</p></Col>
+                                                                <Col md="12" align="center">
+
+                                                                    {(errors) ?
+                                                                        <Alert color="warning">{errors}</Alert>
+                                                                        :
+                                                                        null
+                                                                    }
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col md="12">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="telinhvuc">Tên lĩnh vực<strong className="text-danger">(*) </strong></Label>
+                                                                        <Input id="telinhvuc" required value={this.state.editlvData.tenlinhvuc} onChange={(e) => {
+                                                                            let { editlvData } = this.state;
+                                                                            editlvData.tenlinhvuc = e.target.value;
+                                                                            this.setState({ editlvData });
+                                                                        }} />
+                                                                    </FormGroup>
+                                                                </Col>
+                                                            </Row>
+
+
+
+
+
+
+
+
+
+
+
+                                                        </ModalBody>
+                                                        <ModalFooter>
+                                                            <Button color="primary" disabled={!(this.state.editlvData.tenlinhvuc.length > 0)} onClick={this.updateLV.bind(this)}>Thực hiện lưu</Button>{' '}
+                                                            <Button color="danger" onClick={this.toggleDongLV.bind(this)}>Hủy bỏ</Button>
+                                                        </ModalFooter>
+
+                                                    </Modal>
+                                                    <SweetAlert
+                                                        show={this.state.xoalvAlert}
+                                                        warning
+                                                        showCancel
+
+                                                        showCloseButton
+                                                        confirmBtnText="Đồng ý"
+                                                        confirmBtnBsStyle="danger"
+                                                        cancelBtnText="Không"
+                                                        cancelBtnBsStyle="light"
+                                                        title="Bạn có chắc chắn không?"
+
+                                                        onConfirm={() => this.deleteLV({ masolinhvuc: this.state.xoalv.masolinhvuc })}
+
+                                                        onCancel={() => this.setState({ xoalvAlert: false })}
+                                                        focusCancelBtn
+                                                    >  {"Lĩnh vực  " + this.state.xoalv.tenlinhvuc + " sẽ bị xóa khỏi hệ thống"}
+                                                    </SweetAlert>
+                                                    <SweetAlert
+                                                        show={this.state.confirm}
+                                                        success
+                                                        confirmBtnText="Đồng ý"
+                                                        confirmBtnBsStyle="primary"
+                                                        onConfirm={() => this.handleConfirm()}
+
+
+                                                    >  Đã xóa thành công !!!
+                                                                </SweetAlert>
                                         </tbody>
                                             </Table>
                                        

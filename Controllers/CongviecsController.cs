@@ -51,6 +51,76 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
+        [HttpGet("congtac")]
+        public IEnumerable<CongViecDTO> Congtac()
+        {
+            var nh = (from a in db.Namhoc orderby a.Manamhoc descending select a.Manamhoc).FirstOrDefault();
+            try
+            {
+                var cv = from a in db.Congviec
+                         join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
+                         join c in db.Namhoc on a.Manamhoc equals c.Manamhoc
+                         join d in db.Danhmuc on a.Masodanhmuc equals d.Masodanhmuc
+                         join e in db.Linhvuccongviec on d.Masolinhvuc equals e.Masolinhvuc
+                         where e.Masolinhvuc==8 && a.Manamhoc==nh
+                         select new CongViecDTO()
+                         {
+                             Macongviec = a.Macongviec,
+                             Manamhoc = c.Manamhoc,
+                             Tennamhoc = c.Tennamhoc,
+                             Mavienchuc = b.Mavienchuc,
+                             Hoten = b.Hoten,
+                             Masodanhmuc = a.Masodanhmuc,
+                             Tendanhmuc = d.Tendanhmuc,
+                             Tencongviec = a.Tencongviec,
+                             Ngaythuchien = a.Ngaythuchien,
+                             Diadiem = a.Diadiem,
+                             Thoigian = a.Thoigian,
+                             Filecongvec = a.Filecongvec
+
+                         };
+                return cv.ToList();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+        }
+        [HttpGet("renluyen")]
+        public IEnumerable<CongViecDTO> renluyen()
+        {
+            var nh = (from a in db.Namhoc orderby a.Manamhoc descending select a.Manamhoc).FirstOrDefault();
+            try
+            {
+                var cv = from a in db.Congviec
+                         join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
+                         join c in db.Namhoc on a.Manamhoc equals c.Manamhoc
+                         join d in db.Danhmuc on a.Masodanhmuc equals d.Masodanhmuc
+                         join e in db.Linhvuccongviec on d.Masolinhvuc equals e.Masolinhvuc
+                         where e.Masolinhvuc == 1 && a.Manamhoc==nh
+                         select new CongViecDTO()
+                         {
+                             Macongviec = a.Macongviec,
+                             Manamhoc = c.Manamhoc,
+                             Tennamhoc = c.Tennamhoc,
+                             Mavienchuc = b.Mavienchuc,
+                             Hoten = b.Hoten,
+                             Masodanhmuc = a.Masodanhmuc,
+                             Tendanhmuc = d.Tendanhmuc,
+                             Tencongviec = a.Tencongviec,
+                             Ngaythuchien = a.Ngaythuchien,
+                             Diadiem = a.Diadiem,
+                             Thoigian = a.Thoigian,
+                             Filecongvec = a.Filecongvec
+
+                         };
+                return cv.ToList();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+        }
 
         [HttpGet("cvbomon/{id}")]
         public IEnumerable<CongViecDTO> bm(string id)
@@ -86,8 +156,8 @@ namespace QuanLyHieuSuat.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public IEnumerable<CongViecDTO> Cviec(string id)
+        [HttpGet("{id}/{idnh}")]
+        public IEnumerable<CongViecDTO> Cviec(string id, int idnh)
         {
             try
             {
@@ -95,7 +165,7 @@ namespace QuanLyHieuSuat.Controllers
                          join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
                          join c in db.Namhoc on a.Manamhoc equals c.Manamhoc
                          join d in db.Danhmuc on a.Masodanhmuc equals d.Masodanhmuc
-                         where a.Mavienchuc == id
+                         where a.Mavienchuc == id && a.Manamhoc==idnh
                          select new CongViecDTO()
                          {
                              Macongviec = a.Macongviec,

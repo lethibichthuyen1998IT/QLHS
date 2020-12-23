@@ -26,6 +26,7 @@ namespace QuanLyHieuSuat.Models
         public DateTime? Ngaylamviec { get; set; }
         public string Matkhau { get; set; }
 
+        public virtual Chucdanh MachucdanhNavigation { get; set; }
         public virtual ICollection<Congviec> Congviec { get; set; }
         public virtual ICollection<Danhgia> Danhgia { get; set; }
         public virtual ICollection<Khenthuong> Khenthuong { get; set; }
