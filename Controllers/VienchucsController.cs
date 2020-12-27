@@ -52,6 +52,64 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
+
+        [HttpGet("hesoluong/{id}")]
+        public Double HSo(string id)
+        {
+            double hs=0;
+            var bac = from a in db.Vienchuc join b in db.Chucdanh on a.Machucdanh equals b.Machucdanh where a.Mavienchuc ==id select a.Bacluong;
+            var hang = from a in db.Vienchuc join b in db.Chucdanh on a.Machucdanh equals b.Machucdanh where a.Mavienchuc == id select b.Hangchucdanh;
+            switch (hang.ToString())
+            {
+                case "I":
+                    switch(bac.ToString())
+                    {
+                        case "1":   hs = 6.2;  break;
+                        case "2":  hs = 6.56; break;
+                        case "3":   hs = 6.92; break;
+                        case "4":  hs = 7.28; break;
+                        case "5":   hs = 7.64; break;
+                        case "6":   hs = 8.0; break;
+
+
+                    }
+                    return hs;
+                case "II":
+                    switch (bac.ToString())
+                    {
+                        case "1":   hs = 4.4; break;
+                        case "2":   hs = 4.74; break;
+                        case "3":  hs = 5.08; break;
+                        case "4":   hs = 5.42; break;
+                        case "5":   hs = 5.76; break;
+                        case "6":   hs = 6.10; break;
+                        case "7":   hs = 6.44; break;
+                        case "8":  hs = 6.78; break;
+
+
+                    }
+                    return hs;
+                default:
+                    switch (bac.ToString())
+                    {
+                        case "1":   hs = 2.34; break;
+                        case "2":  hs = 2.67; break;
+                        case "3":   hs = 3.0; break;
+                        case "4":   hs = 3.33; break;
+                        case "5":   hs = 3.66; break;
+                        case "6":   hs = 3.99; break;
+                        case "7":   hs = 4.32; break;
+                        case "8":   hs = 4.65; break;
+                        case "9":   hs = 4.98; break;
+
+
+                            }
+                    return hs;
+            }
+
+
+            
+        }
         [HttpGet("thud")]
         public IEnumerable<VienChucDTO> thud()
         {
