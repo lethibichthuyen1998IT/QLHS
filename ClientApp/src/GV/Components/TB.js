@@ -4,6 +4,8 @@ import cookie from "js-cookie";
 import {
     Button,
     Modal,
+    Col,
+    Row,
     ModalHeader,
     ModalFooter,
     ModalBody,
@@ -104,10 +106,12 @@ class TB extends Component {
                         <Timkiem valueSearch={this.state.valueSearch}
                             handleSearch={this.handleSearch} />
 
-                            <div class="col-md-8 col-sm-7 blog-posts">
-                                
-                                {thongbao.map((emp, index) => {
+                            <div class="col-md-12 col-sm-12 blog-posts">
+                                <Row md ="12">
+                                {thongbao.map((emp) => {
                                     return (
+                                      <Col md ="6">
+
                                         <div class="post-item">
                                         <div class="post-thumbnail">
                                                 {(emp.filethongbao != null) ?
@@ -116,7 +120,8 @@ class TB extends Component {
                                                     <h2>{moment(emp.ngaytb).get("date")}</h2>
                                                     <h3>{moment(emp.ngaytb).format("MMM-YYYY")}</h3>
                                             </div>
-                                        </div>
+                                                </div>
+                                          
 
                                         <div class="post-content">
                                             <h2 class="post-title">{emp.tieudethongbao}</h2>
@@ -128,10 +133,11 @@ class TB extends Component {
                                             </div>
                                         </div>
                                           
-                                       
+                                        </Col>
                                     )
                                 }
                                 )}
+                            </Row>
 
                                
                         

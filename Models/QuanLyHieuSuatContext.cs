@@ -22,10 +22,10 @@ namespace QuanLyHieuSuat.Models
         public virtual DbSet<Congviec> Congviec { get; set; }
         public virtual DbSet<Danhgia> Danhgia { get; set; }
         public virtual DbSet<Danhmuc> Danhmuc { get; set; }
-        public virtual DbSet<Hinhanhtb> Hinhanhtb { get; set; }
         public virtual DbSet<Khenthuong> Khenthuong { get; set; }
         public virtual DbSet<Khoa> Khoa { get; set; }
         public virtual DbSet<Linhvuccongviec> Linhvuccongviec { get; set; }
+        public virtual DbSet<Monhoc> Monhoc { get; set; }
         public virtual DbSet<Namhoc> Namhoc { get; set; }
         public virtual DbSet<Phancong> Phancong { get; set; }
         public virtual DbSet<Quyen> Quyen { get; set; }
@@ -321,27 +321,6 @@ namespace QuanLyHieuSuat.Models
                     .HasConstraintName("FK_DANHMUC_GOM_CO_LINHVUCC");
             });
 
-            modelBuilder.Entity<Hinhanhtb>(entity =>
-            {
-                entity.HasKey(e => e.Mahinhanh);
-
-                entity.ToTable("HINHANHTB");
-
-                entity.Property(e => e.Mahinhanh).HasColumnName("MAHINHANH");
-
-                entity.Property(e => e.Linkha)
-                    .HasColumnName("LINKHA")
-                    .HasMaxLength(10)
-                    .IsFixedLength();
-
-                entity.Property(e => e.Mathongbao).HasColumnName("MATHONGBAO");
-
-                entity.HasOne(d => d.MathongbaoNavigation)
-                    .WithMany(p => p.Hinhanhtb)
-                    .HasForeignKey(d => d.Mathongbao)
-                    .HasConstraintName("FK_HINHANHTB_THONGBAO");
-            });
-
             modelBuilder.Entity<Khenthuong>(entity =>
             {
                 entity.HasKey(e => new { e.Manamhoc, e.Mavienchuc });
@@ -411,6 +390,25 @@ namespace QuanLyHieuSuat.Models
                     .HasMaxLength(100);
             });
 
+            modelBuilder.Entity<Monhoc>(entity =>
+            {
+                entity.HasKey(e => e.Idmonhoc);
+
+                entity.ToTable("MONHOC");
+
+                entity.Property(e => e.Idmonhoc).HasColumnName("IDMONHOC");
+
+                entity.Property(e => e.Sotc).HasColumnName("SOTC");
+
+                entity.Property(e => e.Sotietlt).HasColumnName("SOTIETLT");
+
+                entity.Property(e => e.Sotietth).HasColumnName("SOTIETTH");
+
+                entity.Property(e => e.Tenmonhoc)
+                    .HasColumnName("TENMONHOC")
+                    .HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Namhoc>(entity =>
             {
                 entity.HasKey(e => e.Manamhoc)
@@ -439,17 +437,7 @@ namespace QuanLyHieuSuat.Models
 
                 entity.Property(e => e.Maphancong).HasColumnName("MAPHANCONG");
 
-                entity.Property(e => e.Baibaongoainuoc).HasColumnName("BAIBAONGOAINUOC");
-
-                entity.Property(e => e.Baibaotrongnuoc).HasColumnName("BAIBAOTRONGNUOC");
-
-                entity.Property(e => e.Ghichu)
-                    .HasColumnName("GHICHU")
-                    .HasMaxLength(1000);
-
-                entity.Property(e => e.Giogiang).HasColumnName("GIOGIANG");
-
-                entity.Property(e => e.Luanvan).HasColumnName("LUANVAN");
+                entity.Property(e => e.Idmonhoc).HasColumnName("IDMONHOC");
 
                 entity.Property(e => e.Manamhoc).HasColumnName("MANAMHOC");
 
@@ -459,7 +447,13 @@ namespace QuanLyHieuSuat.Models
                     .IsUnicode(false)
                     .IsFixedLength();
 
-                entity.Property(e => e.Nckh).HasColumnName("NCKH");
+                entity.Property(e => e.Soluong).HasColumnName("SOLUONG");
+                
+
+                entity.HasOne(d => d.IdmonhocNavigation)
+                    .WithMany(p => p.Phancong)
+                    .HasForeignKey(d => d.Idmonhoc)
+                    .HasConstraintName("FK_PHANCONG_MONHOC");
 
                 entity.HasOne(d => d.ManamhocNavigation)
                     .WithMany(p => p.Phancong)
@@ -521,13 +515,20 @@ namespace QuanLyHieuSuat.Models
 
                 entity.Property(e => e.Mathongbao).HasColumnName("MATHONGBAO");
 
-             
+                entity.Property(e => e.Filethongbao)
+                    .HasColumnName("FILETHONGBAO")
+                    .HasMaxLength(1000);
+
                 entity.Property(e => e.Makhoa)
                     .IsRequired()
                     .HasColumnName("MAKHOA")
                     .HasMaxLength(20)
                     .IsUnicode(false)
                     .IsFixedLength();
+
+                entity.Property(e => e.Ngaytb)
+                    .HasColumnName("NGAYTB")
+                    .HasColumnType("date");
 
                 entity.Property(e => e.Noidungthongbao)
                     .HasColumnName("NOIDUNGTHONGBAO")
@@ -536,12 +537,6 @@ namespace QuanLyHieuSuat.Models
                 entity.Property(e => e.Tieudethongbao)
                     .HasColumnName("TIEUDETHONGBAO")
                     .HasMaxLength(1000);
-                entity.Property(e => e.Filethongbao)
-                 .HasColumnName("FILETHONGBAO")
-                 .HasMaxLength(1000);
-                entity.Property(e => e.Ngaytb)
-                .HasColumnName("NGAYTB")
-                .HasMaxLength(1000);
 
                 entity.HasOne(d => d.MakhoaNavigation)
                     .WithMany(p => p.Thongbao)
@@ -571,6 +566,8 @@ namespace QuanLyHieuSuat.Models
                     .HasMaxLength(10)
                     .IsUnicode(false)
                     .IsFixedLength();
+
+                entity.Property(e => e.Bacluong).HasColumnName("BACLUONG");
 
                 entity.Property(e => e.Diachi)
                     .HasColumnName("DIACHI")

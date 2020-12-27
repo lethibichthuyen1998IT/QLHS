@@ -165,6 +165,24 @@ class Thongbao extends React.Component {
             }, () => this.uploadHandler());
         }
     };
+    selectFileHandlerUpdate = (event) => {
+        const fileTypes = ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf', 'image/png', 'image/jpeg'];
+        let file = event.target.files;
+        console.log(`File ${file}`);
+        let errMessage = [];
+        if (fileTypes.every(extension => file[0].type != extension)) {
+            errMessage.push(`The file ${file.type} extension is not supported`);
+        } else {
+            let { editData } = this.state;
+            editData.filethongbao = event.target.value;
+
+            this.setState({
+                selectedFile: file[0],
+                editData,
+
+            }, () => this.uploadHandler());
+        }
+    };
     //upload file
     uploadHandler = (event) => {
 
@@ -181,6 +199,7 @@ class Thongbao extends React.Component {
                 this.setState({
 
                     status: `Tải file lên thành công`
+
                 });
             })
             .catch((error) => {
@@ -258,6 +277,9 @@ class Thongbao extends React.Component {
                         ngaytb:date
 
                     },
+                    selectedFile: '',
+                    progress: 0,
+                    status: '',
                     errors: '',
                     AddModal: false
                 });
@@ -320,6 +342,9 @@ class Thongbao extends React.Component {
                         filethongbao: '',
                         ngaytb:''
                     },
+                    selectedFile: '',
+                    progress: 0,
+                    status: '',
                 });
                 this.refresh();
 
@@ -485,7 +510,7 @@ class Thongbao extends React.Component {
                                     </Modal>
                                     <div class="containerTB">
                                         <Row md="12">
-                                            {(rules.find(x => x == cns)) ?
+                                           
                                                 <Col md="3">
                                                     <div class="content-box color-effect-1" >
 
@@ -494,7 +519,7 @@ class Thongbao extends React.Component {
                                                         </div>
                                                     </div>
                                                 </Col>
-                                                : null}
+                                             
                                             
 
                                                        
@@ -606,9 +631,9 @@ class Thongbao extends React.Component {
                                                                         <FormGroup>
                                                         <Label htmlFor="hoten">File đính kèm: </Label>
                                                         {(this.state.editData.filethongbao != null) ?
-                                                            <Input required id="file" type="text" value={(this.state.editData.filethongbao).split('\\').pop()} /> : null}
+                                                            <Input id="file" type="text" value={(this.state.editData.filethongbao).split('\\').pop()} /> : null}
                                                       
-                                                            <Input required id="file" type="file" onChange={this.selectFileHandler.bind(this)} /> 
+                                                        <Input required id="file" type="file" onChange={this.selectFileHandlerUpdate.bind(this)} /> 
                                                                             <br />
                                                                             <div>{this.state.progress}%</div>
 
@@ -621,7 +646,7 @@ class Thongbao extends React.Component {
                                                         <Row>
                                                             <Col md="12">
                                                                 <FormGroup>
-                                                        <Label htmlFor="hoten">Tiêu đề: </Label>
+                                                        <Label htmlFor="hoten">Ngày thông báo: </Label>
                                                         <Input tyep="date" id="tenchucvu" value={moment(this.state.editData.ngaytb).format("YYYY-MM-DD")} onChange={(e) => {
                                                                         let { editData } = this.state;
                                                             editData.ngaytb = e.target.value;

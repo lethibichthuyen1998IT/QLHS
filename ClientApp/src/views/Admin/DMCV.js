@@ -571,12 +571,12 @@ class DMCV extends React.Component {
                                    
                                        
                                             <Row>
-                                                {(rules.find(x => x == cns)) ?
+                                               
                                                     <Col md="2">
                                                         <Button color="light" onClick={this.toggleNewDMModal.bind(this)} style={{ width: '80px', color: '#1E8ECF', marginLeft:'400px' }}><i style={{ fontSize: '50px' }} class="fa fa-plus-circle" aria-hidden="true" ></i></Button>
                                                     </Col>
-                                                    : null
-                                                }
+                                                   
+                                               
                                           
                                                 </Row>
                                     <Table className="table table-hover">
@@ -589,12 +589,10 @@ class DMCV extends React.Component {
                                                 <th>Tên danh mục</th>
                                                 <th>Tên lĩnh vực</th>
 
-                                                        {
-
-                                                            (rules.find(x => x == cns)) ?
+                                                     
                                                                 <th>Thao tác</th>
-                                                                : null
-                                                        }
+                                                             
+                                                      
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -605,9 +603,9 @@ class DMCV extends React.Component {
                                                             <td>{index + 1}</td>
                                                             <td>{emp.tendanhmuc}</td>
                                                             <td>{emp.tenlinhvuc}</td>
-                                                            {
+                                                         
 
-                                                                (rules.find(x => x == cns)) ?
+                                                               
 
 
                                                                     <td>
@@ -619,8 +617,7 @@ class DMCV extends React.Component {
 
 
                                                                     </td>
-                                                                    : null
-                                                            }
+                                                                   
 
                                                         </tr>
                                                     )
@@ -729,12 +726,12 @@ class DMCV extends React.Component {
                                        <TabPanel>
                                       
                                             <Row>
-                                                {(rules.find(x => x == cns)) ?
+                                               
                                                     <Col md="2">
                                                         <Button color="light" onClick={this.toggleNewLVModal.bind(this)} style={{ width: '80px', color: '#1E8ECF', marginLeft: '280px' }}><i style={{ fontSize: '50px' }} class="fa fa-plus-circle" aria-hidden="true" ></i></Button>
                                                     </Col>
-                                                    : null
-                                                }
+                                                   
+                                            
                                               
                                                 </Row>
                                     <Table className="table table-hover">
@@ -746,8 +743,8 @@ class DMCV extends React.Component {
                                                 <th>Tên lĩnh vực</th>
                                                
 
-                                                        {(rules.find(x => x == cns)) ?
-                                                            <th>Thao tác</th> : null}
+                                                    
+                                                            <th>Thao tác</th> 
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -758,7 +755,7 @@ class DMCV extends React.Component {
                                                             <td>{index + 1}</td>
                                                            
                                                             <td>{lv.tenlinhvuc}</td>
-                                                            {(rules.find(x => x == cns)) ?
+                                                          
                                                             <td>
                                                                     <Button color="default" onClick={this.toggleEditLVModal.bind(this, lv.masolinhvuc, lv.tenlinhvuc)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button> &nbsp;
                                                                
@@ -768,8 +765,7 @@ class DMCV extends React.Component {
 
 
                                                             </td>
-                                                            :null
-                                                            }
+                                                       
 
                                                         </tr>
                                                     )

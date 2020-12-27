@@ -10,6 +10,7 @@ namespace QuanLyHieuSuat.DTO
     {
         public string Mavienchuc { get; set; }
         public string Machucvu { get; set; }
+        public string Masodanhgia { get; set; }
         public string Tenchucvu { get; set; }
         public string Machucdanh { get; set; }
         public string Tenchucdanh { get; set; }
@@ -25,6 +26,7 @@ namespace QuanLyHieuSuat.DTO
         public string Sdt { get; set; }
         public DateTime? Ngaylamviec { get; set; }
         public string Matkhau { get; set; }
+        public int? Bacluong { get; set; }
 
 
     }

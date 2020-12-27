@@ -19,7 +19,7 @@ import axios from 'axios';
 import moment from 'moment';
 import Search from 'components/Search';
 import SweetAlert from 'react-bootstrap-sweetalert';
-import Pagination from "react-paginate";
+import ReactPaginate from 'react-paginate';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css'
 
@@ -39,7 +39,7 @@ class DanhmucVienchuc extends React.Component {
             httt:[],
             vc:[],
             source: [],
-          
+            sourceBM:[],
             showAlert: false,
             confirm: false,
             activePage: 1,
@@ -86,7 +86,15 @@ class DanhmucVienchuc extends React.Component {
             valueSearch: '',
             errors: '',
             idxemct:'',
-            vcbm:[]
+            vcbm: [],
+
+            offset: 0,
+            offsetBM:0,
+            orgtableDataBM:[],
+            orgtableData: [],
+            perPage: 6,
+            currentPage: 0,
+
         }
         this.refresh = this.refresh.bind(this);
         this.handleShowAlert = this.handleShowAlert.bind(this);
@@ -99,18 +107,37 @@ class DanhmucVienchuc extends React.Component {
     componentDidMount() {
 
         //hien thi danh sach
-        axios.get('/Vienchucs/bomon/' + this.state.user.mabomon, { id: this.state.user.mabomon })
-            .then((res) => this.setState({
-                vcbm: res.data,
-                source: res.data,
-            })
-        );
         axios.get('/Vienchucs/')
-            .then((res) => this.setState({
-                vienchuc: res.data,
-                source: res.data,
-            })
-            );
+            .then(res => {
+                var ct = res.data;
+                console.log('data-->' + JSON.stringify(ct))
+                var slice = ct.slice(this.state.offset, this.state.offset + this.state.perPage)
+                this.setState({
+                    pageCount: Math.ceil(ct.length / this.state.perPage),
+                    orgtableData: ct,
+                    vienchuc: slice,
+                    source: slice,
+
+                })
+
+            });
+      
+        axios.get('/Vienchucs/bomon/' + this.state.user.mabomon, { id: this.state.user.mabomon })
+            .then(res => {
+                var ct = res.data;
+                console.log('data-->' + JSON.stringify(ct))
+                var slice = ct.slice(this.state.offsetBM, this.state.offsetBM + this.state.perPage)
+                this.setState({
+                    pageCount: Math.ceil(ct.length / this.state.perPage),
+                    orgtableDataBM: ct,
+                    vcbm: slice,
+                    sourceBM: slice,
+
+                })
+
+            });
+
+       
         axios.get('/Vienchucs/cntt')
             .then((res) => this.setState({
                 cntt: res.data,
@@ -186,10 +213,52 @@ class DanhmucVienchuc extends React.Component {
 
     }
     //phan trang
-    handlePageChange(pageNumber) {
-        console.log(`active page is ${pageNumber}`);
-        this.setState({ activePage: pageNumber });
+    handlePageClick = (e) => {
+        const selectedPage = e.selected;
+        const offset = selectedPage * this.state.perPage;
+
+        this.setState({
+            currentPage: selectedPage,
+            offset: offset
+        }, () => {
+            this.loadMoreData()
+        });
+
+    };
+
+    loadMoreData() {
+        const data = this.state.orgtableData;
+
+        const slice = data.slice(this.state.offset, this.state.offset + this.state.perPage)
+        this.setState({
+            pageCount: Math.ceil(data.length / this.state.perPage),
+            vienchuc: slice,
+        })
     }
+
+
+        handlePageClickBM = (e) => {
+            const selectedPage = e.selected;
+            const offset = selectedPage * this.state.perPage;
+
+            this.setState({
+                currentPage: selectedPage,
+                offsetBM: offset
+            }, () => {
+                    this.loadMoreDataBM()
+            });
+
+        };
+
+        loadMoreDataBM() {
+            const data = this.state.orgtableDataBM;
+
+            const slice = data.slice(this.state.offsetBM, this.state.offsetBM + this.state.perPage)
+            this.setState({
+                pageCount: Math.ceil(data.length / this.state.perPage),
+                vcbm: slice,
+            })
+        }
    
     //search
     handleSearch = (search) => {
@@ -213,14 +282,15 @@ class DanhmucVienchuc extends React.Component {
 
         this.setState({
             vienchuc: newArray,
-            valueSearch: search
+            valueSearch: search,
+
         });
     }
 
     //search bm
     handleSearchBM = (search) => {
 
-        let sourceArray = this.state.source;
+        let sourceArray = this.state.sourceBM;
 
         let newArray = [];
         if (search.length <= 0) {
@@ -248,18 +318,35 @@ class DanhmucVienchuc extends React.Component {
         this.setState({
             vc: nvs
         });
-        axios.get('/Vienchucs/bomon/' + this.state.user.mabomon, { id: this.state.user.mabomon })
-            .then((res) => this.setState({
-                vcbm: res.data,
-                source: res.data,
-            })
-            );
         axios.get('/Vienchucs/')
-            .then((res) => this.setState({
-                vienchuc: res.data,
-                source: res.data,
-            })
-            );
+            .then(res => {
+                var ct = res.data;
+                console.log('data-->' + JSON.stringify(ct))
+                var slice = ct.slice(this.state.offset, this.state.offset + this.state.perPage)
+                this.setState({
+                    pageCount: Math.ceil(ct.length / this.state.perPage),
+                    orgtableData: ct,
+                    vienchuc: slice,
+                    source: slice,
+
+                })
+
+            });
+
+        axios.get('/Vienchucs/bomon/' + this.state.user.mabomon, { id: this.state.user.mabomon })
+            .then(res => {
+                var ct = res.data;
+                console.log('data-->' + JSON.stringify(ct))
+                var slice = ct.slice(this.state.offset, this.state.offset + this.state.perPage)
+                this.setState({
+                    pageCount: Math.ceil(ct.length / this.state.perPage),
+                    orgtableDataBM: ct,
+                    vcbm: slice,
+                    sourceBM: slice,
+
+                })
+
+            });
         axios.get('/Vienchucs/cntt')
             .then((res) => this.setState({
                 cntt: res.data,
@@ -867,6 +954,23 @@ toggleDetailsModal(id) {
                                                 }
                                             </tbody>
                                                 </Table>
+                                                <div class="page-pagination">
+
+                                                    <ReactPaginate
+                                                        previousLabel={"<"}
+                                                        nextLabel={">"}
+
+                                                        breakLabel={"..."}
+                                                        breakClassName={"break-me"}
+                                                        pageCount={this.state.pageCount}
+                                                        marginPagesDisplayed={2}
+                                                        pageRangeDisplayed={6}
+                                                        onPageChange={this.handlePageClick}
+                                                        containerClassName={"pagination"}
+                                                        subContainerClassName={"pages pagination"}
+                                                        activeClassName={"active"} />
+
+                                                </div>
                                             </TabPanel>
                                             <TabPanel>
 
@@ -2192,6 +2296,23 @@ toggleDetailsModal(id) {
                                                                 </SweetAlert>
                                                 </tbody>
                                             </Table>
+                                            <div class="page-pagination">
+
+                                                <ReactPaginate
+                                                    previousLabel={"<"}
+                                                    nextLabel={">"}
+
+                                                    breakLabel={"..."}
+                                                    breakClassName={"break-me"}
+                                                    pageCount={this.state.pageCount}
+                                                    marginPagesDisplayed={2}
+                                                    pageRangeDisplayed={6}
+                                                    onPageChange={this.handlePageClickBM}
+                                                    containerClassName={"pagination"}
+                                                    subContainerClassName={"pages pagination"}
+                                                    activeClassName={"active"} />
+
+                                            </div>
                                         </CardBody>
                                         <CardFooter style={{ paddingLeft: '450px' }}>
                                         </CardFooter>

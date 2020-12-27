@@ -20,11 +20,10 @@ import {
     ModalHeader,
     ModalFooter,
     ModalBody,
-
     Input, Label, Form, FormGroup, Alert
 } from "reactstrap";
 
-
+var date = new Date();
 class DanhGiaVC extends Component {
     constructor(props) {
         super(props);
@@ -40,6 +39,7 @@ class DanhGiaVC extends Component {
                 uudiem: '',
                 nhuocdiem: '',
                 loai: '',
+                ngayvcdg: date
             },
             editdg: {
                 manamhoc: '',
@@ -62,9 +62,14 @@ class DanhGiaVC extends Component {
             user: JSON.parse(localStorage.getItem('user')),
             errors: '',
             selectedFile: '',
+            pc:[],
             progress: 0,
             status: '',
-            modal: false
+            modal: false,
+            lv: [],
+            nl: [],
+            tstiet: '',
+            vc:[]
 
 
         };
@@ -73,6 +78,28 @@ class DanhGiaVC extends Component {
     }
 
     componentDidMount() {
+
+        axios.get('/phancongs/vc/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                pc: res.data,
+
+            }));
+
+        axios.get('/phancongs/lv/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                lv: res.data,
+
+            }));
+        axios.get('/phancongs/nl/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                nl: res.data,
+
+            }));
+        axios.get('/phancongs/tstiet/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                tstiet: res.data,
+
+            }));
         axios.get('/namhocs/namhoc/')
             .then((res) => this.setState({
                 nhmd: res.data.manamhoc,
@@ -94,9 +121,20 @@ class DanhGiaVC extends Component {
                 nh: res.data,
 
             })
-            );
+        );
+        axios.get('/vienchucs/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                vc: res.data,
 
-        axios.get('/danhgias/')
+
+            })
+       
+                
+            );
+       
+        console.log(this.state.vc);
+
+        axios.get('/danhgias/' )
             .then((res) => this.setState({
                 dg: res.data,
 
@@ -127,6 +165,7 @@ class DanhGiaVC extends Component {
                     uudiem: res.data.uudiem,
                     nhuocdiem: res.data.nhuocdiem,
                     loai: res.data.loai,
+                  
                 },
                
 
@@ -183,7 +222,8 @@ class DanhGiaVC extends Component {
             TRACHNHIEM: this.state.newdg.trachnhiem,
             UUDIEM: this.state.newdg.uudiem,
             NHUOCDIEM: this.state.newdg.nhuocdiem,
-            LOAI: this.state.newdg.loai
+            LOAI: this.state.newdg.loai,
+            NGAYVCDG: this.state.newdg.ngayvcdg
 
         }).then((response) => {
             //console.log(response.data);
@@ -201,7 +241,7 @@ class DanhGiaVC extends Component {
     render() {
 
 
-        const { dg, user, idnh, ctdg } = this.state;
+        const { dg, user, idnh, ctdg,pc,lv,nl,tstiet,vc } = this.state;
 
 
 
@@ -210,8 +250,7 @@ class DanhGiaVC extends Component {
             if (e.mavienchuc.trim() === user.mavienchuc.trim() && e.manamhoc === idnh)
                 danhgia.push(e.mavienchuc, e.manamhoc);
         });
-        console.log(ctdg)
-
+      
         return (
             <>
 
@@ -245,21 +284,98 @@ class DanhGiaVC extends Component {
                                     :
 
                                     <>
-                                        <Row>
-                                            <Col md="6">
+
+                                        <div style={{ backgroundColor: 'white', padding: '30px 30px' }}>
+                                            <Row md="12" >
+                                                <Col md="6" >
+                                                    <a style={{ paddingLeft: '7px' }}> BỘ GIÁO DỤC VÀ ĐÀO TẠO</a> <br />
+                                                    <a style={{ fontWeight: 'bold' }}>TRƯỜNG ĐẠI HỌC CẦN THƠ</a> <br />
+                                                    <b style={{ paddingLeft: '70px' }}>-----</b>
+                                                </Col>
+                                                <Col md="6" style={{
+                                                    textAlign: 'right', paddingRight: '20px', fontWeight: 'bold'
+                                                }}>
+                                                    <b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM </b><br />
+                                                    <b style={{ paddingRight: '40px' }}>Độc lập - Tự do - Hạnh phúc</b> <br />
+                                                    <b style={{ paddingRight: '110px' }}>-------------</b>
+                                                </Col>
+                                            </Row>
+
+                                            <Row md="12" style={{ textAlign: 'center' }}>
+                                                <Col md="12" style={{ fontWeight: 'bold' }}>
+                                                    PHIẾU ĐÁNH GIÁ VÀ PHẦN LOẠI VIÊN CHỨC <br />(Dành cho viên chức không giữ chức vụ quản lý)< br />
+                            Năm học {idnh}
+                                                </Col>
+                                            </Row>
+                                            <Row md="12" style={{ textAlign: 'justify' }}>
+                                                <Col md="12">
+                                                    <b>Họ và tên: <a style={{ textTransform: "uppercase", fontWeight: 'bold' }}>{vc.hoten} </a> </b>
+
+                                                </Col>
+
+
+                                                <Col md="12">
+                                                    <b>Chức danh nghề nghiệp: <a style={{ fontWeight: 'bold' }}>{vc.tenchucdanh} </a> </b>
+
+                                                </Col>
+                                                <Col md="12">
+                                                    <b>Đơn vị công tác: Bộ môn <a style={{ fontWeight: 'bold' }}>{vc.tenbomon} </a> , Khoa <a style={{ fontWeight: 'bold' }}>{ctdg.tenkhoa} </a>   </b>
+
+                                                </Col>
+                                                <Col md="4">
+                                                    <b>Hạng chức danh nghề nghiệp: <a style={{ fontWeight: 'bold' }}>{vc.hangchucdanh} </a>  </b>
+
+                                                </Col>
+                                                <Col md="4">
+                                                    <b>Bậc: {vc.bacluong} </b>
+
+                                                </Col>
+                                                <Col md="4">
+                                                    <b>Hệ số lương: </b>
+
+                                                </Col>
+
+                                            </Row>
+
+                                        </div>
+                                        <div style={{ backgroundColor: 'white', padding: '30px 30px' }}>
+                                            <Row md="12" style={{ fontWeight: 'bold' }}>
+                                                I. TỰ ĐÁNH GIÁ KẾT QUẢ CÔNG TÁC, TU DƯỠNG, RÈN LUYỆN CỦA VIÊN CHỨC
+                            </Row>
+                                            <Row md="12">
+                                                <b> 1. Kết quả thực hiện công việc hoặc nhiệm vụ theo hợp đồng làm việc đã ký kết:</b>
+                                            </Row>
+                                            <Row md="12">
+                                                <Col md="12">
+                                                  Số tiết giảng dạy: <b> {tstiet}</b>, &nbsp;
+                                                hướng dẫn <b> {nl.soluong}</b> tiểu luận/niên luận,&nbsp;
+                                                 hướng dẫn <b> {lv.soluong}</b> luận văn
+                                                    Các môn giảng dạy: {pc.map((emp) => {
+                                                        return (<strong> {emp.tenmonhoc},</strong>)
+                                                    })}
+                                                       
+                                                </Col>
+
+                                            </Row>
+                                            <Row md="12">
+                                                <Col md="12">
                                                 <FormGroup>
 
-                                                    <Label htmlFor="hoten">Kết quả rèn luyện: </Label>
+                                                  
                                                     <Input type="textarea" value={this.state.newdg.kqth} onChange={(e) => {
                                                         let { newdg } = this.state;
                                                         newdg.kqth = e.target.value;
 
                                                         this.setState({ newdg });
-                                                    }} placeholder="Kết quả rèn luyện" />
+                                                    }} />
                                                 </FormGroup>
-                                            </Col>
+                                            </Col>   </Row>
 
-                                            <Col md="6">
+
+                                            <Row md="12">
+                                                <b> 2. Việc thực hiện quy định về đạo đức nghề nghiệp:</b></Row>
+                                            <Row md="12">
+                                                <Col md="12">
                                                 <FormGroup>
 
                                                     <Label htmlFor="hoten">Đạo đức: </Label>
@@ -268,12 +384,13 @@ class DanhGiaVC extends Component {
                                                         newdg.daoduc = e.target.value;
 
                                                         this.setState({ newdg });
-                                                    }} placeholder="Đạo đức" />
+                                                    }}  />
                                                 </FormGroup>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col md="12">
+                                            </Col> </Row>
+
+                                            <Row md="12" >
+                                                <b> 3. Tinh thần trách nhiệm, thái độ phục vụ nhân dân, tinh thần hợp tác với đồng nghiệp và việc thực hiện quy tắc ứng xử của viên chức:</b></Row>
+                                            <Row md="12"> <Col md="12">
                                                 <FormGroup>
                                                     <Label htmlFor="hoten">Trách nhiệm: </Label>
                                                     <Input type="textarea" value={this.state.newdg.trachnhiem} onChange={(e) => {
@@ -281,40 +398,14 @@ class DanhGiaVC extends Component {
                                                         newdg.trachnhiem = e.target.value;
 
                                                         this.setState({ newdg });
-                                                    }} placeholder="Trách nhiệm" />
+                                                    }} />
                                                 </FormGroup>
-                                            </Col>
-                                        </Row>
-                                        <Row>
+                                            </Col>   </Row>
 
-                                            <Col md="12">
-                                                <FormGroup>
-                                                    <Label htmlFor="hoten">Ưu điểm: </Label>
-                                                    <Input type="textarea" value={this.state.newdg.uudiem} onChange={(e) => {
-                                                        let { newdg } = this.state;
-                                                        newdg.uudiem = e.target.value;
-
-                                                        this.setState({ newdg });
-                                                    }} placeholder="Ưu điểm" />
-                                                </FormGroup>
-                                            </Col>
-
-                                            <Col md="12">
-                                                <FormGroup>
-                                                    <Label htmlFor="hoten">Nhược điểm: </Label>
-                                                    <Input type="textarea" value={this.state.newdg.nhuocdiem} onChange={(e) => {
-                                                        let { newdg } = this.state;
-                                                        newdg.nhuocdiem = e.target.value;
-
-                                                        this.setState({ newdg });
-                                                    }} placeholder="Nhược điểm" />
-                                                </FormGroup>
-                                            </Col>
-                                        </Row>
-
-
-                                        <Row>
-                                            <Col md="12">
+                                            <Row md="12">
+                                                <b> 4. Việc thực hiện các nghĩa vụ khác của viên chức: <br /></b>
+                            (việc tham gia các hoạt động do Trường và đơn vị tổ chức/ việc tham gia triển khai nghị quyết, chính sách, pháp luật của Đảng, Nhà nước/việc tham gia học tập nâng cao trình độ..)</Row>
+                                            <Row md="12">  <Col md="12">
                                                 <FormGroup>
                                                     <Label htmlFor="hoten">Kết quả thực hiện khác: </Label>
                                                     <Input type="textarea" value={this.state.newdg.khac} onChange={(e) => {
@@ -324,68 +415,178 @@ class DanhGiaVC extends Component {
                                                         this.setState({ newdg });
                                                     }} placeholder="Kết quả thực hiện khác" />
                                                 </FormGroup>
-                                            </Col>
+                                            </Col>  </Row>
 
-                                            <Col md="12">
+                                            <Row md="12" style={{ fontWeight: 'bold' }}>
+                                                II. TỰ ĐÁNH GIÁ, PHÂN LOẠI CỦA VIÊN CHỨC
+                            </Row>
+                                            <Row md="12">
+                                                <b> 1. Đánh giá ưu, nhược điểm:</b>  </Row>
+                                            <Row md="12"> <Col md="12">
                                                 <FormGroup>
-                                                    <Label htmlFor="hoten">Kết quả thực hiện khác: </Label>
-                                                    <Input type="select" value={this.state.newdg.loai} onChange={(e) => {
+                                                    <Label htmlFor="hoten">Ưu điểm: </Label>
+                                                    <Input type="textarea" value={this.state.newdg.uudiem} onChange={(e) => {
                                                         let { newdg } = this.state;
-                                                        newdg.loai = Number.parseInt(e.target.value);
+                                                        newdg.uudiem = e.target.value;
 
                                                         this.setState({ newdg });
-                                                    }}>
-
-                                                        <option value='0'>-- Chọn Loại Đánh Giá --</option>
-                                                        <option value='1'>Hoàn thành xuất sắc nhiệm vụ </option>
-                                                        <option value='2'>Hoàn thành tốt nhiệm vụ </option>
-                                                        <option value='3'>Hoàn thành nhiệm vụ  </option>
-                                                        <option value='4'>Không hoàn thành nhiệm vụ </option>
-                                                    </Input>
+                                                    }} placeholder="Ưu điểm" />
                                                 </FormGroup>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col md="12">
+                                            </Col>  </Row>
+                                            <Row md="12"><Col md="12">
+                                                <FormGroup>
+                                                    <Label htmlFor="hoten">Nhược điểm: </Label>
+                                                    <Input type="textarea" value={this.state.newdg.nhuocdiem} onChange={(e) => {
+                                                        let { newdg } = this.state;
+                                                        newdg.nhuocdiem = e.target.value;
+
+                                                        this.setState({ newdg });
+                                                    }} placeholder="Nhược điểm" />
+                                                </FormGroup>
+                                            </Col> </Row>
+
+                                            <Row md="12">
+                                                <Col md="12">
+                                                    <FormGroup>
+                                                        <Label htmlFor="hoten">Kết quả thực hiện khác: </Label>
+                                                        <Input type="select" value={this.state.newdg.loai} onChange={(e) => {
+                                                            let { newdg } = this.state;
+                                                            newdg.loai = Number.parseInt(e.target.value);
+
+                                                            this.setState({ newdg });
+                                                        }}>
+
+                                                            <option value='0'>-- Chọn Loại Đánh Giá --</option>
+                                                            <option value='1'>Hoàn thành xuất sắc nhiệm vụ </option>
+                                                            <option value='2'>Hoàn thành tốt nhiệm vụ </option>
+                                                            <option value='3'>Hoàn thành nhiệm vụ  </option>
+                                                            <option value='4'>Không hoàn thành nhiệm vụ </option>
+                                                        </Input>
+                                                    </FormGroup>
+                                                </Col>
+                                               
+
+                                            </Row>
+                                            <Row>
+                                                <Col md="12">
 
 
-                                                <button onClick={this.addDG.bind(this)} class="site-btn">Lưu</button>
-                                            </Col>
+                                                    <button onClick={this.addDG.bind(this)} class="site-btn">Lưu</button>
+                                                </Col>
 
-                                        </Row>
-                                    </>
+                                            </Row>
+                                        </div>
+                                               </>
+
                                 }
                                 {(this.state.modal) ?
                                     <>
-                                        <Row>
-                                            <Col md="6">
-                                                <FormGroup>
 
-                                                    <Label htmlFor="hoten">Kết quả rèn luyện: </Label>
-                                                    <Input type="textarea" value={this.state.editdg.kqth} onChange={(e) => {
-                                                        let { editdg } = this.state;
-                                                        editdg.kqth = e.target.value;
+                                        <div style={{ backgroundColor: 'white', padding: '30px 30px' }}>
+                                            <Row md="12" >
+                                                <Col md="6" >
+                                                    <a style={{ paddingLeft: '7px' }}> BỘ GIÁO DỤC VÀ ĐÀO TẠO</a> <br />
+                                                    <a style={{ fontWeight: 'bold' }}>TRƯỜNG ĐẠI HỌC CẦN THƠ</a> <br />
+                                                    <b style={{ paddingLeft: '70px' }}>-----</b>
+                                                </Col>
+                                                <Col md="6" style={{
+                                                    textAlign: 'right', paddingRight: '20px', fontWeight: 'bold'
+                                                }}>
+                                                    <b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM </b><br />
+                                                    <b style={{ paddingRight: '40px' }}>Độc lập - Tự do - Hạnh phúc</b> <br />
+                                                    <b style={{ paddingRight: '110px' }}>-------------</b>
+                                                </Col>
+                                            </Row>
 
-                                                        this.setState({ editdg });
-                                                    }} placeholder="Kết quả rèn luyện" />
-                                                </FormGroup>
-                                            </Col>
+                                            <Row md="12" style={{ textAlign: 'center' }}>
+                                                <Col md="12" style={{ fontWeight: 'bold' }}>
+                                                    PHIẾU ĐÁNH GIÁ VÀ PHẦN LOẠI VIÊN CHỨC <br />(Dành cho viên chức không giữ chức vụ quản lý)< br />
+                            Năm học {ctdg.tennamhoc}
+                                                </Col>
+                                            </Row>
+                                            <Row md="12" style={{ textAlign: 'justify' }}>
+                                                <Col md="12">
+                                                    <b>Họ và tên: <a style={{ textTransform: "uppercase", fontWeight: 'bold' }}>{ctdg.hoten} </a> </b>
 
-                                            <Col md="6">
-                                                <FormGroup>
+                                                </Col>
 
-                                                    <Label htmlFor="hoten">Đạo đức: </Label>
-                                                    <Input type="textarea" value={this.state.editdg.daoduc} onChange={(e) => {
-                                                        let { editdg } = this.state;
-                                                        editdg.daoduc = e.target.value;
 
-                                                        this.setState({ editdg });
-                                                    }} placeholder="Đạo đức" />
-                                                </FormGroup>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col md="12">
+                                                <Col md="12">
+                                                    <b>Chức danh nghề nghiệp: <a style={{ fontWeight: 'bold' }}>{ctdg.tenchucdanh} </a> </b>
+
+                                                </Col>
+                                                <Col md="12">
+                                                    <b>Đơn vị công tác: Bộ môn <a style={{ fontWeight: 'bold' }}>{ctdg.tenbomon} </a> , Khoa <a style={{ fontWeight: 'bold' }}>{ctdg.tenkhoa} </a>   </b>
+
+                                                </Col>
+                                                <Col md="4">
+                                                    <b>Hạng chức danh nghề nghiệp: <a style={{ fontWeight: 'bold' }}>{ctdg.hangchucdanh} </a>  </b>
+
+                                                </Col>
+                                                <Col md="4">
+                                                    <b>Bậc: {ctdg.bacluong} </b>
+
+                                                </Col>
+                                                <Col md="4">
+                                                    <b>Hệ số lương: </b>
+
+                                                </Col>
+
+                                            </Row>
+
+                                        </div>
+                                        <div style={{ backgroundColor: 'white', padding: '30px 30px' }}>
+                                            <Row md="12" style={{ fontWeight: 'bold' }}>
+                                                I. TỰ ĐÁNH GIÁ KẾT QUẢ CÔNG TÁC, TU DƯỠNG, RÈN LUYỆN CỦA VIÊN CHỨC
+                            </Row>
+                                            <Row md="12">
+                                                <b> 1. Kết quả thực hiện công việc hoặc nhiệm vụ theo hợp đồng làm việc đã ký kết:</b>
+                                            </Row>
+                                            <Row md="12">
+                                                <Col md="12">
+                                                    Số tiết giảng dạy: <b> {tstiet}</b>, &nbsp;
+                                                hướng dẫn <b> {nl.soluong}</b> tiểu luận/niên luận,&nbsp;
+                                                 hướng dẫn <b> {lv.soluong}</b> luận văn
+                                                    Các môn giảng dạy: {pc.map((emp) => {
+                                                    return (<strong> {emp.tenmonhoc},</strong>)
+                                                })}
+
+                                                </Col>
+                                            </Row>
+                                            <Row md="12">
+                                                <Col md="12">
+                                                    <FormGroup>
+
+
+                                                        <Input type="textarea" value={this.state.editdg.kqth} onChange={(e) => {
+                                                            let { editdg } = this.state;
+                                                            editdg.kqth = e.target.value;
+
+                                                            this.setState({ editdg });
+                                                        }} />
+                                                    </FormGroup>
+                                                </Col>   </Row>
+
+
+                                            <Row md="12">
+                                                <b> 2. Việc thực hiện quy định về đạo đức nghề nghiệp:</b></Row>
+                                            <Row md="12">
+                                                <Col md="12">
+                                                    <FormGroup>
+
+                                                        <Label htmlFor="hoten">Đạo đức: </Label>
+                                                        <Input type="textarea" value={this.state.editdg.daoduc} onChange={(e) => {
+                                                            let { editdg } = this.state;
+                                                            editdg.daoduc = e.target.value;
+
+                                                            this.setState({ editdg });
+                                                        }} />
+                                                    </FormGroup>
+                                                </Col> </Row>
+
+                                            <Row md="12" >
+                                                <b> 3. Tinh thần trách nhiệm, thái độ phục vụ nhân dân, tinh thần hợp tác với đồng nghiệp và việc thực hiện quy tắc ứng xử của viên chức:</b></Row>
+                                            <Row md="12"> <Col md="12">
                                                 <FormGroup>
                                                     <Label htmlFor="hoten">Trách nhiệm: </Label>
                                                     <Input type="textarea" value={this.state.editdg.trachnhiem} onChange={(e) => {
@@ -393,40 +594,14 @@ class DanhGiaVC extends Component {
                                                         editdg.trachnhiem = e.target.value;
 
                                                         this.setState({ editdg });
-                                                    }} placeholder="Trách nhiệm" />
+                                                    }} />
                                                 </FormGroup>
-                                            </Col>
-                                        </Row>
-                                        <Row>
+                                            </Col>   </Row>
 
-                                            <Col md="12">
-                                                <FormGroup>
-                                                    <Label htmlFor="hoten">Ưu điểm: </Label>
-                                                    <Input type="textarea" value={this.state.editdg.uudiem} onChange={(e) => {
-                                                        let { editdg } = this.state;
-                                                        editdg.uudiem = e.target.value;
-
-                                                        this.setState({ editdg });
-                                                    }} placeholder="Ưu điểm" />
-                                                </FormGroup>
-                                            </Col>
-
-                                            <Col md="12">
-                                                <FormGroup>
-                                                    <Label htmlFor="hoten">Nhược điểm: </Label>
-                                                    <Input type="textarea" value={this.state.editdg.nhuocdiem} onChange={(e) => {
-                                                        let { editdg } = this.state;
-                                                        editdg.nhuocdiem = e.target.value;
-
-                                                        this.setState({ editdg });
-                                                    }} placeholder="Nhược điểm" />
-                                                </FormGroup>
-                                            </Col>
-                                        </Row>
-
-
-                                        <Row>
-                                            <Col md="12">
+                                            <Row md="12">
+                                                <b> 4. Việc thực hiện các nghĩa vụ khác của viên chức: <br /></b>
+                            (việc tham gia các hoạt động do Trường và đơn vị tổ chức/ việc tham gia triển khai nghị quyết, chính sách, pháp luật của Đảng, Nhà nước/việc tham gia học tập nâng cao trình độ..)</Row>
+                                            <Row md="12">  <Col md="12">
                                                 <FormGroup>
                                                     <Label htmlFor="hoten">Kết quả thực hiện khác: </Label>
                                                     <Input type="textarea" value={this.state.editdg.khac} onChange={(e) => {
@@ -436,36 +611,69 @@ class DanhGiaVC extends Component {
                                                         this.setState({ editdg });
                                                     }} placeholder="Kết quả thực hiện khác" />
                                                 </FormGroup>
-                                            </Col>
+                                            </Col>  </Row>
 
-                                            <Col md="12">
+                                            <Row md="12" style={{ fontWeight: 'bold' }}>
+                                                II. TỰ ĐÁNH GIÁ, PHÂN LOẠI CỦA VIÊN CHỨC
+                            </Row>
+                                            <Row md="12">
+                                                <b> 1. Đánh giá ưu, nhược điểm:</b>  </Row>
+                                            <Row md="12"> <Col md="12">
                                                 <FormGroup>
-                                                    <Label htmlFor="hoten">Kết quả thực hiện khác: </Label>
-                                                    <Input type="select" value={this.state.editdg.loai} onChange={(e) => {
+                                                    <Label htmlFor="hoten">Ưu điểm: </Label>
+                                                    <Input type="textarea" value={this.state.editdg.uudiem} onChange={(e) => {
                                                         let { editdg } = this.state;
-                                                        editdg.loai = Number.parseInt(e.target.value);
+                                                        editdg.uudiem = e.target.value;
 
                                                         this.setState({ editdg });
-                                                    }}>
-
-                                                        <option value='0'>-- Chọn Loại Đánh Giá --</option>
-                                                        <option value='1'>Hoàn thành xuất sắc nhiệm vụ </option>
-                                                        <option value='2'>Hoàn thành tốt nhiệm vụ </option>
-                                                        <option value='3'>Hoàn thành nhiệm vụ  </option>
-                                                        <option value='4'>Không hoàn thành nhiệm vụ </option>
-                                                    </Input>
+                                                    }} placeholder="Ưu điểm" />
                                                 </FormGroup>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col md="12">
+                                            </Col>  </Row>
+                                            <Row md="12"><Col md="12">
+                                                <FormGroup>
+                                                    <Label htmlFor="hoten">Nhược điểm: </Label>
+                                                    <Input type="textarea" value={this.state.editdg.nhuocdiem} onChange={(e) => {
+                                                        let { editdg } = this.state;
+                                                        editdg.nhuocdiem = e.target.value;
+
+                                                        this.setState({ editdg });
+                                                    }} placeholder="Nhược điểm" />
+                                                </FormGroup>
+                                            </Col> </Row>
+
+                                            <Row md="12">
+                                                <Col md="12">
+                                                    <FormGroup>
+                                                        <Label htmlFor="hoten">Kết quả thực hiện khác: </Label>
+                                                        <Input type="select" value={this.state.editdg.loai} onChange={(e) => {
+                                                            let { editdg } = this.state;
+                                                            editdg.loai = Number.parseInt(e.target.value);
+
+                                                            this.setState({ editdg });
+                                                        }}>
+
+                                                            <option value='0'>-- Chọn Loại Đánh Giá --</option>
+                                                            <option value='1'>Hoàn thành xuất sắc nhiệm vụ </option>
+                                                            <option value='2'>Hoàn thành tốt nhiệm vụ </option>
+                                                            <option value='3'>Hoàn thành nhiệm vụ  </option>
+                                                            <option value='4'>Không hoàn thành nhiệm vụ </option>
+                                                        </Input>
+                                                    </FormGroup>
+                                                </Col>
+                                                
+
+                                            </Row>
+                                            <Row>
+                                                <Col md="12">
 
 
-                                                <button onClick={this.update.bind(this)} class="site-btn">Lưu</button>
-                                            </Col>
+                                                    <button onClick={this.update.bind(this)} class="site-btn">Lưu</button>
+                                                </Col>
 
-                                        </Row>
+                                            </Row>
+                                        </div>
                                     </>
+                                  
                                     :null
 
                                 }

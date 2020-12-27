@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using QuanLyHieuSuat.DTO;
 using QuanLyHieuSuat.Models;
 
 namespace QuanLyHieuSuat.Controllers
@@ -18,23 +19,74 @@ namespace QuanLyHieuSuat.Controllers
 
 
         [HttpGet("{id}/{idnh}")]
-        public Phancong Index(string id, int idnh)
+        public IEnumerable<PhanCongDTO> Index(string id, int idnh)
         {
             try
             {
                 var pc = from a in db.Phancong
                          join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
-                         where a.Mavienchuc == id && a.Manamhoc==idnh
-                         select a;
-                return pc.SingleOrDefault();
+                         join c in db.Monhoc on a.Idmonhoc equals c.Idmonhoc
+                         where a.Mavienchuc == id && a.Manamhoc == idnh
+
+                         select new PhanCongDTO()
+                         {
+                             Mavienchuc = a.Mavienchuc,
+                             Maphancong=a.Maphancong,
+                             Hoten = b.Hoten,
+                             Tenmonhoc = c.Tenmonhoc,
+                             Sotc = c.Sotc,
+                             Soluong= a.Soluong,
+                             Manamhoc = a.Manamhoc,
+                             Idmonhoc=c.Idmonhoc
+
+                             
+
+
+                         };
+                return pc.ToList();
             }
             catch
             {
                 throw;
             }
         }
+
         [HttpGet("VC/{idvc}")]
-        public Phancong VC(string idvc)
+        public IEnumerable<PhanCongDTO> VC(string idvc)
+        {
+
+            var nh = (from a in db.Namhoc orderby a.Manamhoc descending select a.Manamhoc).FirstOrDefault();
+
+
+            try
+            {
+                var pc = from a in db.Phancong
+                         join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
+                         join c in db.Monhoc on a.Idmonhoc equals c.Idmonhoc
+                         where a.Mavienchuc == idvc && a.Manamhoc == nh && a.Idmonhoc!=1 && a.Idmonhoc!=2
+
+                         select new PhanCongDTO()
+                         {
+                             Mavienchuc = a.Mavienchuc,
+                             Hoten = b.Hoten,
+                             Tenmonhoc = c.Tenmonhoc,
+                             Sotc = c.Sotc,
+                             Soluong = a.Soluong,
+                             Maphancong = a.Maphancong,
+                             Tongsotiet = (c.Sotietlt + c.Sotietth) * a.Soluong
+
+                         };
+
+                return pc.ToList();
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        [HttpGet("LV/{idvc}")]
+        public PhanCongDTO LV(string idvc)
         {
 
             var nh = (from a in db.Namhoc orderby a.Manamhoc descending select a.Manamhoc).FirstOrDefault();
@@ -44,27 +96,83 @@ namespace QuanLyHieuSuat.Controllers
             {
                 var pc = from a in db.Phancong
                          join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
-                         where a.Mavienchuc == idvc && a.Manamhoc == nh
-                         select a;
-                return pc.SingleOrDefault();
+                         join c in db.Monhoc on a.Idmonhoc equals c.Idmonhoc
+                         where a.Mavienchuc == idvc && a.Manamhoc == nh && c.Idmonhoc==1
+
+                         select new PhanCongDTO()
+                         {
+                             Mavienchuc = a.Mavienchuc,
+                             Hoten = b.Hoten,
+                             Tenmonhoc = c.Tenmonhoc,
+                             Maphancong = a.Maphancong,
+                             Sotc = c.Sotc,
+                             Soluong = a.Soluong,
+
+                             Tongsotiet =  (c.Sotietlt + c.Sotietth)*a.Soluong
+
+                         };
+               
+                return  pc.FirstOrDefault();
+               
             }
             catch
             {
                 throw;
             }
         }
-        [HttpGet("bomopc/{id}")]
-        public IEnumerable<Phancong> Bomon(string id)
+        [HttpGet("NL/{idvc}")]
+        public PhanCongDTO NL(string idvc)
         {
+
+            var nh = (from a in db.Namhoc orderby a.Manamhoc descending select a.Manamhoc).FirstOrDefault();
+
+
             try
             {
-
                 var pc = from a in db.Phancong
                          join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
-                         where b.Mabomon == id
-                         select a;
+                         join c in db.Monhoc on a.Idmonhoc equals c.Idmonhoc
+                         where a.Mavienchuc == idvc && a.Manamhoc == nh && c.Idmonhoc == 2
 
-                return pc.ToList();
+                         select new PhanCongDTO()
+                         {
+                             Mavienchuc = a.Mavienchuc,
+                             Hoten = b.Hoten,
+                             Tenmonhoc = c.Tenmonhoc,
+                             Sotc = c.Sotc,
+                             Maphancong = a.Maphancong,
+                             Soluong =a.Soluong,
+                             Tongsotiet = (c.Sotietlt + c.Sotietth) * a.Soluong
+
+                         };
+
+                return pc.FirstOrDefault();
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        [HttpGet("TStiet/{idvc}")]
+        public string TS(string idvc)
+        {
+
+            var nh = (from a in db.Namhoc orderby a.Manamhoc descending select a.Manamhoc).FirstOrDefault();
+
+            
+            try
+            {
+                var pc = (from a in db.Phancong
+                          join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
+                          join c in db.Monhoc on a.Idmonhoc equals c.Idmonhoc
+                          where a.Mavienchuc == idvc && a.Manamhoc == nh
+                          select (c.Sotietlt*a.Soluong + c.Sotietth*a.Soluong)).Sum();
+
+                        
+               
+                return pc.ToString();
+
             }
             catch
             {
@@ -72,6 +180,26 @@ namespace QuanLyHieuSuat.Controllers
             }
         }
 
+
+        [HttpPost("themmonhoc")]
+        public int mh([FromBody] Phancong pc)
+        {
+
+            db.Phancong.Add(pc);
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    db.SaveChanges();
+                }
+                return 1;
+
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+        }
         [HttpPost]
         public int Create([FromBody] Phancong pc)
         {

@@ -72,6 +72,9 @@ class Trangchu extends Component {
             nh: [],
             vc: [],
             pc:[],
+            lv: [],
+            nl:[],
+            tstiet:'',
             user: JSON.parse(localStorage.getItem('user'))
 
 
@@ -97,17 +100,31 @@ class Trangchu extends Component {
                     pageCount: Math.ceil(ct.length / this.state.perPage),
                     orgtableData: ct,
                     congtac: slice,
-                    source: slice,
+                    source: ct,
 
                 })
 
             });
 
-
-
         axios.get('/phancongs/vc/' + this.state.user.mavienchuc)
             .then((res) => this.setState({
                 pc: res.data,
+
+            }));
+
+        axios.get('/phancongs/lv/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                lv: res.data,
+
+            }));
+        axios.get('/phancongs/nl/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                nl: res.data,
+
+            }));
+        axios.get('/phancongs/tstiet/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                tstiet: res.data,
 
             }));
 
@@ -191,9 +208,25 @@ class Trangchu extends Component {
                 })
 
             });
+
         axios.get('/phancongs/vc/' + this.state.user.mavienchuc)
             .then((res) => this.setState({
                 pc: res.data,
+
+            }));
+        axios.get('/phancongs/lv/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                lv: res.data,
+
+            }));
+        axios.get('/phancongs/nl/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                nl: res.data,
+
+            }));
+        axios.get('/phancongs/tstiet/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                tstiet: res.data,
 
             }));
         axios.get('/namhocs/')
@@ -331,7 +364,7 @@ class Trangchu extends Component {
         });
     }
     render() {
-        const { congtac, errors,pc } = this.state;
+        const { congtac, errors,pc, tstiet,lv,nl} = this.state;
         console.log(pc)
         return (
 
@@ -369,30 +402,30 @@ class Trangchu extends Component {
                             <CardBody>
                                 <Row md="12">
                                     <Col md="6">
-                                        <p>Số giờ giảng: {pc.giogiang}</p>
+                                        <p>Số giờ giảng dạy: <strong>{tstiet}</strong> </p>
                                     </Col>
                                     <Col md="6">
-                                            <p>Số luận văn: {pc.luanvan}</p>
-                                    </Col>
-                                </Row>
-                                    <Row md="12">
-                                    <Col md="6">
-                                        <p>Số bài báo trong nước: {pc.baibaongoainuoc}</p>
+                                        <p>Số luận văn: <strong>{nl.soluong}</strong></p>
                                     </Col>
                                     <Col md="6">
-                                        <p>Số bài báo ngoài nước: {pc.baibaotrongnuoc}</p>
+                                        <p>Số tiểu luận / niên luận: <strong>{nl.soluong}</strong></p>
+
                                     </Col>
-                                </Row>
-                                        <Row md="12">
-                                    <Col md="6">
-                                        <p>Nghiên cứu khoa học: {pc.nckh}</p>
-                                    </Col>
-                                </Row>
-                                <Row>
+                                    </Row>
+                                    <Row>
                                     <Col md="12">
-                                        <p>Ghi chú: {pc.ghichu}</p>
-                                </Col>
-                                     </Row>
+                                       Các môn học giảng dạy:  {
+                                            pc.map((emp) => {
+                                                return (
+                                                    <strong> {emp.tenmonhoc },</strong>
+                                                    )
+                                            })
+                                        }
+
+                                    </Col>
+                                </Row>
+                                   
+                                
                             </CardBody>
                             </Card>
                         <br />

@@ -99,11 +99,7 @@ class Khenthuong extends React.Component {
      
         
     }
-    //phan trang
-    handlePageChange(pageNumber) {
-        console.log(`active page is ${pageNumber}`);
-        this.setState({ activePage: pageNumber });
-    }
+  
     //search
     vcxsSearch = (search) => {
 
@@ -201,7 +197,12 @@ class Khenthuong extends React.Component {
             valueSearch: search
         });
     }
-    
+
+    xemct(id) {
+        this.props.history.push("/admin/xemct/" + id);
+
+    }
+
     //render
     render() {
         
@@ -295,7 +296,7 @@ class Khenthuong extends React.Component {
                                                             <td>{emp.tenchucdanh}</td>
                                                             <td>{emp.tenchucvu}</td>
                                                             <td>{emp.tenbomon}</td>
-                                             
+                                                            <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp; 
                                                         </tr>
                                                        
                                                     )
@@ -345,7 +346,7 @@ class Khenthuong extends React.Component {
                                                                     <td>{emp.tenchucdanh}</td>
                                                                     <td>{emp.tenchucvu}</td>
                                                                     <td>{emp.tenbomon}</td>
-
+                                                                    <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp; 
                                                                 </tr>
 
                                                             )
@@ -395,7 +396,7 @@ class Khenthuong extends React.Component {
                                                                     <td>{emp.tenchucdanh}</td>
                                                                     <td>{emp.tenchucvu}</td>
                                                                     <td>{emp.tenbomon}</td>
-
+                                                                    <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp; 
                                                                 </tr>
 
                                                             )
@@ -445,7 +446,7 @@ class Khenthuong extends React.Component {
                                                                     <td>{emp.tenchucdanh}</td>
                                                                     <td>{emp.tenchucvu}</td>
                                                                     <td>{emp.tenbomon}</td>
-
+                                                                    <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp; 
                                                                 </tr>
 
                                                             )
@@ -459,17 +460,7 @@ class Khenthuong extends React.Component {
 
                                     </TabPanel>
                                 </Tabs>
-                                <CardFooter style={{ paddingLeft: '450px' }}>
-                                    <Pagination
-                                        itemClass="page-item"
-                                        linkClass="page-link"
-                                        activePage={this.state.activePage}
-                                        itemsCountPerPage={5}
-                                        pageRangeDisplayed={5}
-                                        totalItemsCount={vcxs.length}
-                                      
-                                        onChange={this.handlePageChange.bind(this)}
-                                    /> </CardFooter>
+                                
                             </Card>
                         </Col>
 

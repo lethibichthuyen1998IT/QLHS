@@ -32,5 +32,7 @@ namespace QuanLyHieuSuat.DTO
         public DateTime? Ngayvcdg { get; set; }
         public DateTime? Ngaybmdg { get; set; }
         public DateTime? Ngaykhoadg { get; set; }
+        public int? Bacluong { get; set; }
+
     }
 }

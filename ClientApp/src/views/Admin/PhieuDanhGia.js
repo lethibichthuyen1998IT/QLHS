@@ -100,8 +100,8 @@ class PhieuDanhGia extends React.Component {
        
         return (
             <>
-                <Button onClick={() => window.print()}>a</Button>
-                <PdfContainer createPdf={this.createPdf}>
+                <Button style={{ width: '130px', marginRight: '10px' }} color="primary" onClick={() => window.print()}><i class="fa fa-print"></i> - {details.masodanhgia}</Button>
+              
                     <div style={{ backgroundColor: 'white', padding: '30px 30px' }}>
                         <Row md="12" >
                             <Col md="6" >
@@ -119,8 +119,8 @@ class PhieuDanhGia extends React.Component {
 
                         <Row md="12" style={{ textAlign: 'center' }}>
                             <Col md="12" style={{ fontWeight: 'bold' }}>
-                        PHIẾU ĐÁNH GIÁ VÀ PHẦN LOẠI VIÊN CHỨC <br />(Dành cho viên chức không giữ chức vụ quản lý)< br/>
-                            Năm học 
+                            PHIẾU ĐÁNH GIÁ VÀ PHẦN LOẠI VIÊN CHỨC <br />(Dành cho viên chức không giữ chức vụ quản lý)< br />
+                            Năm học {details.tennamhoc}
                             </Col>
                         </Row>
                         <Row md="12" style={{ textAlign: 'justify' }}>
@@ -131,7 +131,7 @@ class PhieuDanhGia extends React.Component {
 
                             
                             <Col md="12">
-                                <b>Chức danh nghề nghiệp:<a style={{fontWeight: 'bold' }}>{details.tenchucdanh} </a> </b>
+                                <b>Chức danh nghề nghiệp: <a style={{fontWeight: 'bold' }}>{details.tenchucdanh} </a> </b>
 
                             </Col>
                             <Col md="12">
@@ -139,7 +139,7 @@ class PhieuDanhGia extends React.Component {
 
                             </Col>
                             <Col md="4">
-                                <b>Hạng chức danh nghề nghiệp:<a style={{ fontWeight: 'bold' }}>{details.hangchucdanh} </a>  </b>
+                                <b>Hạng chức danh nghề nghiệp: <a style={{ fontWeight: 'bold' }}>{details.hangchucdanh} </a>  </b>
 
                             </Col>
                             <Col md="4">
@@ -159,47 +159,57 @@ class PhieuDanhGia extends React.Component {
                             I. TỰ ĐÁNH GIÁ KẾT QUẢ CÔNG TÁC, TU DƯỠNG, RÈN LUYỆN CỦA VIÊN CHỨC
                             </Row>
                         <Row md="12"> 
-                            <b> 1. Kết quả thực hiện công việc hoặc nhiệm vụ theo hợp đồng làm việc đã ký kết:</b>
-                        </Row>
+                        <b> 1. Kết quả thực hiện công việc hoặc nhiệm vụ theo hợp đồng làm việc đã ký kết:</b> 
+                    </Row>
+                      
+                        <Row md="12"> {details.kqth}   </Row>
+                      
+                      
                         <Row md="12"> 
-                            <b> 2. Việc thực hiện quy định về đạo đức nghề nghiệp:</b>
-                        </Row>
+                        <b> 2. Việc thực hiện quy định về đạo đức nghề nghiệp:</b></Row>
+                        <Row md="12"> {details.daoduc}   </Row>
+                      
                         <Row md="12" > 
-                            <b> 3. Tinh thần trách nhiệm, thái độ phục vụ nhân dân, tinh thần hợp tác với đồng nghiệp và việc thực hiện quy tắc ứng xử của viên chức:</b>
-                        </Row>
+                        <b> 3. Tinh thần trách nhiệm, thái độ phục vụ nhân dân, tinh thần hợp tác với đồng nghiệp và việc thực hiện quy tắc ứng xử của viên chức:</b></Row>
+                        <Row md="12"> {details.trachnhiem}   </Row>
+                 
                         <Row md="12">
                            <b> 4. Việc thực hiện các nghĩa vụ khác của viên chức: <br/></b>
-                            (việc tham gia các hoạt động do Trường và đơn vị tổ chức/ việc tham gia triển khai nghị quyết, chính sách, pháp luật của Đảng, Nhà nước/việc tham gia học tập nâng cao trình độ..)
-
-                        </Row>
+                            (việc tham gia các hoạt động do Trường và đơn vị tổ chức/ việc tham gia triển khai nghị quyết, chính sách, pháp luật của Đảng, Nhà nước/việc tham gia học tập nâng cao trình độ..)</Row>
+                        <Row md="12"> {details.khac}   </Row>
+                        
                         <Row md="12" style={{ fontWeight: 'bold' }}>
                             II. TỰ ĐÁNH GIÁ, PHÂN LOẠI CỦA VIÊN CHỨC
                             </Row>
                         <Row md="12">
-                            <b> 1. Đánh giá ưu, nhược điểm:</b>
-                        </Row>
-                        <Row md="12">
-                            <b> 2. Phân loại đánh giá:</b>
-                        </Row>
+                        <b> 1. Đánh giá ưu, nhược điểm:</b>  </Row>
+                    <Row md="12">Ưu điểm: {details.uudiem}   </Row>
+                    <Row md="12">Nhược điểm: {details.nhuocdiem} </Row>
                        
                         <Row md="12">
-                            <b> Ngày đánh giá:</b>
+                        <b> 2. Phân loại đánh giá: </b>&nbsp; {(details.loai == 1) ? "Hoàn thành xuất sắc" : (details.loai == 2) ? "Hoàn thành tốt" : (details.loai == 3) ? "Hoàn thành" : "Không hoàn thành"}
+
+                        </Row>
+                  
+                    <Row md="12">
+                        <b> Ngày đánh giá: </b> &nbsp; {moment(details.ngayvcdg).format("DD-MM-YYYY")}
                         </Row>
                         <Row md="12" style={{ fontWeight: 'bold' }}>
                             III. Ý KIẾN CỦA TẬP THỂ ĐƠN VỊ VÀ LÃNH ĐẠO TRỰC TIẾP QUẢN LÝ VIÊN CHỨC
                             </Row>
                         <Row md="12">
-                            <b> 1. Ý kiến của tập thể đơn vị viên chức công tác:</b>
+                        <b> 1. Ý kiến của tập thể đơn vị viên chức công tác:</b> </Row>&nbsp; 
+                        <Row md="12">{details.ykbm}   </Row>
                             
-                        </Row>
+                       
                         <Row md="12">
-                            <b> 2. Nhận xét của lãnh đạo trực tiếp quản lý viên chức:</b>
+                        <b> 2. Nhận xét của lãnh đạo trực tiếp quản lý viên chức:</b> &nbsp; 
+                        {(details.bomon == 1) ? "Hoàn thành xuất sắc" : (details.bomon == 2) ? "Hoàn thành tốt" : (details.bomon == 3) ? "Hoàn thành" : "Không hoàn thành"} 
                         </Row>
 
                         <Row md="12">
-                            <Col md="12" style={{ textAlign: 'right' }}>
-                                <b> Ngày đánh giá:</b><br />
-                               
+                        <Col md="12" style={{ textAlign: 'right' }}> Ngày đánh giá:  {moment(details.ngaybmdg).format("DD-MM-YYYY")}
+                          
 
                             </Col>
 
@@ -208,24 +218,26 @@ class PhieuDanhGia extends React.Component {
                             IV. KẾT QUẢ ĐÁNH GIÁ, PHÂN LOẠI VIÊN CHỨC CỦA CẤP CÓ THẨM QUYỀN
                             </Row>
                         <Row md="12">
-                            <b> 1.Nhận xét ưu điểm, nhược điểm </b>
-
-                        </Row>
+                        <b> 1.Nhận xét ưu điểm, nhược điểm </b></Row>
+                        <Row md="12"> {details.ykienkhoa}   </Row>
+                       
                         <Row md="12">
-                            <b> 2. Kết quả đánh giá, phân loại viên chức:</b>
+                        <b> 2. Kết quả đánh giá, phân loại viên chức:</b>&nbsp; 
+                   {(details.khoa == 1) ? "Hoàn thành xuất sắc" : (details.khoa == 2) ? "Hoàn thành tốt" : (details.khoa == 3) ? "Hoàn thành" : "Không hoàn thành"}  
+
                         </Row>
 
                         <Row md="12">
                             <Col md="12" style={{ textAlign: 'right' }}>
-                                <b> Ngày đánh giá:</b><br />
-                               
-                                
+                            <b> Ngày đánh giá: </b>{moment(details.ngaykhoadg).format("DD-MM-YYYY")}
+                         
+                          
 
                             </Col>
 
                         </Row>
                         </div>
-                    </PdfContainer>  
+                  
               
                 
             </>

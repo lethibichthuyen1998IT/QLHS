@@ -42,7 +42,8 @@ namespace QuanLyHieuSuat.Controllers
                              Tenbomon = c.Tenbomon,
                              Tenchucvu = b.Tenchucvu,
                              Tenchucdanh = d.Tenchucdanh,
-                             Hangchucdanh = d.Hangchucdanh
+                             Hangchucdanh = d.Hangchucdanh,
+                             Bacluong = a.Bacluong
                          };
                 return vc.ToList();
             }
@@ -79,7 +80,8 @@ namespace QuanLyHieuSuat.Controllers
                              Tenbomon = c.Tenbomon,
                              Tenchucvu = b.Tenchucvu,
                              Tenchucdanh = d.Tenchucdanh,
-                             Hangchucdanh = d.Hangchucdanh
+                             Hangchucdanh = d.Hangchucdanh,
+                             Bacluong = a.Bacluong
                          };
                 return vc.ToList();
             }
@@ -116,7 +118,8 @@ namespace QuanLyHieuSuat.Controllers
                              Tenbomon = c.Tenbomon,
                              Tenchucvu = b.Tenchucvu,
                              Tenchucdanh = d.Tenchucdanh,
-                             Hangchucdanh = d.Hangchucdanh
+                             Hangchucdanh = d.Hangchucdanh,
+                             Bacluong = a.Bacluong
                          };
                 return vc.ToList();
             }
@@ -153,7 +156,8 @@ namespace QuanLyHieuSuat.Controllers
                              Tenbomon = c.Tenbomon,
                              Tenchucvu = b.Tenchucvu,
                              Tenchucdanh = d.Tenchucdanh,
-                             Hangchucdanh = d.Hangchucdanh
+                             Hangchucdanh = d.Hangchucdanh,
+                             Bacluong = a.Bacluong
                          };
                 return vc.ToList();
             }
@@ -190,7 +194,8 @@ namespace QuanLyHieuSuat.Controllers
                              Tenbomon = c.Tenbomon,
                              Tenchucvu = b.Tenchucvu,
                              Tenchucdanh = d.Tenchucdanh,
-                             Hangchucdanh = d.Hangchucdanh
+                             Hangchucdanh = d.Hangchucdanh,
+                             Bacluong = a.Bacluong
                          };
                 return vc.ToList();
             }
@@ -227,7 +232,8 @@ namespace QuanLyHieuSuat.Controllers
                              Tenbomon = c.Tenbomon,
                              Tenchucvu = b.Tenchucvu,
                              Tenchucdanh = d.Tenchucdanh,
-                             Hangchucdanh = d.Hangchucdanh
+                             Hangchucdanh = d.Hangchucdanh,
+                             Bacluong = a.Bacluong
                          };
                 return vc.ToList();
             }
@@ -264,7 +270,8 @@ namespace QuanLyHieuSuat.Controllers
                              Tenbomon = c.Tenbomon,
                              Tenchucvu = b.Tenchucvu,
                              Tenchucdanh = d.Tenchucdanh,
-                             Hangchucdanh = d.Hangchucdanh
+                             Hangchucdanh = d.Hangchucdanh,
+                             Bacluong = a.Bacluong
                          };
                 return vc.ToList();
             }
@@ -284,13 +291,13 @@ namespace QuanLyHieuSuat.Controllers
                          join b in db.Chucvu on a.Machucvu equals b.Machucvu
                          join c in db.Bomon on a.Mabomon equals c.Mabomon
                          join d in db.Chucdanh on a.Machucdanh equals d.Machucdanh
-                         join e in db.Danhgia on a.Mavienchuc equals e.Mavienchuc
+                         
                          where a.Mavienchuc == id
                          select new VienChucDTO()
                          {
                              Mavienchuc = a.Mavienchuc,
                             Hangchucdanh=d.Hangchucdanh,
-                            Manamhoc = e.Manamhoc,
+                           
                              Mabomon = c.Mabomon,
                              Machucvu = b.Machucvu,
                              Machucdanh = d.Machucdanh,
@@ -304,7 +311,8 @@ namespace QuanLyHieuSuat.Controllers
                              Ngaylamviec = a.Ngaylamviec,
                              Tenbomon = c.Tenbomon,
                              Tenchucvu = b.Tenchucvu,
-                             Tenchucdanh = d.Tenchucdanh
+                             Tenchucdanh = d.Tenchucdanh,
+                             Bacluong = a.Bacluong
                          };
                 return vc.SingleOrDefault();
             }
@@ -341,7 +349,8 @@ namespace QuanLyHieuSuat.Controllers
                              Ngaylamviec = a.Ngaylamviec,
                              Tenbomon = c.Tenbomon,
                              Tenchucvu = b.Tenchucvu,
-                             Tenchucdanh = d.Tenchucdanh
+                             Tenchucdanh = d.Tenchucdanh,
+                             Bacluong = a.Bacluong
                          };
                 return vc.ToList();
             }
@@ -380,7 +389,8 @@ namespace QuanLyHieuSuat.Controllers
                              Ngaylamviec = a.Ngaylamviec,
                              Tenbomon = c.Tenbomon,
                              Tenchucvu = b.Tenchucvu,
-                             Tenchucdanh = d.Tenchucdanh
+                             Tenchucdanh = d.Tenchucdanh,
+                             Bacluong = a.Bacluong
                          };
                 return vc.ToList();
             }
@@ -403,6 +413,7 @@ namespace QuanLyHieuSuat.Controllers
                          select new VienChucDTO()
                          {
                              Mavienchuc = a.Mavienchuc,
+                            Masodanhgia= e.Masodanhgia,
                              Mabomon = c.Mabomon,
                              Machucvu = b.Machucvu,
                              Machucdanh = d.Machucdanh,
@@ -416,7 +427,8 @@ namespace QuanLyHieuSuat.Controllers
                              Ngaylamviec = a.Ngaylamviec,
                              Tenbomon = c.Tenbomon,
                              Tenchucvu = b.Tenchucvu,
-                             Tenchucdanh = d.Tenchucdanh
+                             Tenchucdanh = d.Tenchucdanh,
+                             Bacluong = a.Bacluong
                          };
                 return vc.ToList();
             }
@@ -440,6 +452,7 @@ namespace QuanLyHieuSuat.Controllers
                          {
                              Mavienchuc = a.Mavienchuc,
                              Mabomon = c.Mabomon,
+                             Masodanhgia = e.Masodanhgia,
                              Machucvu = b.Machucvu,
                              Machucdanh = d.Machucdanh,
                              Hoten = a.Hoten,
@@ -452,7 +465,8 @@ namespace QuanLyHieuSuat.Controllers
                              Ngaylamviec = a.Ngaylamviec,
                              Tenbomon = c.Tenbomon,
                              Tenchucvu = b.Tenchucvu,
-                             Tenchucdanh = d.Tenchucdanh
+                             Tenchucdanh = d.Tenchucdanh,
+                             Bacluong = a.Bacluong
                          };
                 return vc.ToList();
             }
@@ -478,6 +492,7 @@ namespace QuanLyHieuSuat.Controllers
                              Mavienchuc = a.Mavienchuc,
                              Mabomon = c.Mabomon,
                              Machucvu = b.Machucvu,
+                             Masodanhgia = e.Masodanhgia,
                              Machucdanh = d.Machucdanh,
                              Hoten = a.Hoten,
                              Sdt = a.Sdt,
@@ -489,7 +504,8 @@ namespace QuanLyHieuSuat.Controllers
                              Ngaylamviec = a.Ngaylamviec,
                              Tenbomon = c.Tenbomon,
                              Tenchucvu = b.Tenchucvu,
-                             Tenchucdanh = d.Tenchucdanh
+                             Tenchucdanh = d.Tenchucdanh,
+                             Bacluong = a.Bacluong
                          };
                 return vc.ToList();
             }
@@ -515,6 +531,7 @@ namespace QuanLyHieuSuat.Controllers
                              Mavienchuc = a.Mavienchuc,
                              Mabomon = c.Mabomon,
                              Machucvu = b.Machucvu,
+                             Masodanhgia = e.Masodanhgia,
                              Machucdanh = d.Machucdanh,
                              Hoten = a.Hoten,
                              Sdt = a.Sdt,
@@ -526,7 +543,8 @@ namespace QuanLyHieuSuat.Controllers
                              Ngaylamviec = a.Ngaylamviec,
                              Tenbomon = c.Tenbomon,
                              Tenchucvu = b.Tenchucvu,
-                             Tenchucdanh = d.Tenchucdanh
+                             Tenchucdanh = d.Tenchucdanh,
+                             Bacluong = a.Bacluong
                          };
                 return vc.ToList();
             }
@@ -590,6 +608,7 @@ namespace QuanLyHieuSuat.Controllers
             vchuc.Gioitinh = vc.Gioitinh;
             vchuc.Diachi = vc.Diachi;
             vc.Ngaylamviec = vc.Ngaylamviec;
+            vc.Bacluong = vc.Bacluong;
 
             try
             {

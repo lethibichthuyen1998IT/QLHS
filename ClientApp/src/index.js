@@ -40,7 +40,9 @@ import DanhGiaVC from "GV/Components/DanhGiaVC";
 import Admin from "layouts/Admin";
 import GVLayoutRoute from './GV/Layouts/GiangVien';
 import PhieuDanhGia from './views/Admin/PhieuDanhGia.js';
-import EditDG from './views/Admin/EditDG.js';
+import AdminDG from './views/Admin/AdminDG.js';
+import BMDG from './views/Admin/BMDG.js';
+import KhoaDG from './views/Admin/KhoaDG.js';
 import "assets/css/material-dashboard-react.css?v=1.9.0";
 const user = JSON.parse(localStorage.getItem('user'));
 const hist = createBrowserHistory();
@@ -53,8 +55,11 @@ ReactDOM.render(
 
                     <Admin path="/admin" layout={Admin} component={User} />
                     <Admin path="/admin/xemct/:id" layout={Admin} component={PhieuDanhGia} />
-                    <Admin path="/admin/khoadg/:id" layout={Admin} component={EditDG} />
-                 
+                  
+                    <Route path="/admin/admindg/:id" component={AdminDG} />
+                    <Route path="/admin/khoadg/:id" component={KhoaDG} />
+                    <Route path="/admin/bmdg/:id" component={BMDG} />
+
                     <Route exact path="/" component={Trangchu} />
                     <Route exact path="/congtac" component={Congtac} />
                     <Route exact path="/danhgia" component={DanhGiaVC} />

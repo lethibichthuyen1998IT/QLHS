@@ -15,7 +15,10 @@ import routes from "routes.js";
 
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 import PhieuDanhGia from 'views/Admin/PhieuDanhGia.js';
-import EditDG from 'views/Admin/EditDG.js';
+
+import admindg from 'views/Admin/AdminDG.js';
+import bmdg from 'views/Admin/BMDG.js';
+import khoadg from 'views/Admin/KhoaDG.js';
 import bgImage from "assets/img/1.jpg";
 import logo from "assets/img/logo2.png";
 import { withWidth } from "@material-ui/core";
@@ -37,7 +40,10 @@ const switchRoutes = (
       return null;
     })}
         <Route path="/admin/xemct/:id" component={PhieuDanhGia} />
-        <Route path="/admin/khoadg/:id" component={EditDG} />
+        <Route path="/admin/admindg/:id" component={admindg} />
+        <Route path="/admin/khoadg/:id" component={khoadg} />
+        <Route path="/admin/bmdg/:id" component={bmdg} />
+        
         <Redirect from="/admin" to="/admin/dashboard" />
        
   </Switch>

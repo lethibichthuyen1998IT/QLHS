@@ -39,7 +39,6 @@ import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import TableList from "./views/TableList/TableList.js";
 import Icons from "./views/Icons/Icons.js";
 import NotificationsPage from "./views/Notifications/Notifications.js";
-import VienChucBM from "./views/Admin/VienChucBM.js";
 import DanhmucVienchuc from "./views/Admin/DanhmucVienchuc.js";
 import User from "./views/Admin/User.js";
 import Chucvu from "./views/Admin/ChucVu.js";

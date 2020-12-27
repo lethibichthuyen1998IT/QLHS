@@ -95,7 +95,7 @@ class Trangchu extends Component {
                     pageCount: Math.ceil(ct.length / this.state.perPage),
                     orgtableData: ct,
                     renluyen: slice,
-                    source: slice,
+                    source: ct,
 
                 })
 

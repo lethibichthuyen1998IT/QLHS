@@ -25,9 +25,33 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="Models\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="Models\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Models\Bomon.cs" />
+    <Compile Include="Models\Chucdanh.cs" />
+    <Compile Include="Models\Chucnang.cs" />
+    <Compile Include="Models\Chucvu.cs" />
+    <Compile Include="Models\Congviec.cs" />
+    <Compile Include="Models\Danhgia.cs" />
+    <Compile Include="Models\Danhmuc.cs" />
+    <Compile Include="Models\Khenthuong.cs" />
+    <Compile Include="Models\Khoa.cs" />
+    <Compile Include="Models\Linhvuccongviec.cs" />
+    <Compile Include="Models\Monhoc.cs" />
+    <Compile Include="Models\Namhoc.cs" />
+    <Compile Include="Models\Phancong.cs" />
+    <Compile Include="Models\QuanLyHieuSuatContext.cs" />
+    <Compile Include="Models\Quyen.cs" />
+    <Compile Include="Models\Thongbao.cs" />
+    <Compile Include="Models\Vienchuc.cs" />
   </ItemGroup>
 
   <ItemGroup>

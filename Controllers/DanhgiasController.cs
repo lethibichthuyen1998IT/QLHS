@@ -42,7 +42,6 @@ namespace QuanLyHieuSuat.Controllers
             }
             return autoID;
         }
-
         [HttpGet]
         public IEnumerable<DanhGiaDTO> Index()
         {
@@ -50,7 +49,50 @@ namespace QuanLyHieuSuat.Controllers
             {
                 var dg = from a in db.Danhgia
                          join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
+                         join c in db.Namhoc on a.Manamhoc equals c.Manamhoc 
+
+                         select new DanhGiaDTO()
+                         {
+                             Masodanhgia = a.Masodanhgia,
+                             Manamhoc = c.Manamhoc,
+                             Tennamhoc = c.Tennamhoc,
+                             Mavienchuc = b.Mavienchuc,
+                             Hoten = b.Hoten,
+                             Kqth = a.Kqth,
+                             Daoduc = a.Daoduc,
+                             Trachnhiem = a.Trachnhiem,
+                             Khac = a.Khac,
+                             Uudiem = a.Uudiem,
+                             Nhuocdiem = a.Nhuocdiem,
+                             Loai = a.Loai,
+                             Ykbm = a.Ykbm,
+
+                             Bomon = a.Bomon,
+
+                             Ykienkhoa = a.Ykienkhoa,
+                             Khoa = a.Khoa,
+                             Ngayvcdg = a.Ngayvcdg,
+                             Ngaybmdg = a.Ngaybmdg,
+                             Ngaykhoadg = a.Ngaykhoadg
+
+
+                         };
+                return dg.ToList();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        [HttpGet("Tatca/{idnh}")]
+        public IEnumerable<DanhGiaDTO> tatca(int idnh)
+        {
+            try
+            {
+                var dg = from a in db.Danhgia
+                         join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
                          join c in db.Namhoc on a.Manamhoc equals c.Manamhoc
+                         where a.Manamhoc==idnh
                          
                          select new DanhGiaDTO()
                          {
@@ -85,16 +127,59 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
-
-        [HttpGet("khoachuadanhgia")]
-        public IEnumerable<DanhGiaDTO> chuadg()
+        [HttpGet("Tatcabm/{idbm}/{idnh}")]
+        public IEnumerable<DanhGiaDTO> bm(string idbm, int idnh)
         {
             try
             {
                 var dg = from a in db.Danhgia
                          join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
                          join c in db.Namhoc on a.Manamhoc equals c.Manamhoc
-                         where a.Khoa == null && a.Bomon != null
+                         where a.Manamhoc == idnh && b.Mabomon==idbm
+
+                         select new DanhGiaDTO()
+                         {
+                             Masodanhgia = a.Masodanhgia,
+                             Manamhoc = c.Manamhoc,
+                             Tennamhoc = c.Tennamhoc,
+                             Mavienchuc = b.Mavienchuc,
+                             Hoten = b.Hoten,
+                             Kqth = a.Kqth,
+                             Daoduc = a.Daoduc,
+                             Trachnhiem = a.Trachnhiem,
+                             Khac = a.Khac,
+                             Uudiem = a.Uudiem,
+                             Nhuocdiem = a.Nhuocdiem,
+                             Loai = a.Loai,
+                             Ykbm = a.Ykbm,
+
+                             Bomon = a.Bomon,
+
+                             Ykienkhoa = a.Ykienkhoa,
+                             Khoa = a.Khoa,
+                             Ngayvcdg = a.Ngayvcdg,
+                             Ngaybmdg = a.Ngaybmdg,
+                             Ngaykhoadg = a.Ngaykhoadg
+
+
+                         };
+                return dg.ToList();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("khoachuadanhgia/{idnh}")]
+        public IEnumerable<DanhGiaDTO> chuadg(int idnh)
+        {
+            try
+            {
+                var dg = from a in db.Danhgia
+                         join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
+                         join c in db.Namhoc on a.Manamhoc equals c.Manamhoc
+                         where a.Khoa == null && a.Bomon != null && a.Manamhoc==idnh
                          select new DanhGiaDTO()
                          {
                              Masodanhgia = a.Masodanhgia,
@@ -130,15 +215,15 @@ namespace QuanLyHieuSuat.Controllers
             }
         }
 
-        [HttpGet("khoadanhgia")]
-        public IEnumerable<DanhGiaDTO> dadg()
+        [HttpGet("khoadanhgia/{idnh}")]
+        public IEnumerable<DanhGiaDTO> dadg(int idnh)
         {
             try
             {
                 var dg = from a in db.Danhgia
                          join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
                          join c in db.Namhoc on a.Manamhoc equals c.Manamhoc
-                         where a.Khoa != null && a.Bomon != null
+                         where a.Khoa != null && a.Bomon != null && a.Manamhoc==idnh
                          select new DanhGiaDTO()
                          {
                              Masodanhgia = a.Masodanhgia,
@@ -173,15 +258,15 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
-        [HttpGet("bmdanhgia/{id}")]
-        public IEnumerable<DanhGiaDTO> bmdg(string id)
+        [HttpGet("bmdanhgia/{id}/{idnh}")]
+        public IEnumerable<DanhGiaDTO> bmdg(string id, int idnh)
         {
             try
             {
                 var dg = from a in db.Danhgia
                          join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
                          join c in db.Namhoc on a.Manamhoc equals c.Manamhoc
-                         where a.Bomon != null && b.Mabomon == id
+                         where a.Bomon != null && b.Mabomon == id && a.Manamhoc==idnh
                          select new DanhGiaDTO()
                          {
                              Masodanhgia = a.Masodanhgia,
@@ -216,15 +301,15 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
-        [HttpGet("bmchuadanhgia/{id}")]
-        public IEnumerable<DanhGiaDTO> bmchuadg(string id)
+        [HttpGet("bmchuadanhgia/{id}/{idnh}")]
+        public IEnumerable<DanhGiaDTO> bmchuadg(string id, int idnh)
         {
             try
             {
                 var dg = from a in db.Danhgia
                          join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
                          join c in db.Namhoc on a.Manamhoc equals c.Manamhoc
-                         where a.Bomon == null && b.Mabomon == id
+                         where a.Bomon == null && b.Mabomon == id && a.Manamhoc==idnh
                          select new DanhGiaDTO()
                          {
                              Masodanhgia = a.Masodanhgia,
@@ -259,15 +344,15 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
-        [HttpGet("tatcabmchuadanhgia")]
-        public IEnumerable<DanhGiaDTO> tatcabmchuadanhgia()
+        [HttpGet("tatcabmchuadanhgia/{idnh}")]
+        public IEnumerable<DanhGiaDTO> tatcabmchuadanhgia(int idnh)
         {
             try
             {
                 var dg = from a in db.Danhgia
                          join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
                          join c in db.Namhoc on a.Manamhoc equals c.Manamhoc
-                         where a.Bomon == null
+                         where a.Bomon == null && a.Manamhoc==idnh
                          select new DanhGiaDTO()
                          {
                              Masodanhgia = a.Masodanhgia,
@@ -302,6 +387,7 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
+       
         [HttpGet("{id}")]
         public DanhGiaDTO Details(string id)
         {
@@ -322,6 +408,7 @@ namespace QuanLyHieuSuat.Controllers
                              Hangchucdanh = d.Hangchucdanh,
                              Tenbomon = e.Tenbomon,
                              Masodanhgia = a.Masodanhgia,
+                             Bacluong= b.Bacluong,
                              Manamhoc = c.Manamhoc,
                              Tennamhoc = c.Tennamhoc,
                              Mavienchuc = b.Mavienchuc,
@@ -385,6 +472,7 @@ namespace QuanLyHieuSuat.Controllers
                              Nhuocdiem = a.Nhuocdiem,
                              Loai = a.Loai,
                              Ykbm = a.Ykbm,
+                             Bacluong=b.Bacluong,
 
                              Bomon = a.Bomon,
 
@@ -461,55 +549,10 @@ namespace QuanLyHieuSuat.Controllers
             }
         }
 
-        [HttpGet("Khoa/{idvc}/{idnh}")]
-        public IEnumerable<DanhGiaDTO> Khoa(string idvc, int idnh)
-        {
+      
 
-            try
-            {
-                var dg = from a in db.Danhgia
-                         join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
-                         join c in db.Namhoc on a.Manamhoc equals c.Manamhoc
-                         where a.Manamhoc == idnh && b.Mavienchuc == idvc
-                         select new DanhGiaDTO()
-                         {
-                             Masodanhgia = a.Masodanhgia,
-                             Manamhoc = c.Manamhoc,
-                             Tennamhoc = c.Tennamhoc,
-                             Mavienchuc = b.Mavienchuc,
-                             Hoten = b.Hoten,
-                             Kqth = a.Kqth,
-                             Daoduc = a.Daoduc,
-                             Trachnhiem = a.Trachnhiem,
-                             Khac = a.Khac,
-                             Uudiem = a.Uudiem,
-                             Nhuocdiem = a.Nhuocdiem,
-                             Loai = a.Loai,
-                             Ykbm = a.Ykbm,
-
-                             Bomon = a.Bomon,
-
-                             Ykienkhoa = a.Ykienkhoa,
-                             Khoa = a.Khoa,
-                             Ngayvcdg = a.Ngayvcdg,
-                             Ngaybmdg = a.Ngaybmdg,
-                             Ngaykhoadg = a.Ngaykhoadg
-
-
-
-                         };
-                return dg.ToList();
-            }
-
-
-            catch
-            {
-                throw;
-            }
-        }
 
         [HttpPut("Bomon/{id}")]
-
         public int EditBM(Danhgia dg)
         {
             try
@@ -539,8 +582,9 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
-        [HttpPut("Khoa/{id}")]
 
+
+        [HttpPut("Khoa/{id}")]
         public int EditKhoa(Danhgia dg)
         {
             try
@@ -571,8 +615,9 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
-        [HttpPut("Admin/{id}")]
 
+
+        [HttpPut("Admin/{id}")]
         public int AdminEdit(Danhgia dg)
         {
             try
@@ -604,8 +649,10 @@ namespace QuanLyHieuSuat.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
 
+      
+
+        [HttpDelete("{id}")]
         public int Delete(string id)
         {
             try
