@@ -52,7 +52,10 @@ class AdminDG extends Component {
             lv: [],
             nl: [],
             tstiet: '',
-            vc: []
+            vc: [],
+            hesoluong: 0,
+            bacvc: '',
+            hangvc:''
 
 
         };
@@ -103,6 +106,8 @@ class AdminDG extends Component {
         axios.get('/danhgias/' + this.props.match.params.id)
             .then((res) => this.setState({
                 ctdg: res.data,
+                hangvc: res.data.hangchucdanh,
+                bacvc: res.data.bacluong
 
             }, () => this.loadData())
             );
@@ -136,10 +141,61 @@ class AdminDG extends Component {
 
     }
 
-
+    
 
     loadData() {
 
+        switch (this.state.hangvc.trim()) {
+            case "I":
+                {
+                    switch (this.state.bacvc) {
+                        case 1: this.state.hesoluong = 6.2; break;
+                        case 2: this.state.hesoluong = 6.56; break;
+                        case 3: this.state.hesoluong = 6.92; break;
+                        case 4: this.state.hesoluong = 7.28; break;
+                        case 5: this.state.hesoluong = 7.64; break;
+                        case 6: this.state.hesoluong = 8.0; break;
+
+                    }
+                    break;
+
+                }
+
+            case "II":
+                {
+                    switch (this.state.bacvc) {
+                        case 1: this.state.hesoluong = 4.4; break;
+                        case 2: this.state.hesoluong = 4.74; break;
+                        case 3: this.state.hesoluong = 5.08; break;
+                        case 4: this.state.hesoluong = 5.42; break;
+                        case 5: this.state.hesoluong = 5.76; break;
+                        case 6: this.state.hesoluong = 6.10; break;
+                        case 7: this.state.hesoluong = 6.44; break;
+                        case 8: this.state.hesoluong = 6.78; break;
+
+                    }
+                    break;
+                }
+            case "III":
+                {
+                    switch (this.state.bacvc) {
+                        case 1: this.state.hesoluong = 2.34; break;
+                        case 2: this.state.hesoluong = 2.67; break;
+                        case 3: this.state.hesoluong = 3.0; break;
+                        case 4: this.state.hesoluong = 3.33; break;
+                        case 5: this.state.hesoluong = 3.66; break;
+                        case 6: this.state.hesoluong = 3.99; break;
+                        case 7: this.state.hesoluong = 4.32; break;
+                        case 8: this.state.hesoluong = 4.65; break;
+                        case 9: this.state.hesoluong = 4.98; break;
+                        default: break
+
+                    }
+                }
+                break;
+
+
+        }
         this.setState({
             editData: {
                 masodanhgia: this.state.ctdg.masodanhgia,
@@ -148,7 +204,9 @@ class AdminDG extends Component {
                 ykbm: this.state.ctdg.ykbm,
                 bomon: this.state.ctdg.bomon,
                 ykienkhoa: this.state.ctdg.ykienkhoa,
-                khoa: this.state.ctdg.khoa
+                khoa: this.state.ctdg.khoa,
+                ngaybmdg: date,
+                ngaykhoadg:date
                
             },
            
@@ -193,7 +251,7 @@ class AdminDG extends Component {
     render() {
 
 
-        const { dg, user, idnh, ctdg, pc, lv, nl, tstiet, vc } = this.state;
+        const { dg, user, idnh, ctdg, pc, lv, nl, tstiet, vc, hesoluong } = this.state;
         console.log(ctdg.manamhoc)
 
         return (
@@ -247,7 +305,7 @@ class AdminDG extends Component {
 
                                                 </Col>
                                                 <Col md="4">
-                                                    <b>Hệ số lương: </b>
+                            <b>Hệ số lương: {hesoluong} </b>
 
                                                 </Col>
 

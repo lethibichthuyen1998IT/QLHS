@@ -76,8 +76,8 @@ class PhieuDanhGia extends React.Component {
                 hangvc: res.data.hangchucdanh,
                 bacvc: res.data.bacluong
              
-            }, () => this.LoadVC())
-            );
+            })
+     );
 
         
         const nvs = JSON.parse(localStorage.getItem('user'));
@@ -100,13 +100,15 @@ class PhieuDanhGia extends React.Component {
             case "I":
                 {
                     switch (this.state.bacvc) {
-                        case "1": this.state.hesoluong = 6.2; break;
-                        case "2": this.state.hesoluong = 6.56; break;
-                        case "3": this.state.hesoluong = 6.92; break;
-                        case "4": this.state.hesoluong = 7.28; break;
-                        case "5": this.state.hesoluong = 7.64; break;
-                        case "6": this.state.hesoluong = 8.0; break;
+                        case 1: this.state.hesoluong = 6.2; break;
+                        case 2: this.state.hesoluong = 6.56; break;
+                        case 3: this.state.hesoluong = 6.92; break;
+                        case 4: this.state.hesoluong = 7.28; break;
+                        case 5: this.state.hesoluong = 7.64; break;
+                        case 6: this.state.hesoluong = 8.0; break;
+
                     }
+                    break;
 
                 }
 
@@ -123,25 +125,27 @@ class PhieuDanhGia extends React.Component {
                         case 8: this.state.hesoluong = 6.78; break;
 
                     }
+                    break;
                 }
-
-            default:
+            case "III":
                 {
                     switch (this.state.bacvc) {
-                        case "1": this.state.hesoluong = 2.34; break;
-                        case "2": this.state.hesoluong = 2.67; break;
-                        case "3": this.state.hesoluong = 3.0; break;
-                        case "4": this.state.hesoluong = 3.33; break;
-                        case "5": this.state.hesoluong = 3.66; break;
-                        case "6": this.state.hesoluong = 3.99; break;
-                        case "7": this.state.hesoluong = 4.32; break;
-                        case "8": this.state.hesoluong = 4.65; break;
-                        case "9": this.state.hesoluong = 4.98; break;
-
+                        case 1: this.state.hesoluong = 2.34; break;
+                        case 2: this.state.hesoluong = 2.67; break;
+                        case 3: this.state.hesoluong = 3.0; break;
+                        case 4: this.state.hesoluong = 3.33; break;
+                        case 5: this.state.hesoluong = 3.66; break;
+                        case 6: this.state.hesoluong = 3.99; break;
+                        case 7: this.state.hesoluong = 4.32; break;
+                        case 8: this.state.hesoluong = 4.65; break;
+                        case 9: this.state.hesoluong = 4.98; break;
+                        default: break
 
                     }
                 }
-                
+                break;
+
+
         }
        
 
@@ -153,10 +157,10 @@ class PhieuDanhGia extends React.Component {
 
     //render
     render() {
-
+        this.LoadVC();
         const { errors } = this.state;
         const { vc, dg, details, bomonchuadg, hesoluong,bacvc,hangvc} = this.state;
-       
+        console.log(details)
         return (
             <>
                 <Button style={{ width: '130px', marginRight: '10px' }} color="primary" onClick={() => window.print()}><i class="fa fa-print"></i> - {details.masodanhgia}</Button>

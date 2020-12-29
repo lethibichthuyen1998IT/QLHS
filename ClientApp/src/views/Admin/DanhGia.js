@@ -34,6 +34,7 @@ class DanhGia extends React.Component {
         this.state = {
             dg: [],
             source: [],
+            sourcebm: [],
             showAlert: false,
             confirm: false,
             chucnang: [],
@@ -77,7 +78,7 @@ class DanhGia extends React.Component {
         axios.get('/namhocs/namhoc/')
             .then((res) => this.setState({
                 nhmd: res.data.manamhoc,
-
+              
 
             }, ()=>this.Load())
         );
@@ -96,6 +97,7 @@ class DanhGia extends React.Component {
         axios.get('/danhgias/tatcabm/' + this.state.user.mabomon + "/" + Number.parseInt(this.state.nhmd))
             .then((res) => this.setState({
                 tatcabm: res.data,
+                sourcebm: res.data
                
             })
             );
@@ -184,6 +186,30 @@ class DanhGia extends React.Component {
 
         this.setState({
             dg: newArray,
+            valueSearch: search
+        });
+    }
+    handleSearchBM = (search) => {
+
+        let sourceArray = this.state.sourcebm;
+
+        let newArray = [];
+        if (search.length <= 0) {
+            newArray = sourceArray;
+        } else {
+
+            console.log(search);
+            for (let item of sourceArray) {
+
+                if (item.mavienchuc.toLowerCase().indexOf(search.toLowerCase()) > -1 || item.hoten.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+                    newArray.push(item);
+                }
+            }
+
+        }
+
+        this.setState({
+            tatcabm: newArray,
             valueSearch: search
         });
     }
@@ -358,7 +384,7 @@ class DanhGia extends React.Component {
         
         return (
             <>
-
+                {(rules.find(x => x == cns)) ?
                 <div className="content">
 
                     <Row>
@@ -406,7 +432,7 @@ class DanhGia extends React.Component {
                                 </CardHeader>
                                 <CardBody>
                                     
-                                    {(rules.find(x => x == cns)) ?
+                                   
                                         
                                         <Tabs>
                                             <TabList>
@@ -426,7 +452,7 @@ class DanhGia extends React.Component {
 
                                                     <th>Mã viên chức</th>
                                                     <th>Họ tên</th>
-                                                    <th>Loại</th>
+                                                    
                                                     <th>Thao tác</th>
                                                       
                                                    
@@ -442,7 +468,7 @@ class DanhGia extends React.Component {
                                                                
                                                                 <td>{emp.mavienchuc}</td>
                                                                 <td>{emp.hoten}</td>
-                                                                <td>{emp.loai}</td>
+                                                               
                                                               
                                                                     <td>
                                                                     <Button color="primary" onClick ={ (id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp; 
@@ -507,7 +533,7 @@ class DanhGia extends React.Component {
                                                    
                                                         <th>Mã viên chức</th>
                                                         <th>Họ tên</th>
-                                                        <th>Loại</th>
+                                                      
                                                         <th>Thao tác</th>
 
 
@@ -523,7 +549,7 @@ class DanhGia extends React.Component {
                                                                    
                                                                     <td>{emp.mavienchuc}</td>
                                                                     <td>{emp.hoten}</td>
-                                                                    <td>{emp.loai}</td>
+                                                                  
                                                                     <td>
                                                                         <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp;
 
@@ -585,7 +611,7 @@ class DanhGia extends React.Component {
                                                       
                                                         <th>Mã viên chức</th>
                                                         <th>Họ tên</th>
-                                                        <th>Loại</th>
+                                                       
                                                         <th>Thao tác</th>
 
 
@@ -601,7 +627,7 @@ class DanhGia extends React.Component {
                                                                  
                                                                     <td>{emp.mavienchuc}</td>
                                                                     <td>{emp.hoten}</td>
-                                                                    <td>{emp.loai}</td>
+                                                                 
                                                                     <td>
                                                                         <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp;
                                                                 
@@ -661,7 +687,7 @@ class DanhGia extends React.Component {
                                                       
                                                         <th>Mã viên chức</th>
                                                         <th>Họ tên</th>
-                                                        <th>Loại</th>
+                                                      
                                                         <th>Thao tác</th>
 
 
@@ -676,7 +702,7 @@ class DanhGia extends React.Component {
 
                                                                     <td>{emp.mavienchuc}</td>
                                                                     <td>{emp.hoten}</td>
-                                                                    <td>{emp.loai}</td>
+                                                                    
 
                                                                     <td>
                                                                         <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp;
@@ -726,8 +752,62 @@ class DanhGia extends React.Component {
                                                                 </SweetAlert>
                                                 </tbody>
                                             </Table></TabPanel></Tabs>
+                                    </CardBody>
+
+                                </Card>
+                            </Col>
+
+                        </Row>
+                    </div>
                                             :
-                                        (rules.find(x => x == cn)) ?
+                    (rules.find(x => x == cn)) ?
+                        <div className="content">
+
+                            <Row>
+                                <Col md="12">
+
+                                    <Card>
+                                        <CardHeader>
+
+                                            <CardTitle tag="h4"><p style={{ color: '#E86307   ', fontSize: '30px', paddingLeft: '300px' }}><b> DANH SÁCH PHIẾU ĐÁNH GIÁ</b> </p></CardTitle>
+                                            <CardTitle>
+
+
+
+
+                                                <Row md="12">
+
+                                                    <Col md="4" style={{ paddingLeft: '230px' }}>
+                                                        <Search
+                                                            valueSearch={this.state.valueSearch}
+                                                            handleSearch={this.handleSearchBM} />
+                                                    </Col>
+                                                </Row>
+                                                <Row md="5" style={{
+                                                    marginLeft: '350px', marginTop: '10px'
+                                                }}>
+                                                    <Col md="2" style={{ textAlign: 'right', fontWeight: 'bold', marginTop: '10px', fontSize: '18px' }}>Năm học:</Col>
+                                                    <Col md="3" style={{ paddingLeft: '0px' }}>  <Input type="select" id="mabomon" value={this.state.idnh} onChange={this.onchange} >
+
+                                                        {
+                                                            this.state.nh.map((nh) =>
+                                                                <option key={nh.manamhoc} value={nh.manamhoc}>{nh.tennamhoc}</option>)
+                                                        }
+
+                                                    </Input>
+
+                                                    </Col>
+                                                </Row>
+
+
+
+
+                                            </CardTitle>
+
+
+                                        </CardHeader>
+                                        <CardBody>
+
                                             <Tabs>
                                                 <TabList>
 
@@ -745,7 +825,7 @@ class DanhGia extends React.Component {
                                                               
                                                                 <th>Mã viên chức</th>
                                                                 <th>Họ tên</th>
-                                                                <th>Loại</th>
+                                                              
                                                                 <th>Thao tác</th>
 
 
@@ -762,7 +842,7 @@ class DanhGia extends React.Component {
                                                                                
                                                                                 <td>{emp.mavienchuc}</td>
                                                                                 <td>{emp.hoten}</td>
-                                                                                <td>{emp.loai}</td>
+                                                                               
 
                                                                                 <td>
                                                                                     <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp;
@@ -823,7 +903,7 @@ class DanhGia extends React.Component {
                                                           
                                                             <th>Mã viên chức</th>
                                                             <th>Họ tên</th>
-                                                            <th>Loại</th>
+                                                            
                                                             <th>Thao tác</th>
 
 
@@ -839,7 +919,7 @@ class DanhGia extends React.Component {
                                                                       
                                                                         <td>{emp.mavienchuc}</td>
                                                                         <td>{emp.hoten}</td>
-                                                                        <td>{emp.loai}</td>
+                                                                      
 
                                                                         <td>
                                                                             <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp;
@@ -893,7 +973,7 @@ class DanhGia extends React.Component {
                                                         
                                                             <th>Mã viên chức</th>
                                                             <th>Họ tên</th>
-                                                            <th>Loại</th>
+                                                            
                                                             <th>Thao tác</th>
 
 
@@ -909,7 +989,7 @@ class DanhGia extends React.Component {
                                                                     
                                                                         <td>{emp.mavienchuc}</td>
                                                                         <td>{emp.hoten}</td>
-                                                                        <td>{emp.loai}</td>
+                                                                       
 
                                                                         <td>
                                                                             <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp;
@@ -951,15 +1031,16 @@ class DanhGia extends React.Component {
                                                         >  Đã xóa thành công !!!
                                                                 </SweetAlert>
                                                     </tbody>
-                                                </Table></TabPanel></Tabs>: <p> Chỉ có trưởng bộ môn hoặc trưởng khoa mới có quyền xem </p>
-                                        }
+                                                </Table></TabPanel></Tabs>
                                 </CardBody>
 
                             </Card>
                         </Col>
 
                     </Row>
-                </div>
+                        </div>
+                        : <p> Chỉ có trưởng bộ môn hoặc trưởng khoa mới có quyền xem </p>
+                }
             </>
         );
 

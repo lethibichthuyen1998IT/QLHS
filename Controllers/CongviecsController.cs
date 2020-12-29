@@ -51,8 +51,8 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
-        [HttpGet("congtac")]
-        public IEnumerable<CongViecDTO> Congtac()
+        [HttpGet("congtac/{id}")]
+        public IEnumerable<CongViecDTO> Congtac(string id)
         {
             var nh = (from a in db.Namhoc orderby a.Manamhoc descending select a.Manamhoc).FirstOrDefault();
             try
@@ -62,7 +62,7 @@ namespace QuanLyHieuSuat.Controllers
                          join c in db.Namhoc on a.Manamhoc equals c.Manamhoc
                          join d in db.Danhmuc on a.Masodanhmuc equals d.Masodanhmuc
                          join e in db.Linhvuccongviec on d.Masolinhvuc equals e.Masolinhvuc
-                         where e.Masolinhvuc==8 && a.Manamhoc==nh
+                         where e.Masolinhvuc==8 && a.Manamhoc==nh && a.Mavienchuc==id
                          select new CongViecDTO()
                          {
                              Macongviec = a.Macongviec,
@@ -86,8 +86,8 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
-        [HttpGet("renluyen")]
-        public IEnumerable<CongViecDTO> renluyen()
+        [HttpGet("renluyen/{id}")]
+        public IEnumerable<CongViecDTO> renluyen(string id)
         {
             var nh = (from a in db.Namhoc orderby a.Manamhoc descending select a.Manamhoc).FirstOrDefault();
             try
@@ -97,7 +97,7 @@ namespace QuanLyHieuSuat.Controllers
                          join c in db.Namhoc on a.Manamhoc equals c.Manamhoc
                          join d in db.Danhmuc on a.Masodanhmuc equals d.Masodanhmuc
                          join e in db.Linhvuccongviec on d.Masolinhvuc equals e.Masolinhvuc
-                         where e.Masolinhvuc == 1 && a.Manamhoc==nh
+                         where e.Masolinhvuc == 1 && a.Manamhoc==nh && a.Mavienchuc==id
                          select new CongViecDTO()
                          {
                              Macongviec = a.Macongviec,

@@ -71,6 +71,7 @@ class Trangchu extends Component {
             dm: [],
             nh: [],
             vc: [],
+            user: JSON.parse(localStorage.getItem('user'))
 
 
 
@@ -86,7 +87,7 @@ class Trangchu extends Component {
             vc: nvs
         });
 
-        axios.get('/congviecs/renluyen')
+        axios.get('/congviecs/renluyen/' +  this.state.user.mavienchuc)
             .then(res => {
                 var ct = res.data;
                 console.log('data-->' + JSON.stringify(ct))
@@ -154,7 +155,7 @@ class Trangchu extends Component {
 
             for (let item of sourceArray) {
 
-                if (item.tencongviec.toLowerCase().indexOf(search.toLowerCase()) > -1 || item.ngaythuchien.indexOf(search.toLowerCase()) > -1) {
+                if (item.tendanhmuc.toLowerCase().indexOf(search.toLowerCase()) > -1 || item.tencongviec.toLowerCase().indexOf(search.toLowerCase()) > -1 || item.ngaythuchien.indexOf(search.toLowerCase()) > -1) {
                     newArray.push(item);
                 }
             }
@@ -171,7 +172,7 @@ class Trangchu extends Component {
         this.setState({
             vc: nvs
         });
-        axios.get('/congviecs/renluyen')
+        axios.get('/congviecs/renluyen/' + + this.state.user.mavienchuc)
             .then(res => {
                 var ct = res.data;
                 console.log('data-->' + JSON.stringify(ct))
@@ -332,10 +333,10 @@ class Trangchu extends Component {
                     <div class="overlay"></div>
                     <div class="container text-right">
                         <div class="page-info">
-                            <h2>CÔNG TÁC</h2>
+                            <h2>RÈN LUYỆN</h2>
                             <div class="page-links">
                                 <Link to="/congviec">Công việc</Link>
-                                <span>Công tác</span>
+                                <span>Rèn luyện</span>
                             </div>
                         </div>
                     </div>
@@ -345,7 +346,7 @@ class Trangchu extends Component {
                     <div class="container">
 
                         <div class="section-title dark">
-                            <h2> CÔNG VIỆC THUỘC LĨNH VỰC <span style={{ fontSize: '35px' }}>CÔNG TÁC</span> TRONG NĂM</h2>
+                            <h2> CÔNG VIỆC THUỘC LĨNH VỰC <span style={{ fontSize: '35px' }}>RÈN LUYỆN</span> TRONG NĂM</h2>
                         </div>
 
 
@@ -390,9 +391,10 @@ class Trangchu extends Component {
                                                     <td>{emp.diadiem}</td>
                                                     <td>{emp.thoigian}</td>
 
-                                                    <td>{(emp.filecongvec != null) ?
-                                                        < a href={"/UploadedFiles/" + (emp.filecongvec).split('\\').pop()} download> Tải xuống </a>
-                                                        : null}
+                                                    <td>{(emp.filecongvec == null) ? null :
+                                                        (emp.filecongvec == "") ? null :
+                                                            < a href={"/UploadedFiles/" + (emp.filecongvec).split('\\').pop()} download> Tải xuống </a>
+                                                    }
                                                     </td>
 
 
@@ -538,7 +540,7 @@ class Trangchu extends Component {
 
                                                 <Col md="6">
                                                     <FormGroup>
-                                                        <Label htmlFor="hoten">Thời gian: (Giờ) </Label>
+                                                        <Label htmlFor="hoten">Thời gian:  </Label>
                                                         <Input id="tenchucvu" value={this.state.editCVData.thoigian} onChange={(e) => {
                                                             let { editCVData } = this.state;
                                                             editCVData.thoigian = e.target.value;

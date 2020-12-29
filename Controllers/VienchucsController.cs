@@ -457,8 +457,8 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
-        [HttpGet("vcgioi")]
-        public IEnumerable<VienChucDTO> VCgioi()
+        [HttpGet("vcgioi/{idnh}")]
+        public IEnumerable<VienChucDTO> VCgioi(int idnh)
         {
             try
             {
@@ -467,7 +467,7 @@ namespace QuanLyHieuSuat.Controllers
                          join c in db.Bomon on a.Mabomon equals c.Mabomon
                          join d in db.Chucdanh on a.Machucdanh equals d.Machucdanh
                          join e in db.Danhgia on a.Mavienchuc equals e.Mavienchuc
-                         where e.Khoa == 2
+                         where e.Khoa == 2 && e.Manamhoc==idnh
                          select new VienChucDTO()
                          {
                              Mavienchuc = a.Mavienchuc,
@@ -495,8 +495,8 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
-        [HttpGet("vcxs")]
-        public IEnumerable<VienChucDTO> VCXS()
+        [HttpGet("vcxs/{id}")]
+        public IEnumerable<VienChucDTO> VCXS(int idnh)
         {
             try
             {
@@ -505,7 +505,7 @@ namespace QuanLyHieuSuat.Controllers
                          join c in db.Bomon on a.Mabomon equals c.Mabomon
                          join d in db.Chucdanh on a.Machucdanh equals d.Machucdanh
                          join e in db.Danhgia on a.Mavienchuc equals e.Mavienchuc
-                         where e.Khoa == 1
+                        where e.Khoa == 2 && e.Manamhoc==idnh
                          select new VienChucDTO()
                          {
                              Mavienchuc = a.Mavienchuc,
@@ -534,8 +534,8 @@ namespace QuanLyHieuSuat.Controllers
             }
         }
 
-        [HttpGet("vctb")]
-        public IEnumerable<VienChucDTO> vctb()
+        [HttpGet("vctb/{id}")]
+        public IEnumerable<VienChucDTO> vctb(int idnh)
         {
             try
             {
@@ -544,7 +544,7 @@ namespace QuanLyHieuSuat.Controllers
                          join c in db.Bomon on a.Mabomon equals c.Mabomon
                          join d in db.Chucdanh on a.Machucdanh equals d.Machucdanh
                          join e in db.Danhgia on a.Mavienchuc equals e.Mavienchuc
-                         where e.Khoa == 3
+                         where e.Khoa == 2 && e.Manamhoc == idnh
                          select new VienChucDTO()
                          {
                              Mavienchuc = a.Mavienchuc,
@@ -573,8 +573,8 @@ namespace QuanLyHieuSuat.Controllers
             }
         }
 
-        [HttpGet("vcyeu")]
-        public IEnumerable<VienChucDTO> vcyeu()
+        [HttpGet("vcyeu/{id}")]
+        public IEnumerable<VienChucDTO> vcyeu(int idnh)
         {
             try
             {
@@ -583,7 +583,7 @@ namespace QuanLyHieuSuat.Controllers
                          join c in db.Bomon on a.Mabomon equals c.Mabomon
                          join d in db.Chucdanh on a.Machucdanh equals d.Machucdanh
                          join e in db.Danhgia on a.Mavienchuc equals e.Mavienchuc
-                         where e.Khoa == 4
+                         where e.Khoa == 2 && e.Manamhoc == idnh
                          select new VienChucDTO()
                          {
                              Mavienchuc = a.Mavienchuc,

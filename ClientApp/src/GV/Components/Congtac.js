@@ -63,7 +63,6 @@ class Trangchu extends Component {
             editModal: false,
             CVshowAlert: false,
             confirm: false,
-
             selectedFile: '',
             progress: 0,
             status: '',
@@ -77,8 +76,6 @@ class Trangchu extends Component {
             tstiet:'',
             user: JSON.parse(localStorage.getItem('user'))
 
-
-
         };
         this.handleXoa = this.handleXoa.bind(this);
         this.deleteCV = this.deleteCV.bind(this);
@@ -91,7 +88,7 @@ class Trangchu extends Component {
             vc: nvs
         });
 
-        axios.get('/congviecs/congtac')
+        axios.get('/congviecs/congtac/' + this.state.user.mavienchuc)
             .then(res => {
                 var ct = res.data;
                 console.log('data-->' + JSON.stringify(ct))
@@ -177,7 +174,7 @@ class Trangchu extends Component {
 
             for (let item of sourceArray) {
 
-                if (item.tencongviec.toLowerCase().indexOf(search.toLowerCase()) > -1 || item.ngaythuchien.indexOf(search.toLowerCase()) > -1) {
+                if (item.tendanhmuc.toLowerCase().indexOf(search.toLowerCase()) > -1 || item.tencongviec.toLowerCase().indexOf(search.toLowerCase()) > -1 || item.ngaythuchien.indexOf(search.toLowerCase()) > -1) {
                     newArray.push(item);
                 }
             }
@@ -194,7 +191,7 @@ class Trangchu extends Component {
         this.setState({
             vc: nvs
         });
-        axios.get('/congviecs/congtac')
+        axios.get('/congviecs/congtac' + this.state.user.mavienchuc)
             .then(res => {
                 var ct = res.data;
                 console.log('data-->' + JSON.stringify(ct))
@@ -364,8 +361,8 @@ class Trangchu extends Component {
         });
     }
     render() {
-        const { congtac, errors,pc, tstiet,lv,nl} = this.state;
-        console.log(pc)
+        const { congtac, errors, pc, tstiet, lv, nl } = this.state;
+        console.log(this.state.user.mavienchuc)
         return (
 
             <>
@@ -470,9 +467,10 @@ class Trangchu extends Component {
                                                     <td>{emp.diadiem}</td>
                                                     <td>{emp.thoigian}</td>
 
-                                                    <td>{(emp.filecongvec != null) ?
+                                                    <td>{(emp.filecongvec == null) ? null :
+                                                        (emp.filecongvec == "") ? null :
                                                         < a href={"/UploadedFiles/" + (emp.filecongvec).split('\\').pop()} download> Tải xuống </a>
-                                                        : null}
+                                                        }
                                                     </td>
 
 
@@ -618,7 +616,7 @@ class Trangchu extends Component {
 
                                                 <Col md="6">
                                                     <FormGroup>
-                                                        <Label htmlFor="hoten">Thời gian: (Giờ) </Label>
+                                                        <Label htmlFor="hoten">Thời gian: </Label>
                                                         <Input id="tenchucvu" value={this.state.editCVData.thoigian} onChange={(e) => {
                                                             let { editCVData } = this.state;
                                                             editCVData.thoigian = e.target.value;

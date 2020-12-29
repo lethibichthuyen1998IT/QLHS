@@ -47,10 +47,12 @@ class Khenthuong extends React.Component {
             quyen: [],
             chucnang:[],
             valueSearch: '',
-            errors: ''
+            errors: '',
+            nhmd: '',
+            nh:[]
         }
       
-   
+        this.refresh = this.refresh.bind(this);
         
     }
 
@@ -60,46 +62,124 @@ class Khenthuong extends React.Component {
     componentDidMount() {
 
         //hien thi danh sach
-        axios.get('/Vienchucs/vcgioi/')
+        axios.get('/namhocs/namhoc/')
             .then((res) => this.setState({
-                vcgioisource: res.data,
-                vcgioi: res.data,
-            })
-        );
-        axios.get('/Vienchucs/vcxs/')
-            .then((res) => this.setState({
-                vcxs: res.data,
-                vcxssource: res.data,
-            })
-        );
-        axios.get('/Vienchucs/vctb/')
-            .then((res) => this.setState({
-                vctb: res.data,
-                vctbsource: res.data,
-            })
+                nhmd: res.data.manamhoc,
+
+
+            }, () => this.Load())
             );
-        axios.get('/quyens/')
-            .then((res) => this.setState({
-                quyen: res.data,
-               
-            })
-        );
-        axios.get('/Vienchucs/vcyeu/')
+     
+       
+     
+        
+    }
+    refresh() {
+        axios.get('/Vienchucs/vcyeu/' + Number.parseInt(this.state.nhmd))
             .then((res) => this.setState({
                 vcyeu: res.data,
                 vcyeusource: res.data,
             })
             );
+        axios.get('/Vienchucs/vcgioi/' + Number.parseInt(this.state.nhmd))
+            .then((res) => this.setState({
+                vcgioisource: res.data,
+                vcgioi: res.data,
+            })
+            );
+        axios.get('/Vienchucs/vcxs/' + Number.parseInt(this.state.nhmd))
+            .then((res) => this.setState({
+                vcxs: res.data,
+                vcxssource: res.data,
+            })
+            );
+        axios.get('/Vienchucs/vctb/' + Number.parseInt(this.state.nhmd))
+            .then((res) => this.setState({
+                vctb: res.data,
+                vctbsource: res.data,
+            })
+            );
+
+        const nvs = JSON.parse(localStorage.getItem('user'));
+        this.setState({
+            vc: nvs
+        });
+        axios.get('/namhocs/')
+            .then((res) => this.setState({
+                nh: res.data,
+
+            })
+            );
+        axios.get('/quyens')
+            .then((res) => this.setState({
+                quyen: res.data,
+
+            })
+
+            );
         axios.get('/chucnangs/')
             .then((res) => this.setState({
                 chucnang: res.data,
-                
+
+            })
+            );
+    }
+
+    Load() {
+        axios.get('/Vienchucs/vcyeu/' + Number.parseInt(this.state.nhmd))
+            .then((res) => this.setState({
+                vcyeu: res.data,
+                vcyeusource: res.data,
+            })
+            );
+        axios.get('/Vienchucs/vcgioi/' + Number.parseInt(this.state.nhmd))
+            .then((res) => this.setState({
+                vcgioisource: res.data,
+                vcgioi: res.data,
+            })
+            );
+        axios.get('/Vienchucs/vcxs/' + Number.parseInt(this.state.nhmd))
+            .then((res) => this.setState({
+                vcxs: res.data,
+                vcxssource: res.data,
+            })
+            );
+        axios.get('/Vienchucs/vctb/' + Number.parseInt(this.state.nhmd))
+            .then((res) => this.setState({
+                vctb: res.data,
+                vctbsource: res.data,
+            })
+            );
+
+        const nvs = JSON.parse(localStorage.getItem('user'));
+        this.setState({
+            vc: nvs
+        });
+        axios.get('/quyens')
+            .then((res) => this.setState({
+                quyen: res.data,
+
+            })
+
+            );
+        axios.get('/chucnangs/')
+            .then((res) => this.setState({
+                chucnang: res.data,
+
             })
         );
-     
+        axios.get('/namhocs/')
+            .then((res) => this.setState({
+                nh: res.data,
+
+            })
+            );
         
     }
-  
+    onchange = e => {
+        this.setState({ nhmd: e.target.value }, () => this.refresh());
+
+    }
     //search
     vcxsSearch = (search) => {
 
@@ -245,6 +325,22 @@ class Khenthuong extends React.Component {
 
                                    
                                 </CardHeader>
+                                <Row md="5" style={{
+                                    marginLeft: '350px', marginTop: '10px'
+                                }}>
+                                    <Col md="2" style={{ textAlign: 'right', fontWeight: 'bold', marginTop: '10px', fontSize: '18px' }}>Năm học:</Col>
+                                    <Col md="3" style={{ paddingLeft: '0px' }}>  <Input type="select" id="mabomon" value={this.state.idnh} onChange={this.onchange} >
+
+                                        {
+                                            this.state.nh.map((nh) =>
+                                                <option key={nh.manamhoc} value={nh.manamhoc}>{nh.tennamhoc}</option>)
+                                        }
+
+                                    </Input>
+
+                                    </Col>
+                                </Row>
+                                <br />
                                 <Tabs>
                                     <TabList>
 

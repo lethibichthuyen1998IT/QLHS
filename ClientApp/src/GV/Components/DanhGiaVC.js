@@ -52,6 +52,7 @@ class DanhGiaVC extends Component {
                 uudiem: '',
                 nhuocdiem: '',
                 loai: '',
+
             },
 
             dg: [],
@@ -69,15 +70,21 @@ class DanhGiaVC extends Component {
             lv: [],
             nl: [],
             tstiet: '',
-            vc:[]
+            vc: [],
+            hesoluong: 0,
+            bacvc: 0,
+            hangvc: '',
+            tennh:''
 
-
+           
         };
+        this.refresh = this.refresh.bind(this);
 
 
     }
 
     componentDidMount() {
+       
 
         axios.get('/phancongs/vc/' + this.state.user.mavienchuc)
             .then((res) => this.setState({
@@ -103,6 +110,7 @@ class DanhGiaVC extends Component {
         axios.get('/namhocs/namhoc/')
             .then((res) => this.setState({
                 nhmd: res.data.manamhoc,
+                tennh: res.data.tennamhoc
 
             })
             );
@@ -125,14 +133,15 @@ class DanhGiaVC extends Component {
         axios.get('/vienchucs/' + this.state.user.mavienchuc)
             .then((res) => this.setState({
                 vc: res.data,
+                hangvc: res.data.hangchucdanh,
+                bacvc: res.data.bacluong,
 
 
-            })
-       
-                
+            }, () => this.LoadVC())
+           
             );
        
-        console.log(this.state.vc);
+       
 
         axios.get('/danhgias/' )
             .then((res) => this.setState({
@@ -142,18 +151,145 @@ class DanhGiaVC extends Component {
         );
        
 
+       
+    }
+
+    refresh() {
+
+
+        axios.get('/phancongs/vc/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                pc: res.data,
+
+            }));
+
+        axios.get('/phancongs/lv/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                lv: res.data,
+
+            }));
+        axios.get('/phancongs/nl/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                nl: res.data,
+
+            }));
+        axios.get('/phancongs/tstiet/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                tstiet: res.data,
+
+            }));
+        axios.get('/namhocs/namhoc/')
+            .then((res) => this.setState({
+                nhmd: res.data.manamhoc,
+                tennh: res.data.tennamhoc
+
+            })
+            );
+
+        axios.get('/namhocs/namhoc')
+            .then(res => {
+                var nhmd = res.data;
+                this.setState({
+                    idnh: nhmd.manamhoc
+
+                })
+
+            });
+        axios.get('/namhocs/')
+            .then((res) => this.setState({
+                nh: res.data,
+
+            })
+            );
+        axios.get('/vienchucs/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                vc: res.data,
+                hangvc: res.data.hangchucdanh,
+                bacvc: res.data.bacluong,
+
+
+            }, () => this.LoadVC())
+
+            );
+
+
+
+        axios.get('/danhgias/')
+            .then((res) => this.setState({
+                dg: res.data,
+
+            })
+            );
+
 
 
     }
 
+    LoadVC() {
+       
+        switch (this.state.hangvc.trim()) {
+            case "I":
+                {
+                    switch (this.state.bacvc) {
+                        case 1: this.state.hesoluong = 6.2; break;
+                        case 2: this.state.hesoluong = 6.56; break;
+                        case 3: this.state.hesoluong = 6.92; break;
+                        case 4: this.state.hesoluong = 7.28; break;
+                        case 5: this.state.hesoluong = 7.64; break;
+                        case 6: this.state.hesoluong = 8.0; break;
+                       
+                    }
+                    break;
+
+                }
+
+            case "II":
+                {
+                    switch (this.state.bacvc) {
+                        case 1: this.state.hesoluong = 4.4; break;
+                        case 2: this.state.hesoluong = 4.74; break;
+                        case 3: this.state.hesoluong = 5.08; break;
+                        case 4: this.state.hesoluong = 5.42; break;
+                        case 5: this.state.hesoluong = 5.76; break;
+                        case 6: this.state.hesoluong = 6.10; break;
+                        case 7: this.state.hesoluong = 6.44; break;
+                        case 8: this.state.hesoluong = 6.78; break;
+                       
+                    }
+                    break;
+                }
+            case "III":
+                {
+                    switch (this.state.bacvc) {
+                        case 1: this.state.hesoluong = 2.34; break;
+                        case 2: this.state.hesoluong = 2.67; break;
+                        case 3: this.state.hesoluong = 3.0; break;
+                        case 4: this.state.hesoluong = 3.33; break;
+                        case 5: this.state.hesoluong = 3.66; break;
+                        case 6: this.state.hesoluong = 3.99; break;
+                        case 7: this.state.hesoluong = 4.32; break;
+                        case 8: this.state.hesoluong = 4.65; break;
+                        case 9: this.state.hesoluong = 4.98; break;
+                        default: break
+
+                    }
+                }
+                break;
+          
+
+        }
+        console.log(this.state.hangvc, this.state.bacvc, this.state.hesoluong)
 
 
-
+    }
 
     DG() {
+       
         axios.get('/danhgias/vienchuc/' + this.state.user.mavienchuc + "/" + this.state.idnh)
             .then((res) => this.setState({
                 ctdg: res.data,
+               
+
                 editdg: {
                     manamhoc: res.data.manamhoc,
                     mavienchuc: res.data.mavienchuc,
@@ -167,15 +303,14 @@ class DanhGiaVC extends Component {
                     loai: res.data.loai,
                   
                 },
+                modal: !this.state.modal
                
 
             })
-            );
+        );
+       
 
-        this.setState({
-          
-            modal: !this.state.modal
-        })
+        
     }
     update() {
         let { masodanhgia, manamhoc, mavienchuc, kqth, daoduc, trachnhiem, khac, uudiem, nhuocdiem, loai } = this.state.editdg;
@@ -219,6 +354,7 @@ class DanhGiaVC extends Component {
             MANAMHOC: this.state.idnh,
             KQTH: this.state.newdg.kqth,
             DAODUC: this.state.newdg.daoduc,
+            KHAC: this.state.newdg.khac,
             TRACHNHIEM: this.state.newdg.trachnhiem,
             UUDIEM: this.state.newdg.uudiem,
             NHUOCDIEM: this.state.newdg.nhuocdiem,
@@ -227,7 +363,13 @@ class DanhGiaVC extends Component {
 
         }).then((response) => {
             //console.log(response.data);
+            this.setState({
+                modal: false
+            })
+            this.refresh();
             alert("Đã thêm thành công!");
+          
+           
 
         })
             .catch((error) => {
@@ -240,8 +382,8 @@ class DanhGiaVC extends Component {
 
     render() {
 
-
-        const { dg, user, idnh, ctdg,pc,lv,nl,tstiet,vc } = this.state;
+      
+        const { dg, user, idnh, ctdg, pc, lv, nl, tstiet, vc, hesoluong, hangvc, bacvc, tennh} = this.state;
 
 
 
@@ -250,7 +392,8 @@ class DanhGiaVC extends Component {
             if (e.mavienchuc.trim() === user.mavienchuc.trim() && e.manamhoc === idnh)
                 danhgia.push(e.mavienchuc, e.manamhoc);
         });
-      
+        
+        
         return (
             <>
 
@@ -282,7 +425,8 @@ class DanhGiaVC extends Component {
                                 {(danhgia.length > 0) ?
                                     <button onClick={this.DG.bind(this)} style={{width : '300px', marginLeft: '360px'}}> Chỉnh sửa phiếu đánh giá</button>
                                     :
-
+                                    
+                                   
                                     <>
 
                                         <div style={{ backgroundColor: 'white', padding: '30px 30px' }}>
@@ -304,7 +448,7 @@ class DanhGiaVC extends Component {
                                             <Row md="12" style={{ textAlign: 'center' }}>
                                                 <Col md="12" style={{ fontWeight: 'bold' }}>
                                                     PHIẾU ĐÁNH GIÁ VÀ PHẦN LOẠI VIÊN CHỨC <br />(Dành cho viên chức không giữ chức vụ quản lý)< br />
-                            Năm học {idnh}
+                            Năm học {tennh}
                                                 </Col>
                                             </Row>
                                             <Row md="12" style={{ textAlign: 'justify' }}>
@@ -331,7 +475,7 @@ class DanhGiaVC extends Component {
 
                                                 </Col>
                                                 <Col md="4">
-                                                    <b>Hệ số lương: </b>
+                                                    <b>Hệ số lương:  {hesoluong} </b>
 
                                                 </Col>
 
@@ -378,7 +522,7 @@ class DanhGiaVC extends Component {
                                                 <Col md="12">
                                                 <FormGroup>
 
-                                                    <Label htmlFor="hoten">Đạo đức: </Label>
+                                                   
                                                     <Input type="textarea" value={this.state.newdg.daoduc} onChange={(e) => {
                                                         let { newdg } = this.state;
                                                         newdg.daoduc = e.target.value;
@@ -392,7 +536,7 @@ class DanhGiaVC extends Component {
                                                 <b> 3. Tinh thần trách nhiệm, thái độ phục vụ nhân dân, tinh thần hợp tác với đồng nghiệp và việc thực hiện quy tắc ứng xử của viên chức:</b></Row>
                                             <Row md="12"> <Col md="12">
                                                 <FormGroup>
-                                                    <Label htmlFor="hoten">Trách nhiệm: </Label>
+                                                   
                                                     <Input type="textarea" value={this.state.newdg.trachnhiem} onChange={(e) => {
                                                         let { newdg } = this.state;
                                                         newdg.trachnhiem = e.target.value;
@@ -407,13 +551,13 @@ class DanhGiaVC extends Component {
                             (việc tham gia các hoạt động do Trường và đơn vị tổ chức/ việc tham gia triển khai nghị quyết, chính sách, pháp luật của Đảng, Nhà nước/việc tham gia học tập nâng cao trình độ..)</Row>
                                             <Row md="12">  <Col md="12">
                                                 <FormGroup>
-                                                    <Label htmlFor="hoten">Kết quả thực hiện khác: </Label>
+                                                   
                                                     <Input type="textarea" value={this.state.newdg.khac} onChange={(e) => {
                                                         let { newdg } = this.state;
                                                         newdg.khac = e.target.value;
 
                                                         this.setState({ newdg });
-                                                    }} placeholder="Kết quả thực hiện khác" />
+                                                    }} />
                                                 </FormGroup>
                                             </Col>  </Row>
 
@@ -528,7 +672,7 @@ class DanhGiaVC extends Component {
 
                                                 </Col>
                                                 <Col md="4">
-                                                    <b>Hệ số lương: </b>
+                                                    <b>Hệ số lương: {hesoluong} </b>
 
                                                 </Col>
 

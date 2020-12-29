@@ -260,7 +260,7 @@ class Phancong extends React.Component {
             console.log(search);
             for (let item of sourceArray) {
 
-                if (item.mavienchuc.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+                if (item.mavienchuc.toLowerCase().indexOf(search.toLowerCase()) > -1 || item.hoten.toLowerCase().indexOf(search.toLowerCase()) > -1) {
                     newArray.push(item);
                 }
             }
@@ -285,7 +285,7 @@ class Phancong extends React.Component {
             console.log(search);
             for (let item of sourceArray) {
 
-                if (item.mavienchuc.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+                if (item.mavienchuc.toLowerCase().indexOf(search.toLowerCase()) > -1 || item.hoten.toLowerCase().indexOf(search.toLowerCase()) > -1) {
                     newArray.push(item);
                 }
             }
@@ -450,7 +450,7 @@ class Phancong extends React.Component {
 
         axios.post('/phancongs/', {
             MAVIENCHUC: this.state.idvc,
-            MANAMHOC: this.state.idnh,
+            MANAMHOC: this.state.newpc.manamhoc,
             IDMONHOC: this.state.newpc.idmonhoc,
             SOLUONG: this.state.newpc.soluong
           
@@ -915,9 +915,10 @@ class Phancong extends React.Component {
                                                                                 <td>{emp.diadiem}</td>
                                                                                 <td>{emp.thoigian}</td>
 
-                                                                                <td>{(emp.filecongvec != null) ?
-                                                                                    < a href={"/UploadedFiles/" + (emp.filecongvec).split('\\').pop()} download> Tải xuống </a>
-                                                                                :null}
+                                                                                <td>{(emp.filecongvec == null) ? null :
+                                                                                    (emp.filecongvec == "") ? null :
+                                                                                        < a href={"/UploadedFiles/" + (emp.filecongvec).split('\\').pop()} download> Tải xuống </a>
+                                                                                }
                                                                                 </td>
 
                                                                                 {(rules.find(x => x == cns)) ?
@@ -1558,9 +1559,10 @@ class Phancong extends React.Component {
                                                                                     <td>{emp.diadiem}</td>
                                                                                     <td>{emp.thoigian}</td>
 
-                                                                                    <td>{(emp.filecongvec != null) ?
-                                                                                        < a href={"/UploadedFiles/" + (emp.filecongvec).split('\\').pop()} download> Tải xuống </a>
-                                                                                        : null}
+                                                                                    <td>{(emp.filecongvec == null) ? null :
+                                                                                        (emp.filecongvec == "") ? null :
+                                                                                            < a href={"/UploadedFiles/" + (emp.filecongvec).split('\\').pop()} download> Tải xuống </a>
+                                                                                    }
                                                                                     </td>
 
                                                                                     {(rules.find(x => x == cn)) ?

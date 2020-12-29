@@ -273,8 +273,8 @@ class NhapCV extends Component {
 
                         <Col md="6">
                             <FormGroup>
-                                <Label htmlFor="hoten">Thời gian thực hiện (giờ): </Label>
-                                <Input type="number" value={this.state.newcv.thoigian} onChange={(e) => {
+                                <Label htmlFor="hoten">Thời gian thực hiện: </Label>
+                                <Input type="text" value={this.state.newcv.thoigian} onChange={(e) => {
                                         let { newcv } = this.state;
                                     newcv.thoigian = e.target.value;
 
@@ -314,8 +314,8 @@ class NhapCV extends Component {
                     <Row md="12">
                         <Col md="6">
                            
-                                      
-                            <button onClick={this.addCV.bind(this)} class="site-btn">Lưu</button>
+
+                                        <button disabled={!(this.state.newcv.ngaythuchien.length > 0 && this.state.newcv.tencongviec.length > 0 && this.state.newcv.thoigian.length > 0 && this.state.newcv.diadiem.length > 0 && this.state.newcv.masodanhmuc.length != 0)} onClick={this.addCV.bind(this)} class="site-btn">Lưu</button> {' '}
                         </Col>
                         <Col md="6">
                                 <button onClick={this.toggleHuyModal.bind(this)}>Hủy</button>
@@ -347,9 +347,12 @@ class NhapCV extends Component {
                             <p><b>Lao động:</b> tham gia hoặc hướng dẫn các ngày lao động do trường, khoa hoặc thành phố tổ chức </p> 
                        
                           
-                            <p><b> Hội thao:</b> tham gia các hội thao do trường, khoa hoặc thành phố tổ chức </p> 
-                            <p><b> Tuyên truyền:</b> tham gia các hoạt động tuyên truyền do trường, khoa hoặc thành phố tổ chức </p> 
-                            <p><b>Lao động:</b> tham gia hoặc hướng dẫn các ngày lao động do trường, khoa hoặc thành phố tổ chức </p> 
+                            <p><b> Đoàn thể:</b> tham gia các hoạt động của Đoàn khoa, Đoàn trường </p> 
+                            <p><b>Bài báo khoa học:</b> Có các bài báo khoa học trong hoặc ngoài nước </p> 
+                                    <p><b>Cố vấn học tập:</b> Giải quyết các vấn đề cho lớp cố vấn, sinh hoạt cố vấn </p> 
+                                    <p><b>Coi thi, chấm thi:</b> Coi thi, chấm thi cho các học phần </p> 
+                                    <p><b>Nghiên cứu khoa học:</b> Hướng dẫn các sinh viên tham gia nghiên cứu khoa học</p>
+                                    <p><b>Hướng dẫn niên luận / luận văn:</b> Gặp mặt, trao đổi với các sinh viên được hướng dẫn</p>
                         </div>
                         </div>
                     </div>
