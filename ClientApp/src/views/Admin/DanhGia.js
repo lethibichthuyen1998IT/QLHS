@@ -19,6 +19,7 @@ import {
 import { Link, NavLink } from "react-router-dom";
 import axios from 'axios';
 import moment from 'moment';
+import ReactPaginate from 'react-paginate';
 import Search from 'components/Search';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -61,7 +62,14 @@ class DanhGia extends React.Component {
             errors: '',
             vienchuc: [],
             chitietdg:[],
-            nhmd:''
+            nhmd: '',
+
+            offset: 0,
+            offsetBM: 0,
+            orgtableDataBM: [],
+            orgtableData: [],
+            perPage: 6,
+            currentPage: 0,
         }
       
         this.refresh = this.refresh.bind(this);
@@ -89,18 +97,33 @@ class DanhGia extends React.Component {
 
     Load() {
         axios.get('/danhgias/tatca/' + Number.parseInt(this.state.nhmd))
-            .then((res) => this.setState({
-                dg: res.data,
-                source: res.data,
-            })
-        );
+            .then(res => {
+                var ct = res.data;
+                console.log('data-->' + JSON.stringify(ct))
+                var slice = ct.slice(this.state.offset, this.state.offset + this.state.perPage)
+                this.setState({
+                    pageCount: Math.ceil(ct.length / this.state.perPage),
+                    orgtableData: ct,
+                    dg: slice,
+                    source: ct,
+
+                })
+
+            });
         axios.get('/danhgias/tatcabm/' + this.state.user.mabomon + "/" + Number.parseInt(this.state.nhmd))
-            .then((res) => this.setState({
-                tatcabm: res.data,
-                sourcebm: res.data
-               
-            })
-            );
+            .then(res => {
+                var ct = res.data;
+                console.log('data-->' + JSON.stringify(ct))
+                var slice = ct.slice(this.state.offset, this.state.offset + this.state.perPage)
+                this.setState({
+                    pageCount: Math.ceil(ct.length / this.state.perPage),
+                    orgtableData: ct,
+                    tatcabm: slice,
+                    source: ct,
+
+                })
+
+            });
        
         axios.get('/danhgias/khoadanhgia/' + Number.parseInt(this.state.nhmd))
             .then((res) => this.setState({
@@ -163,7 +186,52 @@ class DanhGia extends React.Component {
             })
             );
     }
+    handlePageClick = (e) => {
+        const selectedPage = e.selected;
+        const offset = selectedPage * this.state.perPage;
 
+        this.setState({
+            currentPage: selectedPage,
+            offset: offset
+        }, () => {
+            this.loadMoreData()
+        });
+
+    };
+
+    loadMoreData() {
+        const data = this.state.orgtableData;
+
+        const slice = data.slice(this.state.offset, this.state.offset + this.state.perPage)
+        this.setState({
+            pageCount: Math.ceil(data.length / this.state.perPage),
+            dg: slice,
+        })
+    }
+
+
+    handlePageClickBM = (e) => {
+        const selectedPage = e.selected;
+        const offset = selectedPage * this.state.perPage;
+
+        this.setState({
+            currentPage: selectedPage,
+            offsetBM: offset
+        }, () => {
+            this.loadMoreDataBM()
+        });
+
+    };
+
+    loadMoreDataBM() {
+        const data = this.state.orgtableDataBM;
+
+        const slice = data.slice(this.state.offsetBM, this.state.offsetBM + this.state.perPage)
+        this.setState({
+            pageCount: Math.ceil(data.length / this.state.perPage),
+            tatcabm: slice,
+        })
+    }
     //search
     handleSearch = (search) => {
 
@@ -522,8 +590,29 @@ class DanhGia extends React.Component {
                                                         >  Đã xóa thành công !!!
                                                                 </SweetAlert>
 
-                                            </tbody>
-                                                </Table> </TabPanel>
+                                                    </tbody>
+
+                                                </Table>
+                                                <CardFooter>
+                                                    <div class="page-pagination">
+
+                                                        <ReactPaginate
+                                                            previousLabel={"<"}
+                                                            nextLabel={">"}
+
+                                                            breakLabel={"..."}
+                                                            breakClassName={"break-me"}
+                                                            pageCount={this.state.pageCount}
+                                                            marginPagesDisplayed={2}
+                                                            pageRangeDisplayed={6}
+                                                            onPageChange={this.handlePageClick}
+                                                            containerClassName={"pagination"}
+                                                            subContainerClassName={"pages pagination"}
+                                                            activeClassName={"active"} />
+
+                                                    </div>
+                                                </CardFooter>
+                                            </TabPanel>
                                             <TabPanel>  <Table className="table table-hover">
                                                 <thead className="text-primary">
                                                     <tr>
@@ -893,7 +982,24 @@ class DanhGia extends React.Component {
                                                             >  Đã xóa thành công !!!
                                                                 </SweetAlert>
                                                             </tbody>
-                                                    </Table> </TabPanel>
+                                                    </Table>
+                                                    <div class="page-pagination">
+
+                                                        <ReactPaginate
+                                                            previousLabel={"<"}
+                                                            nextLabel={">"}
+
+                                                            breakLabel={"..."}
+                                                            breakClassName={"break-me"}
+                                                            pageCount={this.state.pageCount}
+                                                            marginPagesDisplayed={2}
+                                                            pageRangeDisplayed={6}
+                                                            onPageChange={this.handlePageClickBM}
+                                                            containerClassName={"pagination"}
+                                                            subContainerClassName={"pages pagination"}
+                                                            activeClassName={"active"} />
+
+                                                    </div></TabPanel>
                                                 <TabPanel>  <Table className="table table-hover">
                                                     <thead className="text-primary">
                                                         <tr>

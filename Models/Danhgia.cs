@@ -22,6 +22,8 @@ namespace QuanLyHieuSuat.Models
         public DateTime? Ngayvcdg { get; set; }
         public DateTime? Ngaybmdg { get; set; }
         public DateTime? Ngaykhoadg { get; set; }
+        public int? Danhhieubm { get; set; }
+        public int? Danhhieukhoa { get; set; }
 
         public virtual Namhoc ManamhocNavigation { get; set; }
         public virtual Vienchuc MavienchucNavigation { get; set; }

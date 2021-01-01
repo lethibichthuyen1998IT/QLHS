@@ -23,7 +23,7 @@ import 'react-tabs/style/react-tabs.css';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import Pagination from "react-js-pagination";
 
-class Khenthuong extends React.Component {
+class Thanhtich extends React.Component {
 
     constructor(props) {
 
@@ -37,23 +37,23 @@ class Khenthuong extends React.Component {
             showAlert: false,
             confirm: false,
             activePage: 1,
-           
-          user: JSON.parse(localStorage.getItem('user')),
-          
+
+            user: JSON.parse(localStorage.getItem('user')),
+
             vcgioi: [],
             vcxs: [],
             vctb: [],
-            vcyeu:[],
+            vcyeu: [],
             quyen: [],
-            chucnang:[],
+            chucnang: [],
             valueSearch: '',
             errors: '',
             nhmd: '',
-            nh:[]
+            nh: []
         }
-      
+
         this.refresh = this.refresh.bind(this);
-        
+
     }
 
 
@@ -69,31 +69,31 @@ class Khenthuong extends React.Component {
 
             }, () => this.Load())
             );
-     
-       
-     
-        
+
+
+
+
     }
     refresh() {
-        axios.get('/Vienchucs/vcyeu/' + Number.parseInt(this.state.nhmd))
+        axios.get('/Vienchucs/tdtq/' + Number.parseInt(this.state.nhmd))
             .then((res) => this.setState({
                 vcyeu: res.data,
                 vcyeusource: res.data,
             })
             );
-        axios.get('/Vienchucs/vcgioi/' + Number.parseInt(this.state.nhmd))
+        axios.get('/Vienchucs/thcs/' + Number.parseInt(this.state.nhmd))
             .then((res) => this.setState({
                 vcgioisource: res.data,
                 vcgioi: res.data,
             })
             );
-        axios.get('/Vienchucs/vcxs/' + Number.parseInt(this.state.nhmd))
+        axios.get('/Vienchucs/ldtt/' + Number.parseInt(this.state.nhmd))
             .then((res) => this.setState({
                 vcxs: res.data,
                 vcxssource: res.data,
             })
             );
-        axios.get('/Vienchucs/vctb/' + Number.parseInt(this.state.nhmd))
+        axios.get('/Vienchucs/tdcb/' + Number.parseInt(this.state.nhmd))
             .then((res) => this.setState({
                 vctb: res.data,
                 vctbsource: res.data,
@@ -126,25 +126,25 @@ class Khenthuong extends React.Component {
     }
 
     Load() {
-        axios.get('/Vienchucs/vcyeu/' + Number.parseInt(this.state.nhmd))
+        axios.get('/Vienchucs/tdtq/' + Number.parseInt(this.state.nhmd))
             .then((res) => this.setState({
                 vcyeu: res.data,
                 vcyeusource: res.data,
             })
             );
-        axios.get('/Vienchucs/vcgioi/' + Number.parseInt(this.state.nhmd))
+        axios.get('/Vienchucs/thcs/' + Number.parseInt(this.state.nhmd))
             .then((res) => this.setState({
                 vcgioisource: res.data,
                 vcgioi: res.data,
             })
             );
-        axios.get('/Vienchucs/vcxs/' + Number.parseInt(this.state.nhmd))
+        axios.get('/Vienchucs/ldtt/' + Number.parseInt(this.state.nhmd))
             .then((res) => this.setState({
                 vcxs: res.data,
                 vcxssource: res.data,
             })
             );
-        axios.get('/Vienchucs/vctb/' + Number.parseInt(this.state.nhmd))
+        axios.get('/Vienchucs/tdcb/' + Number.parseInt(this.state.nhmd))
             .then((res) => this.setState({
                 vctb: res.data,
                 vctbsource: res.data,
@@ -167,14 +167,14 @@ class Khenthuong extends React.Component {
                 chucnang: res.data,
 
             })
-        );
+            );
         axios.get('/namhocs/')
             .then((res) => this.setState({
                 nh: res.data,
 
             })
             );
-        
+
     }
     onchange = e => {
         this.setState({ nhmd: e.target.value }, () => this.refresh());
@@ -285,9 +285,9 @@ class Khenthuong extends React.Component {
 
     //render
     render() {
-        
-        const { vcgioi,vctb,vcxs,vcyeu } = this.state;
-       
+
+        const { vcgioi, vctb, vcxs, vcyeu } = this.state;
+
         const { user, quyen, chucnang } = this.state;
 
         let rules = [];
@@ -304,7 +304,7 @@ class Khenthuong extends React.Component {
                 cn.push(x.machucnang);
         });
         chucnang.forEach((x) => {
-            if (x.tenchucnang.toLowerCase() === name.toLowerCase() )
+            if (x.tenchucnang.toLowerCase() === name.toLowerCase())
                 cns.push(x.machucnang);
         });
 
@@ -320,12 +320,12 @@ class Khenthuong extends React.Component {
                             <Card>
                                 <CardHeader>
 
-                                    <CardTitle tag="h4"><p style={{ color: '#E86307   ', fontSize: '30px', paddingLeft: '300px' }}><b> DANH SÁCH KẾT QUẢ CÁC VIÊN CHỨC</b> </p></CardTitle>
+                                    <CardTitle tag="h4"><p style={{ color: '#E86307   ', fontSize: '30px', paddingLeft: '300px' }}><b> DANH SÁCH DANH HIỆU CÁC VIÊN CHỨC</b> </p></CardTitle>
                                     <CardTitle>
-                                        
+
                                     </CardTitle>
 
-                                   
+
                                 </CardHeader>
                                 <Row md="5" style={{
                                     marginLeft: '350px', marginTop: '10px'
@@ -347,63 +347,63 @@ class Khenthuong extends React.Component {
                                     <TabList>
 
 
-                                        <Tab>Hoàn thành xuất sắc</Tab>
-                                        <Tab>Hoàn thành tốt</Tab>
-                                        <Tab>Hoàn thành</Tab>
-                                    <Tab>Không hoàn thành</Tab>
+                                        <Tab>Lao động tiên tiến</Tab>
+                                        <Tab>Chiến sĩ thi đua cơ sở</Tab>
+                                        <Tab>Chiến sĩ thi đua cấp bộ</Tab>
+                                        <Tab>Chiến sĩ thi đua toàn quốc</Tab>
 
                                     </TabList>
 
                                     <TabPanel>
-                                        
+
                                         <CardBody>
-                                            
+
                                             <Table className="table table-hover">
-                                                
+
                                                 <thead className="text-primary">
                                                     <tr>
                                                         <td colSpan="7">
-                                                        <Search
-                                                            valueSearch={this.state.valueSearch}
+                                                            <Search
+                                                                valueSearch={this.state.valueSearch}
                                                                 handleSearch={this.vcxsSearch} />
-                    </td>
-                                                  </tr>
-                                            <tr>
-                                                <th>STT</th>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>STT</th>
 
-                                                <th>Mã số</th>
-                                                <th>Họ tên</th>
-                                                <th>Giới tính</th>
-                                                <th>Chức danh</th>
-                                                <th>Chức vụ</th>
-                                                <th>Bộ môn</th>
+                                                        <th>Mã số</th>
+                                                        <th>Họ tên</th>
+                                                        <th>Giới tính</th>
+                                                        <th>Chức danh</th>
+                                                        <th>Chức vụ</th>
+                                                        <th>Bộ môn</th>
 
-                                            
-                                            </tr>
-                                          
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                vcxs.map((emp, index) => {
-                                                    return (
-                                                        <tr key={emp.mavienchuc}>
-                                                            <td>{index + 1}</td>
-                                                            <td>{emp.mavienchuc}</td>
-                                                            <td>{emp.hoten}</td>
-                                                            <td>{emp.gioitinh ? 'Nam' : 'Nữ'}</td>
-                                                            <td>{emp.tenchucdanh}</td>
-                                                            <td>{emp.tenchucvu}</td>
-                                                            <td>{emp.tenbomon}</td>
-                                                            <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp; 
-                                                        </tr>
-                                                       
-                                                    )
-                                                })
+
+                                                    </tr>
+
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        vcxs.map((emp, index) => {
+                                                            return (
+                                                                <tr key={emp.mavienchuc}>
+                                                                    <td>{index + 1}</td>
+                                                                    <td>{emp.mavienchuc}</td>
+                                                                    <td>{emp.hoten}</td>
+                                                                    <td>{emp.gioitinh ? 'Nam' : 'Nữ'}</td>
+                                                                    <td>{emp.tenchucdanh}</td>
+                                                                    <td>{emp.tenchucvu}</td>
+                                                                    <td>{emp.tenbomon}</td>
+                                                                    <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp;
+                                                                </tr>
+
+                                                            )
+                                                        })
                                                     }
                                                     <b> Tổng cộng: {vcxs.length} </b>
 
-                                        </tbody>
-                                    </Table>
+                                                </tbody>
+                                            </Table>
                                         </CardBody>
 
                                     </TabPanel>
@@ -444,7 +444,7 @@ class Khenthuong extends React.Component {
                                                                     <td>{emp.tenchucdanh}</td>
                                                                     <td>{emp.tenchucvu}</td>
                                                                     <td>{emp.tenbomon}</td>
-                                                                    <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp; 
+                                                                    <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp;
                                                                 </tr>
 
                                                             )
@@ -494,7 +494,7 @@ class Khenthuong extends React.Component {
                                                                     <td>{emp.tenchucdanh}</td>
                                                                     <td>{emp.tenchucvu}</td>
                                                                     <td>{emp.tenbomon}</td>
-                                                                    <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp; 
+                                                                    <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp;
                                                                 </tr>
 
                                                             )
@@ -544,7 +544,7 @@ class Khenthuong extends React.Component {
                                                                     <td>{emp.tenchucdanh}</td>
                                                                     <td>{emp.tenchucvu}</td>
                                                                     <td>{emp.tenbomon}</td>
-                                                                    <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp; 
+                                                                    <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp;
                                                                 </tr>
 
                                                             )
@@ -558,7 +558,7 @@ class Khenthuong extends React.Component {
 
                                     </TabPanel>
                                 </Tabs>
-                                
+
                             </Card>
                         </Col>
 
@@ -570,4 +570,4 @@ class Khenthuong extends React.Component {
     }
 }
 
-export default Khenthuong;
+export default Thanhtich;

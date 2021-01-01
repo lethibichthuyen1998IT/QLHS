@@ -50,7 +50,7 @@ import Chucdanh from "./views/Admin/ChucDanh.js";
 import Phancong from "./views/Admin/PhanCong";
 import Bomon from "./views/Admin/BoMon.js";
 import Danhgia from "./views/Admin/DanhGia.js";
-import PhieuDanhGia from './views/Admin/PhieuDanhGia.js';
+import Thanhtich from './views/Admin/Thanhtich.js';
 import Khenthuong from './views/Admin/Khenthuong.js';
 
 
@@ -104,17 +104,21 @@ const dashboardRoutes = [
         component: Danhgia,
         layout: "/admin"
     },
-
-    //{
-    //    path: "/xemct/:id",
-    //    name: "abc",
-    //    icon: Grade,
-    //    component: PhieuDanhGia,
-    //    layout: "/admin"
-    //},
-
-   
-
+  {
+    path: "/khenthuong",
+    name: "Khen thưởng",
+      icon: AssistantIcon,
+      component: Khenthuong,
+    layout: "/admin"
+    },
+ 
+    {
+        path: "/thanhtich",
+        name: "Thống kê",
+        icon: EqualizerIcon,
+        component: Thanhtich,
+        layout: "/admin"
+    },
     {
         path: "/chucnang",
         name: "Chức năng",
@@ -122,6 +126,15 @@ const dashboardRoutes = [
         component: Chucnang,
         layout: "/admin"
     },
+
+    {
+        path: "/bomon",
+        name: "Bộ môn",
+        icon: SubjectOutlinedIcon,
+        component: Bomon,
+        layout: "/admin"
+    },
+
     {
         path: "/chucvu",
         name: "Chức vụ",
@@ -134,35 +147,6 @@ const dashboardRoutes = [
         name: "Chức danh",
         icon: ViewStreamIcon,
         component: Chucdanh,
-        layout: "/admin"
-    },
-  {
-    path: "/bomon",
-    name: "Bộ môn",
-      icon: SubjectOutlinedIcon,
-    component: Bomon,
-    layout: "/admin"
-  },
-  
-  //{
-  //  path: "/notifications",
-  //  name: "Khen thưởng",
-  //    icon: AssistantIcon,
-  //  component: NotificationsPage,
-  //  layout: "/admin"
-  //  },
-  //  {
-  //      path: "/notifications",
-  //      name: "In ấn",
-  //      icon: PrintIcon,
-  //      component: NotificationsPage,
-  //      layout: "/admin"
-  //  },
-    {
-        path: "/notifications",
-        name: "Thống kê",
-        icon: EqualizerIcon,
-        component: Khenthuong,
         layout: "/admin"
     },
     {

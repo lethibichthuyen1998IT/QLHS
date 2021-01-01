@@ -30,9 +30,10 @@ class KhoaDG extends Component {
                 masodanhgia: '',
                 manamhoc: '',
                 mavienchuc: '',
-                ykbm: '',
-                bomon: '',
+                ykienkhoa: '',
+                khoa: '',
                 ngaykhoadg: date,
+                danhhieukhoa:'',
                 
 
             },
@@ -201,7 +202,8 @@ class KhoaDG extends Component {
                 mavienchuc: this.state.ctdg.mavienchuc,
                 ykienkhoa: this.state.ctdg.ykienkhoa,
                 khoa: this.state.ctdg.khoa,
-                ngaykhoadg: date
+                ngaykhoadg: date,
+                danhhieukhoa: this.state.ctdg.danhhieukhoa
 
             },
 
@@ -215,9 +217,9 @@ class KhoaDG extends Component {
 
     update() {
 
-        let { masodanhgia, manamhoc, mavienchuc, ykienkhoa, khoa, ngaykhoadg } = this.state.editData;
+        let { masodanhgia, manamhoc, mavienchuc, ykienkhoa, khoa, ngaykhoadg, danhhieukhoa } = this.state.editData;
         axios.put('/danhgias/khoa/' + this.state.editData.masodanhgia,
-            { masodanhgia, manamhoc, mavienchuc, ykienkhoa, khoa, ngaykhoadg }).then((response) => {
+            { masodanhgia, manamhoc, mavienchuc, ykienkhoa, khoa, ngaykhoadg, danhhieukhoa }).then((response) => {
 
                 this.setState({
 
@@ -227,7 +229,8 @@ class KhoaDG extends Component {
                         mavienchuc: '',
                         ykienkhoa: '',
                         khoa: '',
-                        ngaykhoadg: date
+                        ngaykhoadg: date,
+                        danhhieukhoa:''
                     },
                 });
                 this.props.history.push("/admin/danhgia");
@@ -370,6 +373,7 @@ class KhoaDG extends Component {
                             <b> 2. Phân loại đánh giá: </b>&nbsp; {(ctdg.loai == 1) ? "Hoàn thành xuất sắc" : (ctdg.loai == 2) ? "Hoàn thành tốt" : (ctdg.loai == 3) ? "Hoàn thành" : "Không hoàn thành"}
                         </Col>
                     </Row>
+                  
                     <Row md="12">
                         <Col><b> Ngày đánh giá: </b> &nbsp; {moment(ctdg.ngayvcdg).format("DD-MM-YYYY")} </Col>
                     </Row>
@@ -391,7 +395,10 @@ class KhoaDG extends Component {
                             {ctdg.bomon}
                         </Col>
                     </Row>
+                    <Row md="12">
+                        <b> 3. Danh hiệu thi đua (đề cử): </b>&nbsp; {(ctdg.danhhieubm == 1) ? "Lao động tiên tiến" : (ctdg.danhhieubm == 2) ? "Chiến sĩ thi đua cơ sở" : (ctdg.danhhieubm == 3) ? "Chiến sĩ thi đua cấp bộ" : "Chiến sĩ thi đua toàn quốc"}
 
+                    </Row>
                     <Row md="12">
                         <Col><b> Ngày đánh giá: </b> &nbsp; {moment(ctdg.ngaybmdg).format("DD-MM-YYYY")} </Col>
                     </Row>
@@ -429,6 +436,28 @@ class KhoaDG extends Component {
                                     <option value='2'>Hoàn thành tốt nhiệm vụ </option>
                                     <option value='3'>Hoàn thành nhiệm vụ  </option>
                                     <option value='4'>Không hoàn thành nhiệm vụ </option>
+
+                                </Input>
+                            </FormGroup>
+                        </Col>
+
+                    </Row>
+                    <Row md="12">
+                        <Col>
+                            <b> 3. Danh hiệu thi đua:</b></Col>
+                        <Col md="12">
+                            <FormGroup>
+
+                                <Input id="hoten" type="select" value={this.state.editData.danhhieukhoa} onChange={(e) => {
+                                    let { editData } = this.state;
+                                    editData.danhhieukhoa = Number.parseInt(e.target.value);
+                                    this.setState({ editData });
+                                }} >
+                                    <option value='0'>-- Chọn Loại Danh hiệu --</option>
+                                    <option value='1'>Lao động tiên tiến </option>
+                                    <option value='2'>Chiến sĩ thi đua cơ sở </option>
+                                    <option value='3'>Chiến sĩ thi đua cấp Bộ  </option>
+                                    <option value='4'>Chiến sĩ thi đua toàn quốc </option>
 
                                 </Input>
                             </FormGroup>

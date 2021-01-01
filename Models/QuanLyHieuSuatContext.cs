@@ -236,6 +236,8 @@ namespace QuanLyHieuSuat.Models
                     .HasMaxLength(4000);
 
                 entity.Property(e => e.Khoa).HasColumnName("KHOA");
+                entity.Property(e => e.Danhhieubm).HasColumnName("DANHHIEUBM");
+                entity.Property(e => e.Danhhieukhoa).HasColumnName("DANHHIEUKHOA");
 
                 entity.Property(e => e.Kqth)
                     .HasColumnName("KQTH")

@@ -268,7 +268,11 @@ class PhieuDanhGia extends React.Component {
                         <Row md="12">
                         <b> 2. Nhận xét của lãnh đạo trực tiếp quản lý viên chức:</b> &nbsp; 
                         {(details.bomon == 1) ? "Hoàn thành xuất sắc" : (details.bomon == 2) ? "Hoàn thành tốt" : (details.bomon == 3) ? "Hoàn thành" : "Không hoàn thành"} 
-                        </Row>
+                    </Row>
+                    <Row md="12">
+                        <b> 3. Danh hiệu thi đua (đề cử): </b>&nbsp; {(details.danhhieubm == 1) ? "Lao động tiên tiến" : (details.danhhieubm == 2) ? "Chiến sĩ thi đua cơ sở" : (details.danhhieubm == 3) ? "Chiến sĩ thi đua cấp bộ" : "Chiến sĩ thi đua toàn quốc"}
+
+                    </Row>
 
                         <Row md="12">
                         <Col md="12" style={{ textAlign: 'right' }}> Ngày đánh giá:  {moment(details.ngaybmdg).format("DD-MM-YYYY")}
@@ -288,7 +292,11 @@ class PhieuDanhGia extends React.Component {
                         <b> 2. Kết quả đánh giá, phân loại viên chức:</b>&nbsp; 
                    {(details.khoa == 1) ? "Hoàn thành xuất sắc" : (details.khoa == 2) ? "Hoàn thành tốt" : (details.khoa == 3) ? "Hoàn thành" : "Không hoàn thành"}  
 
-                        </Row>
+                    </Row>
+                    <Row md="12">
+                        <b> 3. Danh hiệu thi đua: </b>&nbsp; {(details.danhhieukhoa == 1) ? "Lao động tiên tiến" : (details.danhhieukhoa == 2) ? "Chiến sĩ thi đua cơ sở" : (details.danhhieukhoa == 3) ? "Chiến sĩ thi đua cấp bộ" : "Chiến sĩ thi đua toàn quốc"}
+
+                    </Row>
 
                         <Row md="12">
                             <Col md="12" style={{ textAlign: 'right' }}>

@@ -35,7 +35,9 @@ class AdminDG extends Component {
                 ykienkhoa: '',
                 khoa: '',
                 ngaybmdg: date,
-                ngaykhoadg: date
+                ngaykhoadg: date,
+                danhhieubm: '',
+                danhhieukhoa:'',
 
             },
 
@@ -206,7 +208,9 @@ class AdminDG extends Component {
                 ykienkhoa: this.state.ctdg.ykienkhoa,
                 khoa: this.state.ctdg.khoa,
                 ngaybmdg: date,
-                ngaykhoadg:date
+                ngaykhoadg: date,
+                danhhieubm: this.state.ctdg.danhhieubm,
+                danhhieukhoa: this.state.ctdg.danhhieukhoa
                
             },
            
@@ -220,9 +224,9 @@ class AdminDG extends Component {
 
     update() {
       
-        let { masodanhgia, manamhoc, mavienchuc, ykbm, bomon, ykienkhoa, khoa, ngaybmdg, ngaykhoadg } = this.state.editData;
+        let { masodanhgia, manamhoc, mavienchuc, ykbm, bomon, ykienkhoa, khoa, ngaybmdg, ngaykhoadg, danhhieubm, danhhieukhoa } = this.state.editData;
         axios.put('/danhgias/admin/' + this.state.editData.masodanhgia,
-            { masodanhgia, manamhoc, mavienchuc, ykbm, bomon, ykienkhoa, khoa, ngaybmdg, ngaykhoadg }).then((response) => {
+            { masodanhgia, manamhoc, mavienchuc, ykbm, bomon, ykienkhoa, khoa, ngaybmdg, ngaykhoadg, danhhieubm, danhhieukhoa }).then((response) => {
 
                 this.setState({
                   
@@ -235,7 +239,9 @@ class AdminDG extends Component {
                         ykienkhoa: '',
                         khoa: '',
                         ngaybmdg: '',
-                        ngaykhoadg: ''
+                        ngaykhoadg: '',
+                        danhhieukhoa: '',
+                        danhhieubm:''
                     },
                 });
                 this.props.history.push("/admin/danhgia");
@@ -417,7 +423,28 @@ class AdminDG extends Component {
                                 </FormGroup>
                             </Col>
                         </Row>
+                    <Row md="12">
+                        <Col>
+                            <b> 3. Danh hiệu thi đua (đề cử):</b></Col>
+                        <Col md="12">
+                            <FormGroup>
 
+                                <Input id="hoten" type="select" value={this.state.editData.danhhieubm} onChange={(e) => {
+                                    let { editData } = this.state;
+                                    editData.danhhieubm = Number.parseInt(e.target.value);
+                                    this.setState({ editData });
+                                }} >
+                                    <option value='0'>-- Chọn Loại Danh hiệu --</option>
+                                    <option value='1'>Lao động tiên tiến </option>
+                                    <option value='2'>Chiến sĩ thi đua cơ sở </option>
+                                    <option value='3'>Chiến sĩ thi đua cấp Bộ  </option>
+                                    <option value='4'>Chiến sĩ thi đua toàn quốc </option>
+
+                                </Input>
+                            </FormGroup>
+                        </Col>
+
+                    </Row>
                        
                         <Row md="12" style={{ fontWeight: 'bold' }}>
                         <Col>IV. KẾT QUẢ ĐÁNH GIÁ, PHÂN LOẠI VIÊN CHỨC CỦA CẤP CÓ THẨM QUYỀN </Col>
@@ -459,7 +486,28 @@ class AdminDG extends Component {
                             </Col>
 
                         </Row>
+                    <Row md="12">
+                        <Col>
+                            <b> 3. Danh hiệu thi đua:</b></Col>
+                        <Col md="12">
+                            <FormGroup>
 
+                                <Input id="hoten" type="select" value={this.state.editData.danhhieukhoa} onChange={(e) => {
+                                    let { editData } = this.state;
+                                    editData.danhhieukhoa = Number.parseInt(e.target.value);
+                                    this.setState({ editData });
+                                }} >
+                                    <option value='0'>-- Chọn Loại Danh hiệu --</option>
+                                    <option value='1'>Lao động tiên tiến </option>
+                                    <option value='2'>Chiến sĩ thi đua cơ sở </option>
+                                    <option value='3'>Chiến sĩ thi đua cấp Bộ  </option>
+                                    <option value='4'>Chiến sĩ thi đua toàn quốc </option>
+
+                                </Input>
+                            </FormGroup>
+                        </Col>
+
+                    </Row>
         
                                             <Row>
                                                 <Col md="12">

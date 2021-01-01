@@ -32,6 +32,7 @@ class BMDG extends Component {
                 mavienchuc: '',
                 ykbm: '',
                 bomon: '',
+                danhhieubm:'',
                 ngaybmdg: date
               
 
@@ -199,7 +200,8 @@ class BMDG extends Component {
                 mavienchuc: this.state.ctdg.mavienchuc,
                 ykbm: this.state.ctdg.ykbm,
                 bomon: this.state.ctdg.bomon,
-                ngaybmdg: date
+                ngaybmdg: date,
+                danhhieubm: this.state.ctdg.danhhieubm
                
 
             },
@@ -214,9 +216,9 @@ class BMDG extends Component {
 
     update() {
 
-        let { masodanhgia, manamhoc, mavienchuc, ykbm, bomon, ngaybmdg } = this.state.editData;
+        let { masodanhgia, manamhoc, mavienchuc, ykbm, bomon, ngaybmdg, danhhieubm } = this.state.editData;
         axios.put('/danhgias/bomon/' + this.state.editData.masodanhgia,
-            { MASODANHGIA: masodanhgia, MANAMHOC: manamhoc, MAVIENCHUC: mavienchuc, YKBM: ykbm, BOMON: bomon, NGAYBMDG: ngaybmdg }).then((response) => {
+            { MASODANHGIA: masodanhgia, MANAMHOC: manamhoc, MAVIENCHUC: mavienchuc, YKBM: ykbm, BOMON: bomon, NGAYBMDG: ngaybmdg, DANHHIEUBM: danhhieubm }).then((response) => {
 
                 this.setState({
 
@@ -227,6 +229,7 @@ class BMDG extends Component {
                         ykbm: '',
                         bomon: '',
                         ngaybmdg: date,
+                        danhhieubm: ''
                        
                     },
                 });
@@ -269,7 +272,7 @@ class BMDG extends Component {
 
                     <Row md="12" style={{ textAlign: 'center' }}>
                         <Col md="12" style={{ fontWeight: 'bold' }}>
-                            PHIẾU ĐÁNH GIÁ VÀ PHẦN LOẠI VIÊN CHỨC <br />(Dành cho trưởng khoa)< br />
+                            PHIẾU ĐÁNH GIÁ VÀ PHẦN LOẠI VIÊN CHỨC <br />(Dành cho trưởng bộ môn)< br />
                             Năm học {ctdg.tennamhoc}
                         </Col>
                     </Row>
@@ -409,7 +412,28 @@ class BMDG extends Component {
                             </FormGroup>
                         </Col>
                     </Row>
+                    <Row md="12">
+                        <Col>
+                            <b> 3. Danh hiệu thi đua (đề cử):</b></Col>
+                        <Col md="12">
+                            <FormGroup>
 
+                                <Input id="hoten" type="select" value={this.state.editData.danhhieubm} onChange={(e) => {
+                                    let { editData } = this.state;
+                                    editData.danhhieubm = Number.parseInt(e.target.value);
+                                    this.setState({ editData });
+                                }} >
+                                    <option value='0'>-- Chọn Loại Danh hiệu --</option>
+                                    <option value='1'>Lao động tiên tiến </option>
+                                    <option value='2'>Chiến sĩ thi đua cơ sở </option>
+                                    <option value='3'>Chiến sĩ thi đua cấp Bộ  </option>
+                                    <option value='4'>Chiến sĩ thi đua toàn quốc </option>
+
+                                </Input>
+                            </FormGroup>
+                        </Col>
+
+                    </Row>
 
                    
 

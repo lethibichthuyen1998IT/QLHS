@@ -15,8 +15,8 @@ namespace QuanLyHieuSuat.Controllers
     public class VienchucsController : ControllerBase
     {
         QuanLyHieuSuatContext db = new QuanLyHieuSuatContext();
-        [HttpGet]
-        public IEnumerable<VienChucDTO> Index()
+        [HttpGet("tatca/{id}")]
+        public IEnumerable<VienChucDTO> Index(string id)
         {
             try
             {
@@ -24,7 +24,7 @@ namespace QuanLyHieuSuat.Controllers
                          join b in db.Chucvu on a.Machucvu equals b.Machucvu
                          join c in db.Bomon on a.Mabomon equals c.Mabomon
                          join d in db.Chucdanh on a.Machucdanh equals d.Machucdanh
-                      
+                      where a.Mavienchuc != id
                          select new VienChucDTO()
                          {
                              Mavienchuc = a.Mavienchuc,
@@ -418,8 +418,8 @@ namespace QuanLyHieuSuat.Controllers
             }
         }
 
-        [HttpGet("bomon/{id}")]
-        public IEnumerable<VienChucDTO> VCBomon(string id)
+        [HttpGet("bomon/{id}/{idvc}")]
+        public IEnumerable<VienChucDTO> VCBomon(string id, string idvc)
         {
             try
             {
@@ -429,7 +429,7 @@ namespace QuanLyHieuSuat.Controllers
                          join d in db.Chucdanh on a.Machucdanh equals d.Machucdanh
                         
                       
-                         where a.Mabomon == id
+                         where a.Mabomon == id && a.Mavienchuc != idvc && a.Machucvu != "TK"
                          select new VienChucDTO()
                          {
                              Mavienchuc = a.Mavienchuc,
@@ -495,7 +495,7 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
-        [HttpGet("vcxs/{id}")]
+        [HttpGet("vcxs/{idnh}")]
         public IEnumerable<VienChucDTO> VCXS(int idnh)
         {
             try
@@ -505,7 +505,7 @@ namespace QuanLyHieuSuat.Controllers
                          join c in db.Bomon on a.Mabomon equals c.Mabomon
                          join d in db.Chucdanh on a.Machucdanh equals d.Machucdanh
                          join e in db.Danhgia on a.Mavienchuc equals e.Mavienchuc
-                        where e.Khoa == 2 && e.Manamhoc==idnh
+                        where e.Khoa == 1 && e.Manamhoc==idnh
                          select new VienChucDTO()
                          {
                              Mavienchuc = a.Mavienchuc,
@@ -534,7 +534,7 @@ namespace QuanLyHieuSuat.Controllers
             }
         }
 
-        [HttpGet("vctb/{id}")]
+        [HttpGet("vctb/{idnh}")]
         public IEnumerable<VienChucDTO> vctb(int idnh)
         {
             try
@@ -544,7 +544,7 @@ namespace QuanLyHieuSuat.Controllers
                          join c in db.Bomon on a.Mabomon equals c.Mabomon
                          join d in db.Chucdanh on a.Machucdanh equals d.Machucdanh
                          join e in db.Danhgia on a.Mavienchuc equals e.Mavienchuc
-                         where e.Khoa == 2 && e.Manamhoc == idnh
+                         where e.Khoa == 3 && e.Manamhoc == idnh
                          select new VienChucDTO()
                          {
                              Mavienchuc = a.Mavienchuc,
@@ -573,7 +573,7 @@ namespace QuanLyHieuSuat.Controllers
             }
         }
 
-        [HttpGet("vcyeu/{id}")]
+        [HttpGet("vcyeu/{idnh}")]
         public IEnumerable<VienChucDTO> vcyeu(int idnh)
         {
             try
@@ -583,7 +583,7 @@ namespace QuanLyHieuSuat.Controllers
                          join c in db.Bomon on a.Mabomon equals c.Mabomon
                          join d in db.Chucdanh on a.Machucdanh equals d.Machucdanh
                          join e in db.Danhgia on a.Mavienchuc equals e.Mavienchuc
-                         where e.Khoa == 2 && e.Manamhoc == idnh
+                         where e.Khoa == 4 && e.Manamhoc == idnh
                          select new VienChucDTO()
                          {
                              Mavienchuc = a.Mavienchuc,
@@ -681,6 +681,160 @@ namespace QuanLyHieuSuat.Controllers
         }
 
 
+        [HttpGet("ldtt/{idnh}")]
+        public IEnumerable<VienChucDTO> ldtt(int idnh)
+        {
+            try
+            {
+                var vc = from a in db.Vienchuc
+                         join b in db.Chucvu on a.Machucvu equals b.Machucvu
+                         join c in db.Bomon on a.Mabomon equals c.Mabomon
+                         join d in db.Chucdanh on a.Machucdanh equals d.Machucdanh
+                         join e in db.Danhgia on a.Mavienchuc equals e.Mavienchuc
+                         where e.Danhhieukhoa == 1 && e.Manamhoc == idnh
+                         select new VienChucDTO()
+                         {
+                             Mavienchuc = a.Mavienchuc,
+                             Masodanhgia = e.Masodanhgia,
+                             Mabomon = c.Mabomon,
+                             Machucvu = b.Machucvu,
+                             Machucdanh = d.Machucdanh,
+                             Hoten = a.Hoten,
+                             Sdt = a.Sdt,
+                             Ngaysinh = a.Ngaysinh,
+                             Gioitinh = a.Gioitinh,
+                             Diachi = a.Diachi,
+                             Mail = a.Mail,
+                             Matkhau = a.Matkhau,
+                             Ngaylamviec = a.Ngaylamviec,
+                             Tenbomon = c.Tenbomon,
+                             Tenchucvu = b.Tenchucvu,
+                             Tenchucdanh = d.Tenchucdanh,
+                             Bacluong = a.Bacluong
+                         };
+                return vc.ToList();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+        }
+        [HttpGet("thcs/{idnh}")]
+        public IEnumerable<VienChucDTO> thcs(int idnh)
+        {
+            try
+            {
+                var vc = from a in db.Vienchuc
+                         join b in db.Chucvu on a.Machucvu equals b.Machucvu
+                         join c in db.Bomon on a.Mabomon equals c.Mabomon
+                         join d in db.Chucdanh on a.Machucdanh equals d.Machucdanh
+                         join e in db.Danhgia on a.Mavienchuc equals e.Mavienchuc
+                         where e.Danhhieukhoa == 2 && e.Manamhoc == idnh
+                         select new VienChucDTO()
+                         {
+                             Mavienchuc = a.Mavienchuc,
+                             Mabomon = c.Mabomon,
+                             Masodanhgia = e.Masodanhgia,
+                             Machucvu = b.Machucvu,
+                             Machucdanh = d.Machucdanh,
+                             Hoten = a.Hoten,
+                             Sdt = a.Sdt,
+                             Ngaysinh = a.Ngaysinh,
+                             Gioitinh = a.Gioitinh,
+                             Diachi = a.Diachi,
+                             Mail = a.Mail,
+                             Matkhau = a.Matkhau,
+                             Ngaylamviec = a.Ngaylamviec,
+                             Tenbomon = c.Tenbomon,
+                             Tenchucvu = b.Tenchucvu,
+                             Tenchucdanh = d.Tenchucdanh,
+                             Bacluong = a.Bacluong
+                         };
+                return vc.ToList();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("tdcb/{idnh}")]
+        public IEnumerable<VienChucDTO> tdcb(int idnh)
+        {
+            try
+            {
+                var vc = from a in db.Vienchuc
+                         join b in db.Chucvu on a.Machucvu equals b.Machucvu
+                         join c in db.Bomon on a.Mabomon equals c.Mabomon
+                         join d in db.Chucdanh on a.Machucdanh equals d.Machucdanh
+                         join e in db.Danhgia on a.Mavienchuc equals e.Mavienchuc
+                         where e.Danhhieukhoa == 3 && e.Manamhoc == idnh
+                         select new VienChucDTO()
+                         {
+                             Mavienchuc = a.Mavienchuc,
+                             Mabomon = c.Mabomon,
+                             Machucvu = b.Machucvu,
+                             Masodanhgia = e.Masodanhgia,
+                             Machucdanh = d.Machucdanh,
+                             Hoten = a.Hoten,
+                             Sdt = a.Sdt,
+                             Ngaysinh = a.Ngaysinh,
+                             Gioitinh = a.Gioitinh,
+                             Diachi = a.Diachi,
+                             Mail = a.Mail,
+                             Matkhau = a.Matkhau,
+                             Ngaylamviec = a.Ngaylamviec,
+                             Tenbomon = c.Tenbomon,
+                             Tenchucvu = b.Tenchucvu,
+                             Tenchucdanh = d.Tenchucdanh,
+                             Bacluong = a.Bacluong
+                         };
+                return vc.ToList();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("tdtq/{idnh}")]
+        public IEnumerable<VienChucDTO> tdtq(int idnh)
+        {
+            try
+            {
+                var vc = from a in db.Vienchuc
+                         join b in db.Chucvu on a.Machucvu equals b.Machucvu
+                         join c in db.Bomon on a.Mabomon equals c.Mabomon
+                         join d in db.Chucdanh on a.Machucdanh equals d.Machucdanh
+                         join e in db.Danhgia on a.Mavienchuc equals e.Mavienchuc
+                         where e.Danhhieukhoa == 4 && e.Manamhoc == idnh
+                         select new VienChucDTO()
+                         {
+                             Mavienchuc = a.Mavienchuc,
+                             Mabomon = c.Mabomon,
+                             Machucvu = b.Machucvu,
+                             Masodanhgia = e.Masodanhgia,
+                             Machucdanh = d.Machucdanh,
+                             Hoten = a.Hoten,
+                             Sdt = a.Sdt,
+                             Ngaysinh = a.Ngaysinh,
+                             Gioitinh = a.Gioitinh,
+                             Diachi = a.Diachi,
+                             Mail = a.Mail,
+                             Matkhau = a.Matkhau,
+                             Ngaylamviec = a.Ngaylamviec,
+                             Tenbomon = c.Tenbomon,
+                             Tenchucvu = b.Tenchucvu,
+                             Tenchucdanh = d.Tenchucdanh,
+                             Bacluong = a.Bacluong
+                         };
+                return vc.ToList();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+        }
 
 
         [HttpDelete("{id}")]

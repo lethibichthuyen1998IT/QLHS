@@ -11,6 +11,8 @@ namespace QuanLyHieuSuat.DTO
         public string Mabomon { get; set; }
         public string Tenkhoa { get; set; }
         public string Tenbomon { get; set; }
+        public int? Danhhieubm { get; set; }
+        public int? Danhhieukhoa { get; set; }
         public int Manamhoc { get; set; }
         public string Tennamhoc { get; set; }
         public string Mavienchuc { get; set; }

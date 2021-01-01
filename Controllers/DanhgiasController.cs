@@ -73,7 +73,9 @@ namespace QuanLyHieuSuat.Controllers
                              Khoa = a.Khoa,
                              Ngayvcdg = a.Ngayvcdg,
                              Ngaybmdg = a.Ngaybmdg,
-                             Ngaykhoadg = a.Ngaykhoadg
+                             Ngaykhoadg = a.Ngaykhoadg,
+                             Danhhieubm = a.Danhhieubm,
+                             Danhhieukhoa= a.Danhhieukhoa
 
 
                          };
@@ -116,7 +118,9 @@ namespace QuanLyHieuSuat.Controllers
                              Khoa = a.Khoa,
                              Ngayvcdg = a.Ngayvcdg,
                              Ngaybmdg = a.Ngaybmdg,
-                             Ngaykhoadg = a.Ngaykhoadg
+                             Ngaykhoadg = a.Ngaykhoadg,
+                             Danhhieubm = a.Danhhieubm,
+                             Danhhieukhoa = a.Danhhieukhoa
 
 
                          };
@@ -159,7 +163,9 @@ namespace QuanLyHieuSuat.Controllers
                              Khoa = a.Khoa,
                              Ngayvcdg = a.Ngayvcdg,
                              Ngaybmdg = a.Ngaybmdg,
-                             Ngaykhoadg = a.Ngaykhoadg
+                             Ngaykhoadg = a.Ngaykhoadg,
+                             Danhhieubm = a.Danhhieubm,
+                             Danhhieukhoa = a.Danhhieukhoa
 
 
                          };
@@ -202,7 +208,9 @@ namespace QuanLyHieuSuat.Controllers
                              Khoa = a.Khoa,
                              Ngayvcdg = a.Ngayvcdg,
                              Ngaybmdg = a.Ngaybmdg,
-                             Ngaykhoadg = a.Ngaykhoadg
+                             Ngaykhoadg = a.Ngaykhoadg,
+                             Danhhieubm = a.Danhhieubm,
+                             Danhhieukhoa = a.Danhhieukhoa
 
 
 
@@ -227,6 +235,8 @@ namespace QuanLyHieuSuat.Controllers
                          select new DanhGiaDTO()
                          {
                              Masodanhgia = a.Masodanhgia,
+                             Danhhieubm = a.Danhhieubm,
+                             Danhhieukhoa = a.Danhhieukhoa,
                              Manamhoc = c.Manamhoc,
                              Tennamhoc = c.Tennamhoc,
                              Mavienchuc = b.Mavienchuc,
@@ -282,7 +292,8 @@ namespace QuanLyHieuSuat.Controllers
                              Nhuocdiem = a.Nhuocdiem,
                              Loai = a.Loai,
                              Ykbm = a.Ykbm,
-
+                             Danhhieubm = a.Danhhieubm,
+                             Danhhieukhoa = a.Danhhieukhoa,
                              Bomon = a.Bomon,
 
                              Ykienkhoa = a.Ykienkhoa,
@@ -314,6 +325,8 @@ namespace QuanLyHieuSuat.Controllers
                          {
                              Masodanhgia = a.Masodanhgia,
                              Manamhoc = c.Manamhoc,
+                             Danhhieubm = a.Danhhieubm,
+                             Danhhieukhoa = a.Danhhieukhoa,
                              Tennamhoc = c.Tennamhoc,
                              Mavienchuc = b.Mavienchuc,
                              Hoten = b.Hoten,
@@ -357,6 +370,8 @@ namespace QuanLyHieuSuat.Controllers
                          {
                              Masodanhgia = a.Masodanhgia,
                              Manamhoc = c.Manamhoc,
+                             Danhhieubm = a.Danhhieubm,
+                             Danhhieukhoa = a.Danhhieukhoa,
                              Tennamhoc = c.Tennamhoc,
                              Mavienchuc = b.Mavienchuc,
                              Hoten = b.Hoten,
@@ -415,6 +430,8 @@ namespace QuanLyHieuSuat.Controllers
                              Hoten = b.Hoten,
                              Kqth = a.Kqth,
                              Daoduc = a.Daoduc,
+                             Danhhieubm = a.Danhhieubm,
+                             Danhhieukhoa = a.Danhhieukhoa,
                              Trachnhiem = a.Trachnhiem,
                              Khac = a.Khac,
                              Uudiem = a.Uudiem,
@@ -473,6 +490,8 @@ namespace QuanLyHieuSuat.Controllers
                              Loai = a.Loai,
                              Ykbm = a.Ykbm,
                              Bacluong=b.Bacluong,
+                             Danhhieubm = a.Danhhieubm,
+                             Danhhieukhoa = a.Danhhieukhoa,
 
                              Bomon = a.Bomon,
 
@@ -570,6 +589,7 @@ namespace QuanLyHieuSuat.Controllers
                 dgia.Loai = dgia.Loai;
                 dgia.Ykbm = dg.Ykbm;
                 dgia.Bomon = dg.Bomon;
+                dgia.Danhhieubm = dg.Danhhieubm;
                 dgia.Ngaybmdg = dg.Ngaybmdg;
                 dgia.Ykienkhoa = dgia.Ykienkhoa;
                 dgia.Khoa = dgia.Khoa;
@@ -604,6 +624,7 @@ namespace QuanLyHieuSuat.Controllers
                 dgia.Bomon = dgia.Bomon;
                 dgia.Ykienkhoa = dg.Ykienkhoa;
                 dgia.Khoa = dg.Khoa;
+                dgia.Danhhieukhoa = dg.Danhhieukhoa;
                 dgia.Ngaykhoadg = dg.Ngaykhoadg;
 
                 db.Entry(dgia).State = EntityState.Modified;

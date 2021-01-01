@@ -29,6 +29,19 @@ namespace QuanLyHieuSuat.Controllers
                 throw;
             }
         }
+        [HttpGet("list")]
+        public IEnumerable<Chucvu> list()
+        {
+            try
+            {
+                var cv = from a in db.Chucvu where a.Machucvu != "TK" && a.Machucvu != "TBM" select a;
+                return cv.ToList();
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
         [HttpPost]
         public int Create([FromBody] Chucvu cvu)

@@ -5,6 +5,7 @@ import React from 'react';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import ReactPaginate from 'react-paginate';
 import {
     Alert, Button, Card,
 
@@ -116,7 +117,11 @@ class Phancong extends React.Component {
             idnh: '',
             idvc:'',
             bmsource: [],
-            monhoc:[]
+            monhoc: [],
+            offset: 0,
+            orgtableData: [],
+            perPage: 6,
+            currentPage: 0
                 
 
         }
@@ -158,13 +163,13 @@ class Phancong extends React.Component {
             );
     
 
-        axios.get('/vienchucs/bomon/' + this.state.user.mabomon, { id: this.state.user.mabomon })
+        axios.get('/vienchucs/bomon/' + this.state.user.mabomon + '/' + this.state.user.mavienchuc)
             .then((res) => this.setState({
                 vcbm: res.data,
                 bmsource: res.data
             })
             );
-        axios.get('/vienchucs/')
+        axios.get('/vienchucs/tatca/' + this.state.user.mavienchuc)
             .then((res) => this.setState({
                 vienchuc: res.data,
                 source:res.data
@@ -260,7 +265,7 @@ class Phancong extends React.Component {
             console.log(search);
             for (let item of sourceArray) {
 
-                if (item.mavienchuc.toLowerCase().indexOf(search.toLowerCase()) > -1 || item.hoten.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+                if (item.mavienchuc.toLowerCase().indexOf(search.toLowerCase()) > -1 || item.hoten.toLowerCase().indexOf(search.toLowerCase()) > -1 || item.mabomon.toLowerCase().indexOf(search.toLowerCase()) > -1) {
                     newArray.push(item);
                 }
             }
@@ -328,16 +333,16 @@ class Phancong extends React.Component {
             );
       
 
-        axios.get('/vienchucs/bomon/' + this.state.user.mabomon, { id: this.state.user.mabomon })
+        axios.get('/vienchucs/bomon/' + this.state.user.mabomon + "/" + this.state.user.mavienchuc)
             .then((res) => this.setState({
-                vienchuc: res.data,
-                sourcebm: res.data
-
+                vcbm: res.data,
+                bmsource: res.data
             })
             );
-        axios.get('/vienchucs/')
+        axios.get('/vienchucs/tatca/' + this.state.user.mavienchuc)
             .then((res) => this.setState({
                 vienchuc: res.data,
+                source: res.data
 
             })
             );
@@ -373,12 +378,17 @@ class Phancong extends React.Component {
 
     Load() {
         axios.get('/phancongs/' + this.state.idvc + "/" + this.state.idnh)
-            .then((res) => {
+              .then(res => {
+                var ct = res.data;
+                console.log('data-->' + JSON.stringify(ct))
+                var slice = ct.slice(this.state.offset, this.state.offset + this.state.perPage)
                 this.setState({
-                    chitietpc: res.data
+                    pageCount: Math.ceil(ct.length / this.state.perPage),
+                    orgtableData: ct,
+                    congtac: slice,
+                    source: ct,
 
                 })
-
 
             });
 
@@ -405,22 +415,53 @@ class Phancong extends React.Component {
 
         })
     }
+
+    handlePageClick = (e) => {
+        const selectedPage = e.selected;
+        const offset = selectedPage * this.state.perPage;
+
+        this.setState({
+            currentPage: selectedPage,
+            offset: offset
+        }, () => {
+            this.loadMoreData()
+        });
+
+    };
+
+    loadMoreData() {
+        const data = this.state.orgtableData;
+
+        const slice = data.slice(this.state.offset, this.state.offset + this.state.perPage)
+        this.setState({
+            pageCount: Math.ceil(data.length / this.state.perPage),
+            chitietcv: slice,
+        })
+
+    }
     toggleDetailsModal(idvc,idnh) {
         this.state.idvc = idvc;
         this.state.idnh = idnh;
         axios.get('/phancongs/' + idvc + "/" + idnh)
             .then((res) => {
-                this.setState({
-                    chitietpc: res.data
-                    
-                })
-               
-             
+                this.setState({ chitietpc: res.data })
             });
 
+      
+
         axios.get('/congviecs/' + idvc + "/" + idnh)
-            .then((res) => {
-                this.setState({ chitietcv: res.data})
+            .then(res => {
+                var ct = res.data;
+                console.log('data-->' + JSON.stringify(ct))
+                var slice = ct.slice(this.state.offset, this.state.offset + this.state.perPage)
+                this.setState({
+                    pageCount: Math.ceil(ct.length / this.state.perPage),
+                    orgtableData: ct,
+                    chitietcv: slice
+
+
+                })
+
             });
        
         this.setState({
@@ -1119,8 +1160,25 @@ class Phancong extends React.Component {
 
 
                                                     </CardBody>
+                                                    <CardFooter>
+                                                    <div class="page-pagination">
 
+                                                        <ReactPaginate
+                                                            previousLabel={"<"}
+                                                            nextLabel={">"}
 
+                                                            breakLabel={"..."}
+                                                            breakClassName={"break-me"}
+                                                            pageCount={this.state.pageCount}
+                                                            marginPagesDisplayed={2}
+                                                            pageRangeDisplayed={6}
+                                                            onPageChange={this.handlePageClick}
+                                                            containerClassName={"pagination"}
+                                                            subContainerClassName={"pages pagination"}
+                                                            activeClassName={"active"} />
+
+                                                    </div>
+                                                    </CardFooter>
                                                 </TabPanel>
                                                 <TabPanel>
                                                     <CardBody>
@@ -1950,6 +2008,25 @@ class Phancong extends React.Component {
 
 
                                                         </CardBody>
+                                                        <CardFooter>
+                                                            <div class="page-pagination">
+
+                                                                <ReactPaginate
+                                                                    previousLabel={"<"}
+                                                                    nextLabel={">"}
+
+                                                                    breakLabel={"..."}
+                                                                    breakClassName={"break-me"}
+                                                                    pageCount={this.state.pageCount}
+                                                                    marginPagesDisplayed={2}
+                                                                    pageRangeDisplayed={6}
+                                                                    onPageChange={this.handlePageClick}
+                                                                    containerClassName={"pagination"}
+                                                                    subContainerClassName={"pages pagination"}
+                                                                    activeClassName={"active"} />
+
+                                                            </div>
+                                                        </CardFooter>
                                                     </TabPanel>
 
                                                 </Tabs>
