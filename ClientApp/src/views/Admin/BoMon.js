@@ -457,7 +457,7 @@ class Bomon extends React.Component {
                                                                 let { editData } = this.state;
                                                                 editData.mabomon = e.target.value;
                                                                 this.setState({ editData });
-                                                            }} />
+                                                            }} disabled />
                                                         </FormGroup>
                                                     </Form>
                                                     <Form>

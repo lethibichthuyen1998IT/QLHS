@@ -7,7 +7,7 @@ import SectionContact from "./SectionContact";
 import SectionAbout from "./SectionAbout";
 
 
-class Trangchu extends Component {
+class Trove extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -45,4 +45,4 @@ class Trangchu extends Component {
         );
     }
 }
-export default Trangchu;
+export default Trove;

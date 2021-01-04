@@ -34,6 +34,7 @@ import NhapCV from "GV/Components/NhapCV";
 import Trove from "GV/Components/Team";
 import Thongtincanhan from "GV/Components/Thongtincanhan";
 import DanhGiaVC from "GV/Components/DanhGiaVC";
+import Login from "GV/Components/Login";
 
 
 //layout
@@ -49,8 +50,7 @@ const hist = createBrowserHistory();
 
 ReactDOM.render(
     <Router history={hist}>
-        {
-            (user != null) ?
+       
         <Switch>
 
                     <Admin path="/admin" layout={Admin} component={User} />
@@ -61,6 +61,7 @@ ReactDOM.render(
                     <Route path="/admin/bmdg/:id" component={BMDG} />
 
                     <Route exact path="/" component={Trangchu} />
+                    <Route exact path="/login" component={Login} />
                     <Route exact path="/congtac" component={Congtac} />
                     <Route exact path="/danhgia" component={DanhGiaVC} />
                     <Route exact path="/renluyen" component={Renluyen} />
@@ -76,18 +77,7 @@ ReactDOM.render(
                 
             </Switch>
            
-                : <Switch>
-                    <Route exact path="/" component={Trangchu} />
-                    <Route path="/admin/dashboard" component={Trangchu} />
-                    <Route exact path="/thongbao" component={TB} />
-                    <Route exact path="/trangchu" component={Trove} />
-                    <Route exact path="/chitiettb/:id" component={ChitietTB} />
-                    <Route exact path="/404" component={notFound} />
-                    <Redirect to="/404" />
-                
-           
-            </Switch>
-             }
+          
   </Router>,
   document.getElementById("root")
 );

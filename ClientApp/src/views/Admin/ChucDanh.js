@@ -298,7 +298,7 @@ class Chucdanh extends React.Component {
                             <Card>
                                 <CardHeader>
 
-                                    <CardTitle tag="h4"><p style={{ color: '#E86307   ', fontSize: '30px', paddingLeft: '300px' }}><b> DANH SÁCH NĂM HỌC</b> </p></CardTitle>
+                                    <CardTitle tag="h4"><p style={{ color: '#E86307   ', fontSize: '30px', paddingLeft: '300px' }}><b> DANH SÁCH CHỨC DANH</b> </p></CardTitle>
                                     <CardTitle>
 
 
@@ -471,7 +471,7 @@ class Chucdanh extends React.Component {
                                                     <Row>
                                                         <Col md="12">
                                                             <FormGroup>
-                                                                <Label htmlFor="hoten">Năm học<strong className="text-danger">(*) </strong></Label>
+                                                                <Label htmlFor="hoten">Mã chức danh<strong className="text-danger">(*) </strong></Label>
                                                                 <Input id="hoten" required value={this.state.editData.machucdanh} onChange={(e) => {
                                                                     let { editData } = this.state;
                                                                     editData.machucdanh = e.target.value;
@@ -483,7 +483,7 @@ class Chucdanh extends React.Component {
                                                     <Row>
                                                         <Col md="12">
                                                             <FormGroup>
-                                                                <Label htmlFor="hoten">Năm học<strong className="text-danger">(*) </strong></Label>
+                                                                <Label htmlFor="hoten">Tên chức danh<strong className="text-danger">(*) </strong></Label>
                                                                 <Input id="hoten" required value={this.state.editData.tenchucdanh} onChange={(e) => {
                                                                     let { editData } = this.state;
                                                                     editData.tenchucdanh = e.target.value;
@@ -496,7 +496,7 @@ class Chucdanh extends React.Component {
                                                         <Col md="12">
                                                             <FormGroup>
                                                                 <Label htmlFor="hoten">Hạng chức danh: </Label>
-                                                                <Input id="tenchucvu" type="select" value={this.state.editData.hangchucdanh} onChange={(e) => {
+                                                                <Input id="tenchucvu" type="select" value={this.state.editData.hangchucdanh.trim()} onChange={(e) => {
                                                                     let { editData } = this.state;
                                                                     editData.hangchucdanh = e.target.value;
                                                                     this.setState({ editData });

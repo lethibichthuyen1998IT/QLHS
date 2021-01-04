@@ -24,6 +24,8 @@ import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
+import { Link, NavLink } from "react-router-dom";
+
 
 import avatar from "assets/img/avt.jpg";
 
@@ -57,7 +59,7 @@ class User extends React.Component {
     
     logout() {
         localStorage.clear('user');
-        window.location.href = "https://localhost:44374/";
+        this.props.history.push("/trangchu");
     }
 
     toggleEditModal() {
@@ -457,7 +459,7 @@ class User extends React.Component {
                                     </ModalFooter>
                                 </Modal>
  <Button color="primary" round onClick={this.logout}>
-                                       Đăng xuất
+                                    Đăng xuất 
               </Button>
                                 </CardBody>
                             </Card>

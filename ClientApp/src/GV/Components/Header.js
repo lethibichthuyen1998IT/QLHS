@@ -17,7 +17,7 @@ import {
 } from "reactstrap";
 import { Link, NavLink } from "react-router-dom";
 
-const user = JSON.parse(localStorage.getItem('user'));
+//const user = JSON.parse(localStorage.getItem('user'));
 class Header extends Component {
     constructor(props) {
         super(props);
@@ -32,12 +32,14 @@ class Header extends Component {
             passwordold: '',
             retype: '',
             mavienchuc: '',
-            msg: ''
+            msg: '',
+            vc: [],
+            user: JSON.parse(localStorage.getItem('user'))
 
 
         };
         this.logout = this.logout.bind(this);
-        this.handleForm = this.handleForm.bind(this);
+       
         this.refresh = this.refresh.bind(this);
     }
     componentDidMount() {
@@ -50,7 +52,8 @@ class Header extends Component {
 
             })
 
-            );
+        );
+        
     }
     refresh() {
         axios.get('/vienchucs')
@@ -58,42 +61,24 @@ class Header extends Component {
                 vienchuc: res.data,
                 showAlert: false
             }));
+        const nvs = JSON.parse(localStorage.getItem('user'));
+        this.setState({
+            user: nvs
+        });  
     }
 
     logout() {
         localStorage.clear('user');
-        window.location.href = "https://localhost:44374/";
+        this.refresh();
+       
 
     }
-    handleForm = (e) => {
-        e.preventDefault();
-        //const { vienchuc } = this.state;
-        axios.post("/login/authenticate", { USERNAME: this.state.username, PASSWORD: this.state.password })
-            .then(res => {
-                //cookie.set("token", res.data.access_token);
-                //this.props.setLogin(res.data.vienchuc);
-                localStorage.setItem('user', JSON.stringify(res.data));
-
-                if (res.data.machucvu.trim() == "TK" || res.data.machucvu.trim() == "TBM") {
-                    window.location.href = "https://localhost:44374/admin/dashboard";
-
-                }
-                else
-                    window.location.reload();
-
-                //this.setState({ errors: "" });
-            }).catch(e => { this.setState({ errors: "Sai tài khoản hoặc mật khẩu" }) });
-    };
-    toggleLoginModal() {
-        this.setState({
-            loginModal: !this.state.loginModal
-        });
-    }
+   
     PWD() {
         let { passwordnew, passwordold, retype, mavienchuc } = this.state;
         console.log(mavienchuc.trim());
 
-        if (user.matkhau.trim() !== passwordold) {
+        if (this.state.user.matkhau.trim() !== passwordold) {
             this.setState({
                 msg: "Mật khẩu cũ không đúng",
 
@@ -137,6 +122,7 @@ class Header extends Component {
 
     render() {
         const { username, password, errors, msg } = this.state;
+        console.log(this.state.user);
         return (
 
             <>
@@ -152,94 +138,23 @@ class Header extends Component {
                             <li className="active"> <Link to="/trangchu">Trang chủ</Link></li>
                             <li><Link to="/thongbao">Thông báo</Link></li>
 
-                            {(user != null) ?
+                            {(this.state.user != null) ?
                                 <li>
 
                                     <li><Link to="/congviec">Công việc</Link></li>
                                     <li><Link to="/danhgia">Đánh giá</Link></li>
                                     <li className="dropdown">
-                                        <a className="dropbtn" style={{ width: '160px', paddingLeft: '2px', paddingRight: '2px' }}>{user.hoten} </a>
+                                        <a className="dropbtn" style={{ width: '160px', paddingLeft: '2px', paddingRight: '2px' }}>{this.state.user.hoten} </a>
                                         <div className="dropdown-content">
                                             <Link to="/canhan">Thông tin cá nhân </Link>
-                                            <a onClick={this.edit.bind(this, user.mavienchuc)}>Đổi mật khẩu </a>
-                                            <a onClick={this.logout}> Đăng xuất</a>
+                                            <a onClick={this.edit.bind(this, this.state.user.mavienchuc)}>Đổi mật khẩu </a>
+                                            <a onClick={this.logout}>Đăng xuất</a>
                                         </div>
-                                    </li></li> : <li><a onClick={this.toggleLoginModal.bind(this)}> Đăng nhập</a></li>
+                                    </li></li> : <li> <Link to="/login"> Đăng nhập</Link></li>
 
 
                             }
-                            <Modal isOpen={this.state.loginModal} toggle={this.toggleLoginModal.bind(this)}>
-                                <ModalHeader toggle={this.toggleLoginModal.bind(this)} style={{
-                                    backgroundColor: '#AED6F1'
-                                }}> <p style={{ width: '400px', color: 'black', paddingLeft: '100px', paddingTop: '20px', fontSize: '25px' }}><b>ĐĂNG NHẬP HỆ THỐNG</b></p></ModalHeader>
-
-                                <ModalBody>
-                                    <Form onSubmit={(e) => this.handleForm(e)}>
-                                        {
-                                            (errors) ?
-                                                <div class="alert alert-danger" align="center">
-                                                    <strong color="danger">{errors}</strong>
-                                                </div>
-
-                                                :
-                                                null
-                                        }
-                                        <div class="imgcontainer">
-                                            <img src="img/avt.jpg" alt="Avatar" class="avatar" />
-                                        </div>
-                                        <div class="containerlogin">
-
-
-                                            <label for="uname"><b>Tài khoản</b></label>
-
-                                            <Input
-                                                className="form-control"
-                                                type="username"
-                                                name="username"
-                                                value={username}
-                                                placeholder="Nhập tài khoản"
-                                                onChange={(e) => this.setState({ username: e.target.value })}
-
-                                            />
-                                            <label for="uname"><b>Mật khẩu</b></label>
-                                            <Input
-                                                className="form-control"
-                                                required
-                                                type="password"
-                                                name="password"
-                                                value={password}
-                                                onChange={(e) => this.setState({ password: e.target.value })}
-                                                placeholder="**********"
-
-                                            />
-
-                                            <label>
-                                                <input type="checkbox" name="remember" />
-
-                                                    Nhớ mật khẩu
-
-                                         </label>
-
-
-                                            <button type="submit" class="successbtn" disabled={!(password.length > 0 && username.length > 0)}>
-                                                Đăng nhập
-                                </button>
-
-                                        </div>
-
-
-                                    </Form>
-                                </ModalBody>
-                                <ModalFooter style={{
-                                    backgroundColor: '#AED6F1'
-                                }}>
-
-                                    <button type="button" class="cancelbtn" onClick={this.toggleLoginModal.bind(this)}>Hủy bỏ</button>
-                                    <span class="psw">Quên <a href="#">mật khẩu?</a></span>
-
-                                </ModalFooter>
-
-                            </Modal>
+                           
                             <Modal isOpen={this.state.pwdModal} toggle={this.togglePWDModal.bind(this)}>
                                 <ModalHeader toggle={this.togglePWDModal.bind(this)} style={{ backgroundColor: '#D6EAF8' }}> <p style={{ width: '400px', color: 'black', paddingLeft: '100px', paddingTop: '20px', fontSize: '25px' }}><b>CẬP NHẬT MẬT KHẨU</b></p></ModalHeader>
 

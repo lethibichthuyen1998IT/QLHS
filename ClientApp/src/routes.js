@@ -106,7 +106,7 @@ const dashboardRoutes = [
     },
   {
     path: "/khenthuong",
-    name: "Khen thưởng",
+    name: "Thống kê",
       icon: AssistantIcon,
       component: Khenthuong,
     layout: "/admin"
@@ -114,7 +114,7 @@ const dashboardRoutes = [
  
     {
         path: "/thanhtich",
-        name: "Thống kê",
+        name: "Khen thưởng",
         icon: EqualizerIcon,
         component: Thanhtich,
         layout: "/admin"
