@@ -87,9 +87,9 @@ class TB extends Component {
             <>
                 <Header />
                 
-                <div class="page-top-section">
-                    <div class="overlay"></div>
-                    <div class="container text-right">
+                <div class="page-top-section" style={{ height: '300px' }}>
+
+                    <div class="container text-right" style={{ marginTop: '-100px' }} >
                         <div class="page-info">
                             <h2>THÔNG BÁO</h2>
                             <div class="page-links">

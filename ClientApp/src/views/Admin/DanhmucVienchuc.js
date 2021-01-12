@@ -676,7 +676,7 @@ toggleDetailsModal(id) {
 
                 })
             }).catch(e => {
-                    alert("Tồn tại viên chức đang có chức vụ này, không thể xóa !!");
+                    alert("");
                     this.setState({
                         showAlert: false,
                         confirm: false
@@ -1784,7 +1784,7 @@ toggleDetailsModal(id) {
 
                                                     onCancel={() => this.setState({ showAlert: false })}
                                                     focusCancelBtn
-                                                >  {"Toàn bộ thông tin của  " + this.state.xoa.hoten + " (" + this.state.xoa.mavienchuc + ") sẽ bị xóa khỏi hệ thống"}
+                                        >  {"Xóa hết các công việc phân công và dữ liệu của viên chức  " + this.state.xoa.hoten + " (" + this.state.xoa.mavienchuc + ") ?"}
                                                 </SweetAlert>
 
                                                 <SweetAlert
@@ -2306,7 +2306,7 @@ toggleDetailsModal(id) {
                                                                         <Label htmlFor="diachi">Bậc lương</Label>
                                                                         <Input type="number" id="gioitinh" value={this.state.editData.bac} onChange={(e) => {
                                                                             let { editData } = this.state;
-                                                                            editData.bac = e.target.value;
+                                                                            editData.bac = Number.parseInt(e.target.value);
                                                                             this.setState({ editData });
                                                                         }} >
 

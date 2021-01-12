@@ -846,17 +846,12 @@ namespace QuanLyHieuSuat.Controllers
 
                 if (vc != null)
                 {
-                    if (db.Congviec.Where(x => x.Mavienchuc == vc.Mavienchuc).Count() > 0 || db.Phancong.Where(x => x.Mavienchuc == vc.Mavienchuc).Count() > 0 || db.Danhgia.Where(x => x.Mavienchuc == vc.Mavienchuc).Count() > 0 || db.Khenthuong.Where(x => x.Mavienchuc == vc.Mavienchuc).Count() > 0)
-                    {
-                        return BadRequest();
-                    }
-                    else
-                    {
+                    
                         db.Vienchuc.Remove(vc);
 
                         db.SaveChanges();
                         return Ok();
-                    }
+                    
                 }
                 else
                 {

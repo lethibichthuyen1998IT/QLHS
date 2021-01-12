@@ -13,6 +13,7 @@ namespace QuanLyHieuSuat.Models
         public int Masodanhmuc { get; set; }
         public int? Masolinhvuc { get; set; }
         public string Tendanhmuc { get; set; }
+        public int? Diemdg { get; set; }
 
         public virtual Linhvuccongviec MasolinhvucNavigation { get; set; }
         public virtual ICollection<Congviec> Congviec { get; set; }

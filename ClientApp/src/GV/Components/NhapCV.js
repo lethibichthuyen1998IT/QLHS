@@ -6,6 +6,7 @@ import Services from "./Services";
 import SectionContact from "./SectionContact";
 import SectionAbout from "./SectionAbout";
 import { Link, NavLink } from "react-router-dom";
+import moment from 'moment';
 import {
     Card,
     CardHeader,
@@ -23,6 +24,7 @@ import {
 
     Input, Label, Form, FormGroup, Alert
 } from "reactstrap";
+
 class NhapCV extends Component {
     constructor(props) {
         super(props);
@@ -32,25 +34,34 @@ class NhapCV extends Component {
                 mavienchuc: '',
                 masodanhmuc: '',
                 tencongviec: '',
-                ngaythuchien: '',
+                thoigiankt: '',
                 diadiem: '',
-                thoigian: '',
-                filecongviec:''
+                thoigianbd: '',
+                filecongviec: '',
+                mdht:''
             },
             dm: [],
             nh: [],
             nhmd:[],
-            idnh:'',
+            idnh: '',
+            ctdg:[],
             user: JSON.parse(localStorage.getItem('user')),
             errors: '',
             selectedFile: '',
             progress: 0,
-            status: ''
+            status: '',
+            danhgia: [],
+            tsdiem: 0,
+            cv: [],
+            loi: false,
+            add: false
 
 
         };
       
-
+        this.refresh = this.refresh.bind(this);
+        this.toggleHuyModal = this.toggleHuyModal.bind(this);
+     
     }
 
     componentDidMount() { 
@@ -60,11 +71,23 @@ class NhapCV extends Component {
 
             })
         );
+        axios.get('/congviecs/danhsach/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                cv: res.data,
+
+            })
+            );
         axios.get('/namhocs/namhoc')
             .then((res) => this.setState({
                 nhmd: res.data,
 
             })
+        );
+        axios.get('/namhocs/namhoc')
+            .then((res) => this.setState({
+                idnh: res.data.manamhoc,
+
+            }, () => this.DG())
             );
       
         axios.get('/dmcongviecs/')
@@ -73,10 +96,68 @@ class NhapCV extends Component {
 
             })
         );
+       
+      
+      
+    }
+
+    refresh() {
+        axios.get('/namhocs/')
+            .then((res) => this.setState({
+                nh: res.data,
+
+            })
+            );
+        axios.get('/congviecs/danhsach/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                cv: res.data,
+
+            })
+            );
+        axios.get('/namhocs/namhoc')
+            .then((res) => this.setState({
+                nhmd: res.data,
+
+            })
+            );
+        axios.get('/namhocs/namhoc')
+            .then((res) => this.setState({
+                idnh: res.data.manamhoc,
+
+            }, () => this.DG())
+            );
+
+        axios.get('/dmcongviecs/')
+            .then((res) => this.setState({
+                dm: res.data,
+
+            })
+            );
+
+}
+    TongDiem() {
+        axios.get('/dmcongviecs/tsdiem/' + this.state.newcv.masodanhmuc)
+            .then((res) => this.setState({
+                tsdiem: res.data,
+
+            })
+            );
 
     }
 
-   
+    DG() {
+        axios.get('/danhgias/vienchuc/' + this.state.user.mavienchuc + "/" + this.state.idnh)
+            .then((res) => this.setState({
+                ctdg: res.data,
+            })
+        );
+        axios.get('/phancongs/tsdiem/' + this.state.user.mavienchuc + "/" + this.state.idnh)
+            .then((res) => {
+                this.setState({ tsdiem: res.data })
+            });
+       
+     
+    }
 
   
     selectFileHandler = (event) => {
@@ -121,72 +202,172 @@ class NhapCV extends Component {
     }
 
     toggleHuyModal() {
+       
         this.setState({
             newcv: {
                 manamhoc: '',
                 mavienchuc: this.state.user.mavienchuc,
                 masodanhmuc: '',
                 tencongviec: '',
-                ngaythuchien: '',
+                thoigianbd: '',
                 diadiem: '',
-                thoigian: '',
-                filecongviec: ''
+                thoigiankt: '',
+                filecongviec: '',
+                mdht:''
 
-            }
+            },
+
+            tsdiem: '',
+            errors: '',
+            loi: false,
+            add: false,
+            progress:0,
+            status:''
+
         })
-       }
+        this.refresh();
+     
+    }
+
+    //huy() {
+
+    //    this.setState({
+    //        errors: ""
+    //    });
+    //}
     addCV() {
-      
+       
+        //if (this.state.cv.length > 0) {
+        //    this.state.cv.forEach((e) => {
+        //        if ((moment(e.thoigiankt).format("h:mm a DD-MM-YYYY") > moment(this.state.newcv.thoigianbd).format("h:mm a DD-MM-YYYY")) && (moment(e.thoigianbd).format("h:mm a DD-MM-YYYY") < moment(this.state.newcv.thoigiankt).format("h:mm a DD-MM-YYYY"))
+        //           || (moment(e.thoigianbd).format("h:mm a DD-MM-YYYY") > moment(this.state.newcv.thoigianbd).format("h:mm a DD-MM-YYYY")) && (moment(e.thoigianbd).format("h:mm a DD-MM-YYYY") < moment(this.state.newcv.thoigiankt).format("h:mm a DD-MM-YYYY"))
+        //            || (moment(e.thoigiankt).format("h:mm a DD-MM-YYYY") > moment(this.state.newcv.thoigianbd).format("h:mm a DD-MM-YYYY")) && (moment(e.thoigiankt).format("h:mm a DD-MM-YYYY") < moment(this.state.newcv.thoigiankt).format("h:mm a DD-MM-YYYY")))
+        //         {
+
+        //            this.setState({
+        //                errors: "Đã thực hiện công việc khác"
+        //            });
+        //            this.toggleHuyModal();
+
+                   
+
+        //        }
+        //        else {
+        //            this.setState({
+        //                errors: "",
+        //                loi:true
+        //            });
+        //            console.log(this.state.errors)
+        //        }
+
+        //    }); 
+           
+        //}
+
+       
+        //else {
             axios.post('/congviecs/', {
                 MAVIENCHUC: this.state.user.mavienchuc,
                 MANAMHOC: this.state.nhmd.manamhoc,
                 MASODANHMUC: this.state.newcv.masodanhmuc,
                 TENCONGVIEC: this.state.newcv.tencongviec,
-                NGAYTHUCHIEN: this.state.newcv.ngaythuchien,
+                THOIGIANBD: this.state.newcv.thoigianbd,
                 DIADIEM: this.state.newcv.diadiem,
-                THOIGIAN: this.state.newcv.thoigian,
-                FILECONGVEC: this.state.newcv.filecongviec
+                THOIGIANKT: this.state.newcv.thoigiankt,
+                FILECONGVEC: this.state.newcv.filecongviec,
+                MUCDOHT: this.state.newcv.mdht
 
             }).then((response) => {
                 //console.log(response.data);
                 alert("Đã thêm thành công!");
                 this.setState({
-                    newpc: {
+                    newcv: {
                         manamhoc: '',
                         mavienchuc: this.state.user.mavienchuc,
                         masodanhmuc: '',
                         tencongviec: '',
-                        ngaythuchien: '',
+                        thoigianbd: '',
                         diadiem: '',
-                        thoigian: '',
-                        filecongviec: ''
+                        thoigiankt: '',
+                        filecongviec: '',
+                        mdht: ''
 
                     },
-                    errors: ''
-                
+                    errors: '',
+
+
                 }, () => this.toggleHuyModal());
-             
-              
+
+
             })
                 .catch((error) => {
                     console.log(error.response);
                     alert(error);
                 });
-            //.catch ((error) => console.log(error.response.request.response) );
-       
+        //}
+        //this.state.add = this.state.loi;
+        //.catch ((error) => console.log(error.response.request.response) );
     }
+                
+
+    //ADD() {
+    //    axios.post('/congviecs/', {
+    //        MAVIENCHUC: this.state.user.mavienchuc,
+    //        MANAMHOC: this.state.nhmd.manamhoc,
+    //        MASODANHMUC: this.state.newcv.masodanhmuc,
+    //        TENCONGVIEC: this.state.newcv.tencongviec,
+    //        THOIGIANBD: this.state.newcv.thoigianbd,
+    //        DIADIEM: this.state.newcv.diadiem,
+    //        THOIGIANKT: this.state.newcv.thoigiankt,
+    //        FILECONGVEC: this.state.newcv.filecongviec,
+    //        MUCDOHT: this.state.newcv.mdht
+
+    //    }).then((response) => {
+    //        //console.log(response.data);
+    //        alert("Đã thêm thành công!");
+    //        this.setState({
+    //            newcv: {
+    //                manamhoc: '',
+    //                mavienchuc: this.state.user.mavienchuc,
+    //                masodanhmuc: '',
+    //                tencongviec: '',
+    //                thoigianbd: '',
+    //                diadiem: '',
+    //                thoigiankt: '',
+    //                filecongviec: '',
+    //                mdht: ''
+
+    //            },
+    //            errors: '',
+    //            add: false,
+    //            loi: false
+
+
+    //        }, () => this.toggleHuyModal());
+
+
+    //    })
+    //        .catch((error) => {
+    //            console.log(error.response);
+    //            alert(error);
+    //        });
+    //}
+  
+       
+
 
     render() {
-      
+        const { ctdg, idnh, tsdiem, cv, errors } = this.state;
+        
+        
        
-      
         return (
             <>
+             
 
-              
-                <div class="page-top-section">
-                    <div class="overlay"></div>
-                    <div class="container text-right">
+                <div class="page-top-section" style={{ height: '300px' }}>
+                   
+                    <div class="container text-right" style={{ marginTop: '-100px' }} >
                         <div class="page-info">
                             <h2>CÔNG VIỆC</h2>
                             <div class="page-links">
@@ -198,130 +379,161 @@ class NhapCV extends Component {
                 </div>
              
                 <div class="page-section spad">
-                    <div class="container" style={{ paddingTop: '-500px', paddingLeft: '-300px', width: '1800px' }}>
+                    <div class="container" style={{ marginTop: '-70px', paddingLeft: '-300px', width: '1800px' }}>
                         <div class="row">
 
                            
                             <div class="col-md-6 col-sm-7 blog-posts" style={{ textAlign: 'justify' }}>
                     <div class="element">
                         <h4 style={{ height: '5px', color: 'blue', textAlign: 'center' }}>Nhập công việc</h4>
-                        </div>
-                    <Row>
-                        <Col md="6">
-                            <FormGroup>
-                                <Label htmlFor="hoten">Danh mục: </Label>
-                                <Input type="select" name="name"
-                                    value={this.state.newcv.masodanhmuc} onChange={(e) => {
-                                        let { newcv } = this.state;
-                                         newcv.masodanhmuc = Number.parseInt(e.target.value);
-                                         this.setState({ newcv });
-                                    }} >
-                                    <option value='0' >--Chọn danh mục công việc--</option>
-                                    {
-                                        this.state.dm.map((lv) =>
-                                            <option key={lv.masodanhmuc} value={lv.masodanhmuc}>{lv.tendanhmuc}</option>)
-                                    }
-                                </Input>
-                            </FormGroup>
-                        </Col>
-                        <Col md="6">
-                            <FormGroup>
-                                <Label htmlFor="hoten">Năm học: </Label>
-                                <Input type="select"
-                                                value={this.state.newcv.manamhoc} onChange={(e) => {
-                                        let { newcv } = this.state;
-                                        newcv.manamhoc = Number.parseInt(e.target.value);
-                                                    this.setState({ newcv });
-                                                }} disabled >
-                                                
-                                                {
+                                </div>
+                                {(ctdg.ykbm == null) ?
+                                    <>
+                                        <Row>
+                                        <Col md="12"> <p className="text-danger"> (*) Bắt buộc</p></Col>
+                                        <Col md="12" align="center">
 
-                                        this.state.nh.map((nh) =>
-                                            <option key={nh.manamhoc} value={nh.manamhoc}>{nh.tennamhoc}</option>)
-                                    }
-                                </Input>
-                            </FormGroup>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md="12">
-                            <FormGroup>
-                            
-                                <Label htmlFor="hoten">Tên công việc: </Label>
-                                <Input type="text"  value={this.state.newcv.tencongviec} onChange={(e) => {
-                                    let { newcv } = this.state;
-                                    newcv.tencongviec = e.target.value ;
+                                            {(errors) ?
+                                                <Alert color="warning">{errors}</Alert>
+                                                :
+                                                null
+                                            }
+                                        </Col>
+                                    </Row>
+                                        <Row>
+                                            <Col md="6">
+                                                <FormGroup>
+                                                    <Label htmlFor="hoten">Danh mục: </Label>
+                                                    <Input type="select" name="name"
+                                                        value={this.state.newcv.masodanhmuc} onChange={(e) => {
+                                                            let { newcv } = this.state;
+                                                            newcv.masodanhmuc = Number.parseInt(e.target.value);
+                                                            this.setState({ newcv }, () => this.TongDiem());
+                                                        }} >
+                                                        <option value='0' >--Chọn danh mục công việc--</option>
+                                                        {
+                                                            this.state.dm.map((lv) =>
+                                                                <option key={lv.masodanhmuc} value={lv.masodanhmuc}>{lv.tendanhmuc}</option>)
+                                                        }
+                                                    </Input>
+                                                </FormGroup>
+                                            </Col>
+                                            <Col md="6">
+                                                <FormGroup>
+                                                    <Label htmlFor="hoten">Năm học: </Label>
+                                                    <Input type="select"
+                                                        value={this.state.newcv.manamhoc} onChange={(e) => {
+                                                            let { newcv } = this.state;
+                                                            newcv.manamhoc = Number.parseInt(e.target.value);
+                                                            this.setState({ newcv });
+                                                        }} disabled >
 
-                                    this.setState({ newcv });
-                                }} placeholder="Tên công việc" />
-                            </FormGroup>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md="6">
-                            <FormGroup>
-                                <Label htmlFor="hoten">Ngày thực hiện: </Label>
-                                <Input type="date" value={this.state.newcv.ngaythuchien} onChange={(e) => {
-                                    let { newcv } = this.state;
-                                    newcv.ngaythuchien = e.target.value;
+                                                        {
 
-                                    this.setState({ newcv });
-                                }} placeholder="Ngày thực hiện" />
-                            </FormGroup>
-                        </Col>
-                   
+                                                            this.state.nh.map((nh) =>
+                                                                <option key={nh.manamhoc} value={nh.manamhoc}>{nh.tennamhoc}</option>)
+                                                        }
+                                                    </Input>
+                                                </FormGroup>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md="12">
+                                                <FormGroup>
 
-                        <Col md="6">
-                            <FormGroup>
-                                <Label htmlFor="hoten">Thời gian thực hiện: </Label>
-                                <Input type="text" value={this.state.newcv.thoigian} onChange={(e) => {
-                                        let { newcv } = this.state;
-                                    newcv.thoigian = e.target.value;
+                                                    <Label htmlFor="hoten">Tên công việc: </Label>
+                                                    <Input type="text" value={this.state.newcv.tencongviec} onChange={(e) => {
+                                                        let { newcv } = this.state;
+                                                        newcv.tencongviec = e.target.value;
 
-                                        this.setState({ newcv });
-                                }} placeholder="Thời gian thực hiện" />
-                            </FormGroup>
-                        </Col>
-                    </Row>
+                                                        this.setState({ newcv });
+                                                    }} placeholder="Tên công việc" />
+                                                </FormGroup>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md="6">
+                                                <FormGroup>
+                                                    <Label htmlFor="hoten">Thời gian bắt đầu: </Label>
+                                                    <Input type="datetime-local" value={this.state.newcv.thoigianbd} onChange={(e) => {
+                                                        let { newcv } = this.state;
+                                                        newcv.thoigianbd = e.target.value;
 
-                    <Row>
-                        <Col md="12">
-                            <FormGroup>
-                                <Label htmlFor="hoten">Địa điểm: </Label>
-                                        <Input type="textarea" value={this.state.newcv.diadiem} onChange={(e) => {
-                                            let { newcv } = this.state;
-                                            newcv.diadiem = e.target.value;
-
-                                            this.setState({ newcv });
-                                }} placeholder="Địa điểm" />
-                            </FormGroup>
-                        </Col>
-                    </Row>
+                                                        this.setState({ newcv });
+                                                    }} placeholder="Thời gian bắt đầu" />
+                                                </FormGroup>
+                                            </Col>
 
 
-                    <Row>
-                        <Col md="12">
-                            <FormGroup>
-                                            <Label htmlFor="hoten">File đính kèm: </Label>
-                                            <Input type="file" value={this.state.newcv.filecongviec} onChange={this.selectFileHandler.bind(this)} />
-                                                <br />
-                                                <div>{this.state.progress}%</div>
+                                            <Col md="6">
+                                                <FormGroup>
+                                                    <Label htmlFor="hoten">Thời gian kết thúc: </Label>
+                                                    <Input type="datetime-local" value={this.state.newcv.thoigiankt} onChange={(e) => {
+                                                        let { newcv } = this.state;
+                                                        newcv.thoigiankt = e.target.value;
 
-                                                <div>{this.state.status}</div>
-                            </FormGroup>
-                        </Col>
-                    </Row>
-                    <Row md="12">
-                        <Col md="6">
-                           
+                                                        this.setState({ newcv });
+                                                    }} placeholder="Thời gian kết thúc" />
+                                                </FormGroup>
+                                            </Col>
 
-                                        <button disabled={!(this.state.newcv.ngaythuchien.length > 0 && this.state.newcv.tencongviec.length > 0 && this.state.newcv.thoigian.length > 0 && this.state.newcv.diadiem.length > 0 && this.state.newcv.masodanhmuc.length != 0)} onClick={this.addCV.bind(this)} class="site-btn">Lưu</button> {' '}
-                        </Col>
-                        <Col md="6">
-                                <button onClick={this.toggleHuyModal.bind(this)}>Hủy</button>
-                           
-                        </Col>
-                    </Row>
+                                        </Row>
+
+                                        <Row>
+                                            <Col md="12">
+                                                <FormGroup>
+                                                    <Label htmlFor="hoten">Địa điểm: </Label>
+                                                    <Input type="textarea" value={this.state.newcv.diadiem} onChange={(e) => {
+                                                        let { newcv } = this.state;
+                                                        newcv.diadiem = e.target.value;
+
+                                                        this.setState({ newcv });
+                                                    }} placeholder="Địa điểm" />
+                                                </FormGroup>
+                                            </Col>
+                                        </Row>
+                                        <Row md ="8">
+                                            <Col md="6">
+                                                <FormGroup>
+                                                    <Label htmlFor="hoten">Mức độ hoàn thành: </Label>
+                                                    <Input type="number" value={this.state.newcv.mdht} onChange={(e) => {
+                                                        let { newcv } = this.state;
+                                                        newcv.mdht = Number.parseInt(e.target.value);
+
+                                                        this.setState({ newcv });
+                                                    }} placeholder="Mức độ hoàn thành" /> 
+                                                </FormGroup>
+                                            </Col>
+                                            <Col md="2" style={{ color: 'red', paddingTop: '40px', paddingLeft: '-10px', fontSize: '30px' }}>/ {tsdiem}</Col>
+                                           
+                                        </Row>
+
+
+                                        <Row>
+                                            <Col md="12">
+                                                <FormGroup>
+                                                    <Label htmlFor="hoten">File đính kèm: </Label>
+                                                    <Input type="file" value={this.state.newcv.filecongviec} onChange={this.selectFileHandler.bind(this)} />
+                                                    <br />
+                                                    <div>{this.state.progress}%</div>
+
+                                                    <div>{this.state.status}</div>
+                                                </FormGroup>
+                                            </Col>
+                                        </Row>
+                                        <Row md="12">
+                                            <Col md="6">
+
+
+                                                <button disabled={!(this.state.newcv.thoigianbd.length > 0 && this.state.newcv.tencongviec.length > 0 && this.state.newcv.thoigiankt.length > 0 && this.state.newcv.diadiem.length > 0 && this.state.newcv.masodanhmuc.length != 0)} onClick={this.addCV.bind(this)} class="site-btn">Lưu</button> {' '}
+                                            </Col>
+                                            <Col md="6">
+                                                <button onClick={this.toggleHuyModal.bind(this)}>Hủy</button>
+
+                                            </Col>
+                                        </Row>
+                                    </>
+                                    : <div style={{ textAlign: 'center', color:'red' }}> Đã hết thời gian nhập công việc trong năm học {this.state.nhmd.tennamhoc}</div>}
                     </div>
                    
                             <div class="col-md-6 col-sm-5 sidebar" style={{marginTop: '0px'}}>
@@ -351,7 +563,7 @@ class NhapCV extends Component {
                             <p><b>Bài báo khoa học:</b> Có các bài báo khoa học trong hoặc ngoài nước </p> 
                                     <p><b>Cố vấn học tập:</b> Giải quyết các vấn đề cho lớp cố vấn, sinh hoạt cố vấn </p> 
                                     <p><b>Coi thi, chấm thi:</b> Coi thi, chấm thi cho các học phần </p> 
-                                    <p><b>Nghiên cứu khoa học:</b> Hướng dẫn các sinh viên tham gia nghiên cứu khoa học</p>
+                                    <p><b>Hoạt dộng khoa học công nghệ:</b> Tham gia các hoạt động nhiên cứu khoa học</p>
                                     <p><b>Hướng dẫn niên luận / luận văn:</b> Gặp mặt, trao đổi với các sinh viên được hướng dẫn</p>
                         </div>
                         </div>

@@ -152,9 +152,9 @@ class Thongtincanhan extends React.Component {
 
         return (
             <>
-                <div class="page-top-section">
-                    <div class="overlay"></div>
-                    <div class="container text-right">
+                <div class="page-top-section" style={{ height: '300px' }}>
+
+                    <div class="container text-right" style={{ marginTop: '-150px' }} >
                         <div class="page-info">
                             <h2>THÔNG TIN CÁ  NHÂN</h2>
                             <div class="page-links">

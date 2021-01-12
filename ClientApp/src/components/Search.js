@@ -9,7 +9,7 @@ class Search extends Component {
             <>
 
                 <FormGroup className="form-inline" style={{ width: '800px' }}>
-                        <Input placeholder="Search..." value={this.props.valueSearch} onChange={(event) => this.props.handleSearch(event.target.value)} style={{ width: '500px' }} /> &nbsp;
+                        <Input placeholder="Tìm kiếm..." value={this.props.valueSearch} onChange={(event) => this.props.handleSearch(event.target.value)} style={{ width: '500px' }} /> &nbsp;
                    
                     <Button className="btn btn-control" color="info" onClick={() => this.props.handleSearch('')} style={{ width: '100px' }} >Tất cả</Button>
                     </FormGroup>

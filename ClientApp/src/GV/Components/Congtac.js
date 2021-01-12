@@ -48,9 +48,10 @@ class Trangchu extends Component {
                 mavienchuc: '',
                 masodanhmuc: '',
                 tencongviec: '',
-                ngaythuchien: '',
+                thoigianbd: '',
                 diadiem: '',
-                thoigian: '',
+                thoigiankt: '',
+                mucdoht:'',
                 filecongvec: ''
             },
             xoacv: {
@@ -73,7 +74,8 @@ class Trangchu extends Component {
             pc:[],
             lv: [],
             nl:[],
-            tstiet:'',
+            tstiet: '',
+            tsdiem:'',
             user: JSON.parse(localStorage.getItem('user'))
 
         };
@@ -136,7 +138,9 @@ class Trangchu extends Component {
                 dm: res.data,
 
             })
-            );
+        );
+       
+
     }
 
     handlePageClick = (e) => {
@@ -162,6 +166,16 @@ class Trangchu extends Component {
         })
 
     }
+
+    TongDiem() {
+        axios.get('/dmcongviecs/tsdiem/' + this.state.editCVData.masodanhmuc)
+            .then((res) => this.setState({
+                tsdiem: res.data,
+
+            })
+            );
+
+    }
     handleSearch = (search) => {
 
         let sourceArray = this.state.source;
@@ -174,7 +188,7 @@ class Trangchu extends Component {
 
             for (let item of sourceArray) {
 
-                if (item.tendanhmuc.toLowerCase().indexOf(search.toLowerCase()) > -1 || item.tencongviec.toLowerCase().indexOf(search.toLowerCase()) > -1 || item.ngaythuchien.indexOf(search.toLowerCase()) > -1) {
+                if (item.tendanhmuc.toLowerCase().indexOf(search.toLowerCase()) > -1 || item.tencongviec.toLowerCase().indexOf(search.toLowerCase()) > -1 || item.thoigianbd.indexOf(search.toLowerCase()) > -1) {
                     newArray.push(item);
                 }
             }
@@ -191,7 +205,7 @@ class Trangchu extends Component {
         this.setState({
             vc: nvs
         });
-        axios.get('/congviecs/congtac' + this.state.user.mavienchuc)
+        axios.get('/congviecs/congtac/' + this.state.user.mavienchuc)
             .then(res => {
                 var ct = res.data;
                 console.log('data-->' + JSON.stringify(ct))
@@ -285,16 +299,23 @@ class Trangchu extends Component {
             editCVModal: !this.state.editCVModal
         })
     }
-    toggleEditCVModal(macongviec, manamhoc, masodanhmuc, tencongviec, ngaythuchien, diadiem, thoigian, filecongvec) {
+    toggleEditCVModal(macongviec, manamhoc, masodanhmuc, tencongviec, thoigianbd, diadiem, thoigiankt, filecongvec, mucdoht) {
+        axios.get('/dmcongviecs/tsdiem/' + masodanhmuc)
+            .then((res) => this.setState({
+                tsdiem: res.data,
+
+            })
+            );
+
         this.setState({
-            editCVData: { macongviec, manamhoc, masodanhmuc, tencongviec, ngaythuchien, diadiem, thoigian, filecongvec },
+            editCVData: { macongviec, manamhoc, masodanhmuc, tencongviec, thoigianbd, diadiem, thoigiankt, filecongvec, mucdoht },
             editCVModal: !this.state.editCVModal
 
         });
     }
 
     updateCV() {
-        let { macongviec, manamhoc, masodanhmuc, tencongviec, ngaythuchien, diadiem, thoigian, filecongvec } = this.state.editCVData;
+        let { macongviec, manamhoc, masodanhmuc, tencongviec, thoigianbd, diadiem, thoigiankt, filecongvec, mucdoht } = this.state.editCVData;
         axios.put('/congviecs/' + Number.parseInt(this.state.editCVData.macongviec),
             {
                 macongviec: macongviec,
@@ -302,10 +323,11 @@ class Trangchu extends Component {
                 mavienchuc: this.state.vc.mavienchuc,
                 masodanhmuc: masodanhmuc,
                 tencongviec: tencongviec,
-                ngaythuchien: ngaythuchien,
+                thoigianbd: thoigianbd,
                 diadiem: diadiem,
-                thoigian: thoigian,
-                filecongvec: filecongvec
+                thoigiankt: thoigiankt,
+                filecongvec: filecongvec,
+                mucdoht: mucdoht
             }).then((response) => {
 
                 this.setState({
@@ -316,10 +338,11 @@ class Trangchu extends Component {
                         mavienchuc: this.state.vc.mavienchuc,
                         masodanhmuc: '',
                         tencongviec: '',
-                        ngaythuchien: '',
+                        thoigianbd: '',
                         diadiem: '',
-                        thoigian: '',
-                        filecongvec: ''
+                        thoigiankt: '',
+                        filecongvec: '',
+                        mucdoht:''
                     },
                 });
                 this.refresh();
@@ -361,17 +384,18 @@ class Trangchu extends Component {
         });
     }
     render() {
-        const { congtac, errors, pc, tstiet, lv, nl } = this.state;
+        const { congtac, errors, pc, tstiet, lv, nl, tsdiem } = this.state;
         console.log(this.state.user.mavienchuc)
         return (
 
             <>
 
 
-                <Header />
-                <div class="page-top-section">
-                    <div class="overlay"></div>
-                    <div class="container text-right">
+          
+
+                <div class="page-top-section" style={{ height: '300px' }}>
+                  
+                    <div class="container text-right" style={{ marginTop: '-100px' }} >
                         <div class="page-info">
                             <h2>CÔNG TÁC</h2>
                             <div class="page-links">
@@ -385,7 +409,7 @@ class Trangchu extends Component {
                 <div class="services-section spad">
                     <div class="container">
 
-                        <div class="section-title dark">
+                        <div class="section-title dark" style={{ height: '0px', marginTop: '-90px' }}>
                             <h2> CÔNG VIỆC THUỘC LĨNH VỰC <span style={{ fontSize: '35px' }}>CÔNG TÁC</span> TRONG NĂM</h2>
                         </div>
 
@@ -399,10 +423,10 @@ class Trangchu extends Component {
                             <CardBody>
                                 <Row md="12">
                                     <Col md="6">
-                                        <p>Số giờ giảng dạy: <strong>{tstiet}</strong> </p>
+                                        <p>Số giờ giảng dạy: <strong>{tstiet} tiết chuẩn</strong> </p>
                                     </Col>
                                     <Col md="6">
-                                        <p>Số luận văn: <strong>{nl.soluong}</strong></p>
+                                        <p>Số luận văn: <strong>{lv.soluong}</strong></p>
                                     </Col>
                                     <Col md="6">
                                         <p>Số tiểu luận / niên luận: <strong>{nl.soluong}</strong></p>
@@ -435,13 +459,15 @@ class Trangchu extends Component {
 
                                 <thead className="text-primary">
                                     <tr>
-                                        <th>STT</th>
+                                      
 
                                         <th>Tên danh mục</th>
                                         <th>Tên công việc</th>
-                                        <th>Ngày thực hiện</th>
+                                        <th width="180px">Thời gian bắt đầu</th>
+                                        <th width="180px">Thời gian kết thúc</th>
                                         <th>Địa điểm</th>
-                                        <th>Thời gian</th>
+                                       
+                                        <th>Điểm</th>
                                         <th>File</th>
 
 
@@ -457,16 +483,17 @@ class Trangchu extends Component {
                                         congtac.map((emp, index) => {
                                             return (
                                                 <tr key={emp.macongviec}>
-                                                    <td>{index + 1}</td>
+                                                 
 
 
                                                     <td>{emp.tendanhmuc}</td>
 
                                                     <td>{emp.tencongviec}</td>
-                                                    <td>{moment(emp.ngaythuchien).format("DD-MM-YYYY")}</td>
+                                                    <td>{moment(emp.thoigianbd).format("h:mm a DD-MM-YYYY")}</td>
+                                                    <td>{moment(emp.thoigiankt).format("h:mm a DD-MM-YYYY")}</td>
                                                     <td>{emp.diadiem}</td>
-                                                    <td>{emp.thoigian}</td>
-
+                                                   
+                                                    <td>{emp.mucdoht}</td>
                                                     <td>{(emp.filecongvec == null) ? null :
                                                         (emp.filecongvec == "") ? null :
                                                         < a href={"/UploadedFiles/" + (emp.filecongvec).split('\\').pop()} download> Tải xuống </a>
@@ -475,7 +502,7 @@ class Trangchu extends Component {
 
 
                                                     <td>
-                                                        <Button color="default" onClick={this.toggleEditCVModal.bind(this, emp.macongviec, emp.manamhoc, emp.masodanhmuc, emp.tencongviec, emp.ngaythuchien, emp.diadiem, emp.thoigian, emp.filecongvec)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
+                                                        <Button color="default" onClick={this.toggleEditCVModal.bind(this, emp.macongviec, emp.manamhoc, emp.masodanhmuc, emp.tencongviec, emp.thoigianbd, emp.diadiem, emp.thoigiankt, emp.filecongvec, emp.mucdoht)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
 
                                                                                         <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleXoa.bind(this, emp.macongviec, emp.tencongviec)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
 
@@ -518,9 +545,9 @@ class Trangchu extends Component {
 
                                     >  Đã xóa thành công !!!
                                                                 </SweetAlert>
-                                    <Modal isOpen={this.state.editCVModal} toggle={this.toggleEditCVModal.bind(this, this.state.editCVData.macongviec, this.state.editCVData.manamhoc, this.state.editCVData.masodanhmuc, this.state.editCVData.tencongviec, this.state.editCVData.ngaythuchien, this.state.editCVData.diadiem, this.state.editCVData.thoigian, this.state.editCVData.filecongvec)} size="lg" style={{ maxWidth: '800px', width: '100%' }}>
+                                    <Modal isOpen={this.state.editCVModal} toggle={this.toggleEditCVModal.bind(this, this.state.editCVData.macongviec, this.state.editCVData.manamhoc, this.state.editCVData.masodanhmuc, this.state.editCVData.tencongviec, this.state.editCVData.thoigianbd, this.state.editCVData.diadiem, this.state.editCVData.thoigiankt, this.state.editCVData.filecongvec, this.state.editCVData.mucdoht)} size="lg" style={{ maxWidth: '800px', width: '100%' }}>
 
-                                        <ModalHeader toggle={this.toggleEditCVModal.bind(this, this.state.editCVData.macongviec, this.state.editCVData.manamhoc, this.state.editCVData.masodanhmuc, this.state.editCVData.tencongviec, this.state.editCVData.ngaythuchien, this.state.editCVData.diadiem, this.state.editCVData.thoigian, this.state.editCVData.filecongvec)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '400px', color: 'black', textAlign: 'center', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
+                                        <ModalHeader toggle={this.toggleEditCVModal.bind(this, this.state.editCVData.macongviec, this.state.editCVData.manamhoc, this.state.editCVData.masodanhmuc, this.state.editCVData.tencongviec, this.state.editCVData.thoigianbd, this.state.editCVData.diadiem, this.state.editCVData.thoigiankt, this.state.editCVData.filecongvec, this.state.editCVData.mucdoht)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '400px', color: 'black', textAlign: 'center', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
 
 
                                         <ModalBody>
@@ -591,19 +618,6 @@ class Trangchu extends Component {
 
                                                 <Col md="6">
                                                     <FormGroup>
-                                                        <Label htmlFor="hoten">Ngày thực hiện: </Label>
-                                                        <Input id="tenchucvu" type="date" value={moment(this.state.editCVData.ngaythuchien).format("YYYY-MM-DD")} onChange={(e) => {
-                                                            let { editCVData } = this.state;
-                                                            editCVData.ngaythuchien = e.target.value;
-                                                            this.setState({ editCVData });
-                                                        }} />
-
-                                                    </FormGroup>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col md="6">
-                                                    <FormGroup>
                                                         <Label htmlFor="hoten">Địa điểm: </Label>
                                                         <Input id="tenchucvu" value={this.state.editCVData.diadiem} onChange={(e) => {
                                                             let { editCVData } = this.state;
@@ -613,21 +627,56 @@ class Trangchu extends Component {
 
                                                     </FormGroup>
                                                 </Col>
-
-                                                <Col md="6">
-                                                    <FormGroup>
-                                                        <Label htmlFor="hoten">Thời gian: </Label>
-                                                        <Input id="tenchucvu" value={this.state.editCVData.thoigian} onChange={(e) => {
-                                                            let { editCVData } = this.state;
-                                                            editCVData.thoigian = e.target.value;
-                                                            this.setState({ editCVData });
-                                                        }} />
-
-                                                    </FormGroup>
-                                                </Col>
-
-
                                             </Row>
+                                         
+                                               
+
+                                                <Row>
+                                                    <Col md="6">
+                                                        <FormGroup>
+                                                            <Label htmlFor="hoten">Thời gian bắt đầu: </Label>
+                                                        <Input type="datetime-local" value={this.state.editCVData.thoigianbd} onChange={(e) => {
+                                                            let { editCVData } = this.state;
+                                                            editCVData.thoigianbd = e.target.value;
+
+                                                            this.setState({ editCVData });
+                                                            }} placeholder="Thời gian bắt đầu" />
+                                                        </FormGroup>
+                                                    </Col>
+
+
+                                                    <Col md="6">
+                                                        <FormGroup>
+                                                            <Label htmlFor="hoten">Thời gian kết thúc: </Label>
+                                                        <Input type="datetime-local" value={this.state.editCVData.thoigiankt} onChange={(e) => {
+                                                            let { editCVData } = this.state;
+                                                            editCVData.thoigiankt = e.target.value;
+
+                                                            this.setState({ editCVData });
+                                                            }} placeholder="Thời gian kết thúc" />
+                                                        </FormGroup>
+                                                    </Col>
+
+                                                </Row>
+                                             
+                                                <Row md="6">
+                                                    <Col md="4">
+                                                        <FormGroup>
+                                                            <Label htmlFor="hoten">Mức độ hoàn thành: </Label>
+                                                            <Input type="number" value={this.state.editCVData.mucdoht} onChange={(e) => {
+                                                                let { editCVData } = this.state;
+                                                                editCVData.mucdoht = Number.parseInt(e.target.value);
+
+                                                                this.setState({ editCVData });
+                                                            }} placeholder="Mức độ hoàn thành" />
+                                                        </FormGroup>
+                                                    </Col>
+                                                    <Col md="2" style={{ color: 'red', paddingTop: '40px', paddingLeft: '-10px', fontSize: '30px' }}>/ {tsdiem}</Col>
+
+                                                </Row>
+
+
+                                            
                                             <Row>
                                                 <Col md="12">
                                                     <FormGroup>
@@ -655,7 +704,7 @@ class Trangchu extends Component {
 
                                         </ModalBody>
                                         <ModalFooter>
-                                            <Button color="primary" disabled={!(this.state.editCVData.masodanhmuc.length != 0 && this.state.editCVData.manamhoc.length != 0 && this.state.editCVData.ngaythuchien.length > 0 && this.state.editCVData.diadiem.length > 0 && this.state.editCVData.thoigian.length > 0)} onClick={this.updateCV.bind(this)}>Thực hiện lưu</Button>{' '}
+                                            <Button color="primary" disabled={!(this.state.editCVData.masodanhmuc.length != 0 && this.state.editCVData.manamhoc.length != 0 && this.state.editCVData.thoigianbd.length > 0 && this.state.editCVData.diadiem.length > 0 && this.state.editCVData.thoigiankt.length > 0)} onClick={this.updateCV.bind(this)}>Thực hiện lưu</Button>{' '}
                                             <Button color="danger" onClick={this.toggleDongCV.bind(this)}>Hủy bỏ</Button>
                                         </ModalFooter>
 

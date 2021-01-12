@@ -10,10 +10,13 @@ namespace QuanLyHieuSuat.Models
         public string Mavienchuc { get; set; }
         public int Masodanhmuc { get; set; }
         public string Tencongviec { get; set; }
-        public DateTime? Ngaythuchien { get; set; }
+       
         public string Diadiem { get; set; }
-        public string Thoigian { get; set; }
+        public DateTime? Thoigianbd { get; set; }
+        public DateTime? Thoigiankt { get; set; }
         public string Filecongvec { get; set; }
+
+        public int? Mucdoht { get; set; }
 
         public virtual Namhoc ManamhocNavigation { get; set; }
         public virtual Danhmuc MasodanhmucNavigation { get; set; }

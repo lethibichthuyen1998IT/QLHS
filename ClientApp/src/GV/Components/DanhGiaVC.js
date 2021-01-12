@@ -392,15 +392,15 @@ class DanhGiaVC extends Component {
             if (e.mavienchuc.trim() === user.mavienchuc.trim() && e.manamhoc === idnh)
                 danhgia.push(e.mavienchuc, e.manamhoc);
         });
-        
+    
         
         return (
             <>
 
 
-                <div class="page-top-section">
-                    <div class="overlay"></div>
-                    <div class="container text-right">
+                <div class="page-top-section" style={{ height: '300px' }}>
+
+                    <div class="container text-right" style={{ marginTop: '-150px' }} >
                         <div class="page-info">
                             <h2>ĐÁNH GIÁ</h2>
                             <div class="page-links">
@@ -423,9 +423,9 @@ class DanhGiaVC extends Component {
                                     <h4 style={{ height: '5px', color: 'blue', textAlign: 'center', paddingTop: '20px' }}>PHIẾU ĐÁNH GIÁ</h4>
                                 </div>
                                 {(danhgia.length > 0) ?
-                                    <button onClick={this.DG.bind(this)} style={{width : '300px', marginLeft: '360px'}}> Chỉnh sửa phiếu đánh giá</button>
+                                    <button onClick={this.DG.bind(this)} style={{ width: '300px', marginLeft: '360px' }}> Chỉnh sửa phiếu đánh giá</button> 
                                     :
-                                    
+                                   
                                    
                                     <>
 
@@ -624,6 +624,8 @@ class DanhGiaVC extends Component {
 
                                 }
                                 {(this.state.modal) ?
+                                    (ctdg.ykbm != null) ?
+                                        <div style={{ textAlign: 'center', color: 'red' }}> Đã hết thời gian chỉnh sửa phiếu đánh giá </div> :
                                     <>
 
                                         <div style={{ backgroundColor: 'white', padding: '30px 30px' }}>

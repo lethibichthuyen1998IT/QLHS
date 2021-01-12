@@ -41,7 +41,8 @@ class DMCV extends React.Component {
             newdm: {
                 masodanhmuc: 0,
                 masolinhvuc:0,
-                tendanhmuc: ''
+                tendanhmuc: '',
+                diemdg:''
 
             },
             newlv: {
@@ -63,7 +64,8 @@ class DMCV extends React.Component {
             editData: {
                 masodanhmuc: 0,
                 masolinhvuc: 0,
-                tendanhmuc: ''
+                tendanhmuc: '',
+                diemdg: ''
 
             },
 
@@ -154,8 +156,8 @@ class DMCV extends React.Component {
         axios.get('/dmcongviecs/')
             .then((res) => this.setState({
                 dmcv: res.data,
-                showAlert: false,
-                activePage: 1
+                showAlert: false
+             
 
             }));
         axios.get('/lvcongviecs/')
@@ -205,6 +207,7 @@ class DMCV extends React.Component {
                 MASODANHMUC: this.state.newdm.masodanhmuc,
                 MASOLINHVUC: this.state.newdm.masolinhvuc,
                 TENDANHMUC: this.state.newdm.tendanhmuc,
+                DIEMDG: this.state.newdm.diemdg,
 
             }).then((response) => {
                 //console.log(response.data);
@@ -214,7 +217,8 @@ class DMCV extends React.Component {
 
                         masodanhmuc: 0,
                         masolinhvuc: 0,
-                        tendanhmuc:''
+                        tendanhmuc: '',
+                        diemdg:''
 
                     },
                     errors: '',
@@ -265,7 +269,7 @@ class DMCV extends React.Component {
                     errors: '',
                     addlvModal: false
                 });
-                //this.refresh();
+                this.refresh();
             })
                 .catch((error) => {
                     console.log(error.response);
@@ -282,25 +286,26 @@ class DMCV extends React.Component {
             editModal: !this.state.editModal
         })
     }
-    toggleEditModal(masodanhmuc, masolinhvuc, tendanhmuc) {
+    toggleEditModal(masodanhmuc, masolinhvuc, tendanhmuc, diemdg) {
         this.setState({
-            editData: { masodanhmuc, masolinhvuc, tendanhmuc },
+            editData: { masodanhmuc, masolinhvuc, tendanhmuc, diemdg },
             editModal: !this.state.editModal
 
         });
 
     }
     updateDM() {
-        let { masodanhmuc, masolinhvuc, tendanhmuc } = this.state.editData;
+        let { masodanhmuc, masolinhvuc, tendanhmuc, diemdg } = this.state.editData;
         axios.put('/dmcongviecs/' + this.state.editData.masodanhmuc,
-            { masodanhmuc, masolinhvuc, tendanhmuc }).then((response) => {
+            { masodanhmuc, masolinhvuc, tendanhmuc, diemdg }).then((response) => {
 
                 this.setState({
                     editModal: false,
                     editData: {
                         masodanhmuc: 0,
                         masolinhvuc: 0,
-                        tendanhmuc:''
+                        tendanhmuc: '',
+                        diemdg:''
                     },
                 });
                 this.refresh();
@@ -328,6 +333,8 @@ class DMCV extends React.Component {
         });
 
     }
+
+    
    
     updateLV() {
         let { masolinhvuc, tenlinhvuc } = this.state.editlvData;
@@ -450,11 +457,29 @@ class DMCV extends React.Component {
 
 
 
-                                        {(this.state.AddModal == true) ?
+                                      
 
-                                            <Form>
-                                                <Row md="12">
-                                                    <Col md="4" style={{ marginTop:'7px' }}>
+                                        <Modal isOpen={this.state.AddModal} toggle={this.toggleNewLVModal.bind(this)} style={{ width: '500px' }}>
+
+                                            <ModalHeader toggle={this.toggleNewLVModal.bind(this)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '400px', color: 'black', paddingLeft: '100px', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
+
+
+                                            <ModalBody>
+                                                <Row>
+                                                    <Col md="12"> <p className="text-danger"> (*) Bắt buộc</p></Col>
+                                                    <Col md="12" align="center">
+
+                                                        {(errors) ?
+                                                            <Alert color="warning">{errors}</Alert>
+                                                            :
+                                                            null
+                                                        }
+                                                    </Col>
+                                                </Row>
+
+                                               
+                                                <Row>
+                                                    <Col>
                                                                 <FormGroup>
                                                                     <Label htmlFor="iddonvi">Lĩnh vực</Label>
                                                                     <Input type="select" id="malvdm" value={this.state.newdm.masolinhvuc} onChange={(e) => {
@@ -470,8 +495,9 @@ class DMCV extends React.Component {
                                                                     </Input>
                                                             </FormGroup>
                                                     </Col>
-
-                                                            <Col md="3">
+                                                    </Row>
+                                                <Row>
+                                                            <Col>
                                                                 <FormGroup>
                                                                     <Label htmlFor="hoten">Tên danh mục : </Label>
                                                                     <Input id="tendm" value={this.state.newdm.tendanhmuc} onChange={(e) => {
@@ -487,23 +513,37 @@ class DMCV extends React.Component {
                                                                 </FormGroup>
 
                                                     </Col>
-                                             
-                                                            
-
-
+                                                </Row>
+                                                <Row>
+                                                    <Col>
+                                                        <FormGroup>
+                                                            <Label htmlFor="hoten">Điểm tối đa: </Label>
+                                                            <Input id="tendm" type="number" value={this.state.newdm.diemdg} onChange={(e) => {
+                                                                let { newdm } = this.state;
+                                                                newdm.diemdg = Number.parseInt(e.target.value);
+                                                                this.setState({ newdm });
+                                                            }} required />
                                                            
-                                                        
-                                                        
-                                                    <Col md="3" style={{  marginTop: '30px' }}>
+                                                        </FormGroup>
+
+                                                    </Col>
+                                             
+                                                </Row>   
+
+                                                     </ModalBody>
+                                                           
+
+                                                <ModalFooter>
+                                                    
                                                
                                                         <Button style={{ width: '80px' }} disabled={!(this.state.newdm.tendanhmuc.length > 0 && this.state.newdm.masolinhvuc.length != 0)} color="primary" onClick={this.addDM.bind(this)}>Lưu</Button> {' '} &nbsp;
                                                         <Button style={{ width: '80px' }} color="danger" onClick={this.toggleNewDMModal.bind(this)}>Đóng</Button>
-                                                    </Col>
-
-                                                </Row>
-                                            </Form>
+                                                </ModalFooter>
+                                            </Modal>
+                                               
+                                           
                                                 
-                                            :
+                                            {
                                             (this.state.addlvModal == true) ?
                                                 <Form>
                                                     <Row md="12">
@@ -534,7 +574,7 @@ class DMCV extends React.Component {
 
                                                         <Col md="3" style={{ marginTop: '30px' }}>
 
-                                                            <Button style={{ width: '80px' }} disabled={!(this.state.newlv.tenlinhvuc.length > 0)} color="primary" onClick={this.addLV.bind(this)}>Lưu</Button> {' '} &nbsp;
+                                                            <Button style={{ width: '80px' }} disabled={!(this.state.newlv.tenlinhvuc.length > 0 && this.state.editData.diemdg.length > 0)} color="primary" onClick={this.addLV.bind(this)}>Lưu</Button> {' '} &nbsp;
                                                         <Button style={{ width: '80px' }} color="danger" onClick={this.toggleNewLVModal.bind(this)}>Đóng</Button>
                                                         </Col>
 
@@ -586,7 +626,8 @@ class DMCV extends React.Component {
                                                 <th>STT</th>
 
                                                
-                                                <th>Tên danh mục</th>
+                                                        <th>Tên danh mục</th>
+                                                        <th>Điểm tối đa</th>
                                                 <th>Tên lĩnh vực</th>
 
                                                      
@@ -602,14 +643,15 @@ class DMCV extends React.Component {
                                                         <tr key={emp.masodanhmuc}>
                                                             <td>{index + 1}</td>
                                                             <td>{emp.tendanhmuc}</td>
+                                                            <td>{emp.diemdg}</td>
                                                             <td>{emp.tenlinhvuc}</td>
                                                          
 
                                                                
 
 
-                                                                    <td>
-                                                                        <Button color="default" onClick={this.toggleEditModal.bind(this, emp.masodanhmuc, emp.masolinhvuc, emp.tendanhmuc)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
+                                                            <td>
+                                                                <Button color="default" onClick={this.toggleEditModal.bind(this, emp.masodanhmuc, emp.masolinhvuc, emp.tendanhmuc, emp.diemdg)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button>  &nbsp;
                                                                 
                                                                         <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.masodanhmuc, emp.tendanhmuc)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
                                                                         
@@ -623,9 +665,9 @@ class DMCV extends React.Component {
                                                     )
                                                 })
                                                     }
-                                                    <Modal isOpen={this.state.editModal} toggle={this.toggleEditModal.bind(this, this.state.editData.masodanhmuc, this.state.editData.masolinhvuc, this.state.editData.tendanhmuc)} style={{ width: '500px' }}>
+                                                    <Modal isOpen={this.state.editModal} toggle={this.toggleEditModal.bind(this, this.state.editData.masodanhmuc, this.state.editData.masolinhvuc, this.state.editData.tendanhmuc, this.state.editData.diemdg)} style={{ width: '500px' }}>
 
-                                                        <ModalHeader toggle={this.toggleEditModal.bind(this, this.state.editData.masodanhmuc, this.state.editData.masolinhvuc, this.state.editData.tendanhmuc)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '400px', color: 'black', paddingLeft: '100px', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
+                                                        <ModalHeader toggle={this.toggleEditModal.bind(this, this.state.editData.masodanhmuc, this.state.editData.masolinhvuc, this.state.editData.tendanhmuc, this.state.editData.diemdg)} style={{ backgroundColor: '#D6EAF8' }} > <p style={{ width: '400px', color: 'black', paddingLeft: '100px', paddingTop: '20px', fontSize: '25px' }}><b>CHỈNH SỬA THÔNG TIN</b></p></ModalHeader>
 
 
                                                         <ModalBody>
@@ -667,6 +709,18 @@ class DMCV extends React.Component {
                                                                         <Input id="dm" value={this.state.editData.tendanhmuc} onChange={(e) => {
                                                                             let { editData } = this.state;
                                                                             editData.tendanhmuc = e.target.value;
+                                                                            this.setState({ editData });
+                                                                        }} />
+                                                                    </FormGroup>
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col md="12">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="DM">Điểm tối đa<strong className="text-danger">(*) </strong></Label>
+                                                                        <Input id="dm" type ="number" value={this.state.editData.diemdg} onChange={(e) => {
+                                                                            let { editData } = this.state;
+                                                                            editData.diemdg = Number.parseInt(e.target.value);
                                                                             this.setState({ editData });
                                                                         }} />
                                                                     </FormGroup>

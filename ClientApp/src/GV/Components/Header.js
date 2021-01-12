@@ -15,7 +15,7 @@ import {
     CardTitle,
     Alert
 } from "reactstrap";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 //const user = JSON.parse(localStorage.getItem('user'));
 class Header extends Component {
@@ -69,8 +69,9 @@ class Header extends Component {
 
     logout() {
         localStorage.clear('user');
-        this.refresh();
        
+        this.refresh();
+      
 
     }
    
@@ -122,7 +123,7 @@ class Header extends Component {
 
     render() {
         const { username, password, errors, msg } = this.state;
-        console.log(this.state.user);
+        //console.log(this.state.user);
         return (
 
             <>

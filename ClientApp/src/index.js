@@ -53,15 +53,14 @@ ReactDOM.render(
        
         <Switch>
 
-                    <Admin path="/admin" layout={Admin} component={User} />
-                    <Admin path="/admin/xemct/:id" layout={Admin} component={PhieuDanhGia} />
-                  
+                    <Admin path="/admin"  component={User} />
+                    <Route path="/admin/xemct/:id"  component={PhieuDanhGia} />
                     <Route path="/admin/admindg/:id" component={AdminDG} />
                     <Route path="/admin/khoadg/:id" component={KhoaDG} />
                     <Route path="/admin/bmdg/:id" component={BMDG} />
 
                     <Route exact path="/" component={Trangchu} />
-                    <Route exact path="/login" component={Login} />
+            <Route exact path="/login" component={Login} />
                     <Route exact path="/congtac" component={Congtac} />
                     <Route exact path="/danhgia" component={DanhGiaVC} />
                     <Route exact path="/renluyen" component={Renluyen} />
@@ -69,7 +68,7 @@ ReactDOM.render(
                 
                     <Route exact path="/404" component={notFound} />
                     <Route exact path="/thongbao" component={TB} />
-                    <Route exact path="/trangchu" component={Trove} />
+            <Route exact path="/trangchu" component={Trove} />
                     <Route exact path="/canhan" component={Thongtincanhan} />
                     <Route exact path="/chitiettb/:id" component={ChitietTB} />
                     <Redirect to="/404" />

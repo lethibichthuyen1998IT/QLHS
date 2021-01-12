@@ -25,8 +25,6 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
 import { Link, NavLink } from "react-router-dom";
-
-
 import avatar from "assets/img/avt.jpg";
 
 
@@ -59,7 +57,7 @@ class User extends React.Component {
     
     logout() {
         localStorage.clear('user');
-        this.props.history.push("/trangchu");
+        this.props.history.push("/login");
     }
 
     toggleEditModal() {
@@ -167,7 +165,6 @@ class User extends React.Component {
         const { vc, msg, editModal } = this.state;
        
         return (
-           
             <div>
               
                     <GridContainer>
@@ -264,10 +261,10 @@ class User extends React.Component {
                                 <CardFooter style={{
                                     paddingLeft: '210px'
                                 }}>
-                                    <Button disabled={!(vc.hoten.length > 0 && vc.diachi.length > 0 && vc.gioitinh.length > 0 && vc.ngaysinh.length > 0 && vc.sdt.length > 0) } color="primary" onClick={this.updateVC.bind(this)}
+                                    <Button  color="primary" onClick={this.updateVC.bind(this)}
                                         style={{
                                         width: '250px'
-                                    }}>Lưu lại</Button>{' '}
+                                    }}>Lưu lại</Button>
                                 </CardFooter>
                             </Card>
                         </GridItem>

@@ -548,7 +548,7 @@ class DanhGia extends React.Component {
                                                                     }
 
 
-                                                                    <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.masodanhgia, emp.hoten)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
+                                                                   
                                                                 
 
                                                                   
@@ -561,35 +561,7 @@ class DanhGia extends React.Component {
                                                         }
 
                                                       
-                                                        <SweetAlert
-                                                            show={this.state.showAlert}
-                                                            warning
-                                                            showCancel
-
-                                                            showCloseButton
-                                                            confirmBtnText="Đồng ý"
-                                                            confirmBtnBsStyle="danger"
-                                                            cancelBtnText="Không"
-                                                            cancelBtnBsStyle="light"
-                                                            title="Bạn có chắc chắn không?"
-
-                                                            onConfirm={() => this.deleteDG({ masodanhgia: this.state.xoa.masodanhgia })}
-
-                                                            onCancel={() => this.setState({ showAlert: false })}
-                                                            focusCancelBtn
-                                                        >  {"Đánh giá của viên chức " + this.state.xoa.mavienchuc + " sẽ bị xóa?"}
-                                                        </SweetAlert>
-                                                        <SweetAlert
-                                                            show={this.state.confirm}
-                                                            success
-                                                            confirmBtnText="Đồng ý"
-                                                            confirmBtnBsStyle="primary"
-                                                            onConfirm={() => this.handleConfirm()}
-
-
-                                                        >  Đã xóa thành công !!!
-                                                                </SweetAlert>
-
+                                                   
                                                     </tbody>
 
                                                 </Table>
@@ -646,7 +618,7 @@ class DanhGia extends React.Component {
 
 
 
-                                                                        <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.masodanhgia, emp.hoten)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
+                                                                     
 
 
 
@@ -660,35 +632,7 @@ class DanhGia extends React.Component {
                                                     }
                                                    
 
-                                                    <SweetAlert
-                                                        show={this.state.showAlert}
-                                                        warning
-                                                        showCancel
-
-                                                        showCloseButton
-                                                        confirmBtnText="Đồng ý"
-                                                        confirmBtnBsStyle="danger"
-                                                        cancelBtnText="Không"
-                                                        cancelBtnBsStyle="light"
-                                                        title="Bạn có chắc chắn không?"
-
-                                                        onConfirm={() => this.deleteDG({ masodanhgia: this.state.xoa.masodanhgia })}
-
-                                                        onCancel={() => this.setState({ showAlert: false })}
-                                                        focusCancelBtn
-                                                    >  {"Đánh giá của viên chức " + this.state.xoa.mavienchuc + " sẽ bị xóa?"}
-                                                    </SweetAlert>
-                                                    <SweetAlert
-                                                        show={this.state.confirm}
-                                                        success
-                                                        confirmBtnText="Đồng ý"
-                                                        confirmBtnBsStyle="primary"
-                                                        onConfirm={() => this.handleConfirm()}
-
-
-                                                    >  Đã xóa thành công !!!
-                                                                </SweetAlert>
-
+                                               
                                                 </tbody>
                                             </Table></TabPanel>
                                             <TabPanel>  <Table className="table table-hover">
@@ -723,7 +667,7 @@ class DanhGia extends React.Component {
                                                                         <Button color="light" onClick={(id) => this.khoa(emp.masodanhgia)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button> &nbsp;                                                                            
 
 
-                                                                        <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.masodanhgia, emp.hoten)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
+                                                                      
 
 
 
@@ -737,34 +681,7 @@ class DanhGia extends React.Component {
                                                     }
                                                    
                                             
-                                                    <SweetAlert
-                                                        show={this.state.showAlert}
-                                                        warning
-                                                        showCancel
-
-                                                        showCloseButton
-                                                        confirmBtnText="Đồng ý"
-                                                        confirmBtnBsStyle="danger"
-                                                        cancelBtnText="Không"
-                                                        cancelBtnBsStyle="light"
-                                                        title="Bạn có chắc chắn không?"
-
-                                                        onConfirm={() => this.deleteDG({ masodanhgia: this.state.xoa.masodanhgia })}
-
-                                                        onCancel={() => this.setState({ showAlert: false })}
-                                                        focusCancelBtn
-                                                    >  {"Đánh giá của viên chức " + this.state.xoa.mavienchuc + " sẽ bị xóa?"}
-                                                    </SweetAlert>
-                                                    <SweetAlert
-                                                        show={this.state.confirm}
-                                                        success
-                                                        confirmBtnText="Đồng ý"
-                                                        confirmBtnBsStyle="primary"
-                                                        onConfirm={() => this.handleConfirm()}
-
-
-                                                    >  Đã xóa thành công !!!
-                                                                </SweetAlert>
+                                                  
                                                 </tbody>
                                             </Table></TabPanel>
                                             <TabPanel>  <Table className="table table-hover">
@@ -799,7 +716,6 @@ class DanhGia extends React.Component {
                                                                         <Button color="light" onClick={(id) => this.admin(emp.masodanhgia)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button> &nbsp;
 
 
-                                                                        <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.masodanhgia, emp.hoten)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
 
 
 
@@ -811,34 +727,7 @@ class DanhGia extends React.Component {
                                                         })
                                                     }
                                                    
-                                                    <SweetAlert
-                                                        show={this.state.showAlert}
-                                                        warning
-                                                        showCancel
-
-                                                        showCloseButton
-                                                        confirmBtnText="Đồng ý"
-                                                        confirmBtnBsStyle="danger"
-                                                        cancelBtnText="Không"
-                                                        cancelBtnBsStyle="light"
-                                                        title="Bạn có chắc chắn không?"
-
-                                                        onConfirm={() => this.deleteDG({ masodanhgia: this.state.xoa.masodanhgia })}
-
-                                                        onCancel={() => this.setState({ showAlert: false })}
-                                                        focusCancelBtn
-                                                    >  {"Đánh giá của viên chức " + this.state.xoa.mavienchuc + " sẽ bị xóa?"}
-                                                    </SweetAlert>
-                                                    <SweetAlert
-                                                        show={this.state.confirm}
-                                                        success
-                                                        confirmBtnText="Đồng ý"
-                                                        confirmBtnBsStyle="primary"
-                                                        onConfirm={() => this.handleConfirm()}
-
-
-                                                    >  Đã xóa thành công !!!
-                                                                </SweetAlert>
+                                                  
                                                 </tbody>
                                             </Table></TabPanel></Tabs>
                                     </CardBody>
@@ -940,7 +829,6 @@ class DanhGia extends React.Component {
 
 
 
-                                                                        <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.masodanhgia, emp.hoten)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
 
 
 
@@ -953,34 +841,7 @@ class DanhGia extends React.Component {
                                                                     })
                                                                 }
                                                            
-                                                            <SweetAlert
-                                                                show={this.state.showAlert}
-                                                                warning
-                                                                showCancel
-
-                                                                showCloseButton
-                                                                confirmBtnText="Đồng ý"
-                                                                confirmBtnBsStyle="danger"
-                                                                cancelBtnText="Không"
-                                                                cancelBtnBsStyle="light"
-                                                                title="Bạn có chắc chắn không?"
-
-                                                                onConfirm={() => this.deleteDG({ masodanhgia: this.state.xoa.masodanhgia })}
-
-                                                                onCancel={() => this.setState({ showAlert: false })}
-                                                                focusCancelBtn
-                                                            >  {"Đánh giá của viên chức " + this.state.xoa.mavienchuc + " sẽ bị xóa?"}
-                                                            </SweetAlert>
-                                                            <SweetAlert
-                                                                show={this.state.confirm}
-                                                                success
-                                                                confirmBtnText="Đồng ý"
-                                                                confirmBtnBsStyle="primary"
-                                                                onConfirm={() => this.handleConfirm()}
-
-
-                                                            >  Đã xóa thành công !!!
-                                                                </SweetAlert>
+                                                           
                                                             </tbody>
                                                     </Table>
                                                     <div class="page-pagination">
@@ -1031,7 +892,7 @@ class DanhGia extends React.Component {
                                                                             <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp;
 
                                                                            <Button color="light" onClick={(id) => this.bomon(emp.masodanhgia)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button> &nbsp;
-                                                                        <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.masodanhgia, emp.hoten)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
+                                                                       
                                                                         </td>
 
                                                                     </tr>
@@ -1039,34 +900,7 @@ class DanhGia extends React.Component {
                                                             })
                                                         }
                                                        
-                                                        <SweetAlert
-                                                            show={this.state.showAlert}
-                                                            warning
-                                                            showCancel
-
-                                                            showCloseButton
-                                                            confirmBtnText="Đồng ý"
-                                                            confirmBtnBsStyle="danger"
-                                                            cancelBtnText="Không"
-                                                            cancelBtnBsStyle="light"
-                                                            title="Bạn có chắc chắn không?"
-
-                                                            onConfirm={() => this.deleteDG({ masodanhgia: this.state.xoa.masodanhgia })}
-
-                                                            onCancel={() => this.setState({ showAlert: false })}
-                                                            focusCancelBtn
-                                                        >  {"Đánh giá của viên chức " + this.state.xoa.mavienchuc + " sẽ bị xóa?"}
-                                                        </SweetAlert>
-                                                        <SweetAlert
-                                                            show={this.state.confirm}
-                                                            success
-                                                            confirmBtnText="Đồng ý"
-                                                            confirmBtnBsStyle="primary"
-                                                            onConfirm={() => this.handleConfirm()}
-
-
-                                                        >  Đã xóa thành công !!!
-                                                                </SweetAlert>
+                                                      
                                                     </tbody>
                                                 </Table></TabPanel>
 
@@ -1101,41 +935,14 @@ class DanhGia extends React.Component {
                                                                             <Button color="primary" onClick={(id) => this.xemct(emp.masodanhgia)} style={{ width: '40px' }}><i class="fa fa-eye"></i></Button>  &nbsp;
 
                                                                            <Button color="light" onClick={(id) => this.bomon(emp.masodanhgia)} style={{ width: '40px' }}><i className="fa fa-pencil" aria-hidden="true"></i></Button> &nbsp;
-                                                                        <Button className="btn btn-danger" style={{ width: '40px' }} onClick={this.handleShowAlert.bind(this, emp.masodanhgia, emp.hoten)} > <i className="fa fa-trash" aria-hidden="true"></i> </Button>
+                                                                       
                                                                         </td>
                                                                     </tr>
                                                                 )
                                                             })
                                                         }
                                                 
-                                                        <SweetAlert
-                                                            show={this.state.showAlert}
-                                                            warning
-                                                            showCancel
-
-                                                            showCloseButton
-                                                            confirmBtnText="Đồng ý"
-                                                            confirmBtnBsStyle="danger"
-                                                            cancelBtnText="Không"
-                                                            cancelBtnBsStyle="light"
-                                                            title="Bạn có chắc chắn không?"
-
-                                                            onConfirm={() => this.deleteDG({ masodanhgia: this.state.xoa.masodanhgia })}
-
-                                                            onCancel={() => this.setState({ showAlert: false })}
-                                                            focusCancelBtn
-                                                        >  {"Đánh giá của viên chức " + this.state.xoa.mavienchuc + " sẽ bị xóa?"}
-                                                        </SweetAlert>
-                                                        <SweetAlert
-                                                            show={this.state.confirm}
-                                                            success
-                                                            confirmBtnText="Đồng ý"
-                                                            confirmBtnBsStyle="primary"
-                                                            onConfirm={() => this.handleConfirm()}
-
-
-                                                        >  Đã xóa thành công !!!
-                                                                </SweetAlert>
+                                                      
                                                     </tbody>
                                                 </Table></TabPanel></Tabs>
                                 </CardBody>

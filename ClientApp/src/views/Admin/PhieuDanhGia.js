@@ -45,9 +45,17 @@ class PhieuDanhGia extends React.Component {
                 Masodanhgia: '',
                 Mavienchuc: '',
             },
+            user: JSON.parse(localStorage.getItem('user')),
             hangvc: '',
             bacvc:'',
-            hesoluong: 0
+            hesoluong: 0,
+            lv: [],
+            nl: [],
+            pc:[],
+            tstiet: '',
+            mavienchuc: '',
+            idnh:''
+          
             
          
         }
@@ -56,41 +64,51 @@ class PhieuDanhGia extends React.Component {
 
     }
 
-    createPdf = (html) => Doc.createPdf(html);
+    
 
     //load
     componentDidMount() {
 
         //hien thi danh sach
 
-        axios.get('/danhgias/')
-            .then((res) => this.setState({
-                dg: res.data,
-                source: res.data,
-            })
-            );
+       
      
         axios.get('/danhgias/' + this.props.match.params.id )
             .then((res) => this.setState({
                 details: res.data,
                 hangvc: res.data.hangchucdanh,
-                bacvc: res.data.bacluong
-             
-            })
-     );
+                bacvc: res.data.bacluong,
+                mavienchuc: res.data.mavienchuc,
+                idnh: res.data.manamhoc
 
-        
-        const nvs = JSON.parse(localStorage.getItem('user'));
-        this.setState({
-             vc: nvs
-        });
-       
-        axios.get('/vienchucs/')
+
+            }, () => this.Data())
+        );
+        axios.get('/phancongs/vc/' + this.state.user.mavienchuc)
             .then((res) => this.setState({
-                vienchuc: res.data,
+                pc: res.data,
 
-            })
-            );
+            }));
+
+
+        axios.get('/phancongs/lv/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                lv: res.data,
+
+            }));
+        axios.get('/phancongs/nl/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                nl: res.data,
+
+            }));
+        axios.get('/phancongs/tstiet/' + this.state.user.mavienchuc)
+            .then((res) => this.setState({
+                tstiet: res.data,
+
+            }));
+
+      
+      
 
     }
 
@@ -147,20 +165,45 @@ class PhieuDanhGia extends React.Component {
 
 
         }
+
        
 
     }
 
+    Data() {
+        axios.get('/phancongs/vc/' + this.state.mavienchuc)
+            .then((res) => this.setState({
+                pc: res.data,
+
+            }));
+
+        axios.get('/phancongs/lv/' + this.state.mavienchuc)
+            .then((res) => this.setState({
+                lv: res.data,
+
+            }));
+        axios.get('/phancongs/nl/' + this.state.mavienchuc)
+            .then((res) => this.setState({
+                nl: res.data,
+
+            }));
+        axios.get('/phancongs/tstiettheonam/' + this.state.mavienchuc + '/' + this.state.idnh)
+            .then((res) => this.setState({
+                tstiet: res.data,
+
+            }));
+    }
 
 
-    //createPdf = (html) => Doc.createPdf(html);
+
+  
 
     //render
     render() {
         this.LoadVC();
         const { errors } = this.state;
-        const { vc, dg, details, bomonchuadg, hesoluong,bacvc,hangvc} = this.state;
-        console.log(details)
+        const { vc, dg, details, bomonchuadg, hesoluong, bacvc, hangvc, lv, nl, tstiet,pc} = this.state;
+        
         return (
             <>
                 <Button style={{ width: '130px', marginRight: '10px' }} color="primary" onClick={() => window.print()}><i class="fa fa-print"></i> - {details.masodanhgia}</Button>
@@ -219,27 +262,38 @@ class PhieuDanhGia extends React.Component {
                     </div>
                     <div style={{ backgroundColor: 'white', padding: '30px 30px' }}>
                         <Row md ="12" style={{ fontWeight: 'bold' }}> 
-                            I. TỰ ĐÁNH GIÁ KẾT QUẢ CÔNG TÁC, TU DƯỠNG, RÈN LUYỆN CỦA VIÊN CHỨC
+                        I. TỰ ĐÁNH GIÁ KẾT QUẢ CÔNG TÁC, TU DƯỠNG, RÈN LUYỆN CỦA VIÊN CHỨC
                             </Row>
+                    <Row md="12">
+                        <Col md="12">
+                            Số tiết giảng dạy: <b> {tstiet}</b> tiết chuẩn, &nbsp;
+                                                hướng dẫn <b> {nl.soluong}</b> tiểu luận/niên luận,&nbsp;
+                                                 hướng dẫn <b> {lv.soluong}</b> luận văn <br />
+                            Các môn giảng dạy: {pc.map((emp) => {
+                            return (<strong> {emp.tenmonhoc},</strong>)
+                        })}
+
+                        </Col>
+                    </Row>
                         <Row md="12"> 
                         <b> 1. Kết quả thực hiện công việc hoặc nhiệm vụ theo hợp đồng làm việc đã ký kết:</b> 
                     </Row>
-                      
-                        <Row md="12"> {details.kqth}   </Row>
+
+                    <Row md="12" style={{ whiteSpace: 'pre' }}> {details.kqth}   </Row>
                       
                       
                         <Row md="12"> 
                         <b> 2. Việc thực hiện quy định về đạo đức nghề nghiệp:</b></Row>
-                        <Row md="12"> {details.daoduc}   </Row>
+                    <Row md="12" style={{ whiteSpace: 'pre' }}> {details.daoduc}   </Row>
                       
                         <Row md="12" > 
                         <b> 3. Tinh thần trách nhiệm, thái độ phục vụ nhân dân, tinh thần hợp tác với đồng nghiệp và việc thực hiện quy tắc ứng xử của viên chức:</b></Row>
-                        <Row md="12"> {details.trachnhiem}   </Row>
+                    <Row md="12" style={{ whiteSpace: 'pre' }}> {details.trachnhiem}   </Row>
                  
                         <Row md="12">
                            <b> 4. Việc thực hiện các nghĩa vụ khác của viên chức: <br/></b>
                             (việc tham gia các hoạt động do Trường và đơn vị tổ chức/ việc tham gia triển khai nghị quyết, chính sách, pháp luật của Đảng, Nhà nước/việc tham gia học tập nâng cao trình độ..)</Row>
-                        <Row md="12"> {details.khac}   </Row>
+                    <Row md="12" style={{ whiteSpace: 'pre' }}> {details.khac}   </Row>
                         
                         <Row md="12" style={{ fontWeight: 'bold' }}>
                             II. TỰ ĐÁNH GIÁ, PHÂN LOẠI CỦA VIÊN CHỨC
@@ -262,7 +316,7 @@ class PhieuDanhGia extends React.Component {
                             </Row>
                         <Row md="12">
                         <b> 1. Ý kiến của tập thể đơn vị viên chức công tác:</b> </Row>&nbsp; 
-                        <Row md="12">{details.ykbm}   </Row>
+                        <Row md="12" style={{ whiteSpace: 'pre' }}>{details.ykbm}   </Row>
                             
                        
                         <Row md="12">
@@ -286,7 +340,7 @@ class PhieuDanhGia extends React.Component {
                             </Row>
                         <Row md="12">
                         <b> 1.Nhận xét ưu điểm, nhược điểm </b></Row>
-                        <Row md="12"> {details.ykienkhoa}   </Row>
+                    <Row md="12" style={{ whiteSpace: 'pre' }}> {details.ykienkhoa}   </Row>
                        
                         <Row md="12">
                         <b> 2. Kết quả đánh giá, phân loại viên chức:</b>&nbsp; 

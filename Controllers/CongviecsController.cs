@@ -38,10 +38,47 @@ namespace QuanLyHieuSuat.Controllers
                              Masodanhmuc = a.Masodanhmuc,
                              Tendanhmuc = d.Tendanhmuc,
                              Tencongviec = a.Tencongviec,
-                             Ngaythuchien = a.Ngaythuchien,
+                             Thoigianbd = a.Thoigianbd,
                              Diadiem = a.Diadiem,
-                             Thoigian = a.Thoigian,
-                             Filecongvec = a.Filecongvec
+                             Thoigiankt = a.Thoigiankt,
+                             Filecongvec = a.Filecongvec,
+                             Mucdoht = a.Mucdoht
+
+                         };
+                return cv.ToList();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+        }
+        [HttpGet("danhsach/{id}")]
+        public IEnumerable<CongViecDTO> ds(string id)
+        {
+            var nh = (from a in db.Namhoc orderby a.Manamhoc descending select a.Manamhoc).FirstOrDefault();
+            try
+            {
+                var cv = from a in db.Congviec
+                         join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
+                         join c in db.Namhoc on a.Manamhoc equals c.Manamhoc
+                         join d in db.Danhmuc on a.Masodanhmuc equals d.Masodanhmuc
+                         join e in db.Linhvuccongviec on d.Masolinhvuc equals e.Masolinhvuc
+                         where a.Manamhoc == nh && a.Mavienchuc == id
+                         select new CongViecDTO()
+                         {
+                             Macongviec = a.Macongviec,
+                             Manamhoc = c.Manamhoc,
+                             Tennamhoc = c.Tennamhoc,
+                             Mavienchuc = b.Mavienchuc,
+                             Hoten = b.Hoten,
+                             Masodanhmuc = a.Masodanhmuc,
+                             Tendanhmuc = d.Tendanhmuc,
+                             Tencongviec = a.Tencongviec,
+                             Thoigianbd = a.Thoigianbd,
+                             Diadiem = a.Diadiem,
+                             Thoigiankt = a.Thoigiankt,
+                             Filecongvec = a.Filecongvec,
+                             Mucdoht = a.Mucdoht
 
                          };
                 return cv.ToList();
@@ -73,10 +110,11 @@ namespace QuanLyHieuSuat.Controllers
                              Masodanhmuc = a.Masodanhmuc,
                              Tendanhmuc = d.Tendanhmuc,
                              Tencongviec = a.Tencongviec,
-                             Ngaythuchien = a.Ngaythuchien,
+                             Thoigianbd = a.Thoigianbd,
                              Diadiem = a.Diadiem,
-                             Thoigian = a.Thoigian,
-                             Filecongvec = a.Filecongvec
+                             Thoigiankt = a.Thoigiankt,
+                             Filecongvec = a.Filecongvec,
+                             Mucdoht = a.Mucdoht
 
                          };
                 return cv.ToList();
@@ -108,10 +146,11 @@ namespace QuanLyHieuSuat.Controllers
                              Masodanhmuc = a.Masodanhmuc,
                              Tendanhmuc = d.Tendanhmuc,
                              Tencongviec = a.Tencongviec,
-                             Ngaythuchien = a.Ngaythuchien,
+                             Thoigianbd = a.Thoigianbd,
                              Diadiem = a.Diadiem,
-                             Thoigian = a.Thoigian,
-                             Filecongvec = a.Filecongvec
+                             Thoigiankt = a.Thoigiankt,
+                             Filecongvec = a.Filecongvec,
+                             Mucdoht = a.Mucdoht
 
                          };
                 return cv.ToList();
@@ -142,10 +181,11 @@ namespace QuanLyHieuSuat.Controllers
                              Masodanhmuc = a.Masodanhmuc,
                              Tendanhmuc = d.Tendanhmuc,
                              Tencongviec = a.Tencongviec,
-                             Ngaythuchien = a.Ngaythuchien,
+                             Thoigianbd = a.Thoigianbd,
                              Diadiem = a.Diadiem,
-                             Thoigian = a.Thoigian,
-                             Filecongvec = a.Filecongvec
+                             Thoigiankt = a.Thoigiankt,
+                             Filecongvec = a.Filecongvec,
+                             Mucdoht = a.Mucdoht
 
                          };
                 return cv.ToList();
@@ -176,10 +216,11 @@ namespace QuanLyHieuSuat.Controllers
                              Masodanhmuc = a.Masodanhmuc,
                              Tendanhmuc = d.Tendanhmuc,
                              Tencongviec = a.Tencongviec,
-                             Ngaythuchien = a.Ngaythuchien,
+                             Thoigianbd = a.Thoigianbd,
                              Diadiem = a.Diadiem,
-                             Thoigian = a.Thoigian,
-                             Filecongvec = a.Filecongvec
+                             Thoigiankt = a.Thoigiankt,
+                             Filecongvec = a.Filecongvec,
+                             Mucdoht = a.Mucdoht
 
                          };
                 return cv.ToList();

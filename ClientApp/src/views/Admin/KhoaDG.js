@@ -54,7 +54,9 @@ class KhoaDG extends Component {
             vc: [],
             bacvc: '',
             hesoluong: 0,
-            hangvc:''
+            hangvc: '',
+            mavienchuc: '',
+            idnh:''
 
 
         };
@@ -64,27 +66,7 @@ class KhoaDG extends Component {
 
     componentDidMount() {
 
-        axios.get('/phancongs/vc/' + this.state.user.mavienchuc)
-            .then((res) => this.setState({
-                pc: res.data,
-
-            }));
-
-        axios.get('/phancongs/lv/' + this.state.user.mavienchuc)
-            .then((res) => this.setState({
-                lv: res.data,
-
-            }));
-        axios.get('/phancongs/nl/' + this.state.user.mavienchuc)
-            .then((res) => this.setState({
-                nl: res.data,
-
-            }));
-        axios.get('/phancongs/tstiet/' + this.state.user.mavienchuc)
-            .then((res) => this.setState({
-                tstiet: res.data,
-
-            }));
+      
         axios.get('/namhocs/namhoc/')
             .then((res) => this.setState({
                 nhmd: res.data.manamhoc,
@@ -106,7 +88,9 @@ class KhoaDG extends Component {
             .then((res) => this.setState({
                 ctdg: res.data,
                 hangvc: res.data.hangchucdanh,
-                bacvc: res.data.bacluong
+                bacvc: res.data.bacluong,
+                mavienchuc: res.data.mavienchuc,
+                idnh: res.data.manamhoc
 
             }, () => this.loadData())
             );
@@ -209,6 +193,27 @@ class KhoaDG extends Component {
 
 
         });
+        axios.get('/phancongs/vc/' + this.state.mavienchuc)
+            .then((res) => this.setState({
+                pc: res.data,
+
+            }));
+
+        axios.get('/phancongs/lv/' + this.state.mavienchuc)
+            .then((res) => this.setState({
+                lv: res.data,
+
+            }));
+        axios.get('/phancongs/nl/' + this.state.mavienchuc)
+            .then((res) => this.setState({
+                nl: res.data,
+
+            }));
+        axios.get('/phancongs/tstiettheonam/' + this.state.mavienchuc + '/' + this.state.idnh)
+            .then((res) => this.setState({
+                tstiet: res.data,
+
+            }));
     }
 
 
@@ -316,9 +321,9 @@ class KhoaDG extends Component {
                     </Row>
                     <Row md="12">
                         <Col md="12">
-                            Số tiết giảng dạy: <b> {tstiet}</b>, &nbsp;
+                            Số tiết giảng dạy: <b> {tstiet}</b> tiết chuẩn, &nbsp;
                                                 hướng dẫn <b> {nl.soluong}</b> tiểu luận/niên luận,&nbsp;
-                                                 hướng dẫn <b> {lv.soluong}</b> luận văn
+                                                 hướng dẫn <b> {lv.soluong}</b> luận văn <br />
                             Các môn giảng dạy: {pc.map((emp) => {
                                 return (<strong> {emp.tenmonhoc},</strong>)
                             })}
@@ -326,7 +331,7 @@ class KhoaDG extends Component {
                         </Col>
                     </Row>
                     <Row md="12">
-                        <Col md="12">
+                        <Col md="12" style={{ whiteSpace: 'pre' }}>
                             {ctdg.kqth}
                         </Col>
                     </Row>
@@ -335,7 +340,7 @@ class KhoaDG extends Component {
                     <Row md="12">
                         <Col> <b> 2. Việc thực hiện quy định về đạo đức nghề nghiệp:</b> </Col></Row>
                     <Row md="12">
-                        <Col md="12">
+                        <Col md="12" style={{ whiteSpace: 'pre' }}>
 
                             {ctdg.daoduc}
                         </Col>
@@ -344,15 +349,15 @@ class KhoaDG extends Component {
                     <Row md="12" >
                         <Col><b> 3. Tinh thần trách nhiệm, thái độ phục vụ nhân dân, tinh thần hợp tác với đồng nghiệp và việc thực hiện quy tắc ứng xử của viên chức:</b> </Col></Row>
                     <Row md="12">
-                        <Col md="12">
+                        <Col md="12" style={{ whiteSpace: 'pre' }}>
                             {ctdg.trachnhiem}
                         </Col>
                     </Row>
 
-                    <Row md="12">
+                    <Row md="12" >
                         <Col> <b> 4. Việc thực hiện các nghĩa vụ khác của viên chức: <br /></b>
                             (việc tham gia các hoạt động do Trường và đơn vị tổ chức/ việc tham gia triển khai nghị quyết, chính sách, pháp luật của Đảng, Nhà nước/việc tham gia học tập nâng cao trình độ..) </Col></Row>
-                    <Row md="12">  <Col md="12">
+                    <Row md="12">  <Col md="12" style={{ whiteSpace: 'pre' }}>
                         {ctdg.khac}
                     </Col>  </Row>
 
@@ -383,7 +388,7 @@ class KhoaDG extends Component {
                     <Row md="12">
                         <Col> <b> 1. Ý kiến của tập thể đơn vị viên chức công tác:</b> </Col> </Row>
                     <Row md="12">
-                        <Col md="12">
+                        <Col md="12" style={{ whiteSpace: 'pre' }}>
                             {ctdg.ykbm}
                         </Col>
                     </Row>
@@ -391,7 +396,7 @@ class KhoaDG extends Component {
 
                     <Row md="12">
                         <Col><b> 2. Nhận xét của lãnh đạo trực tiếp quản lý viên chức:</b>  </Col>
-                        <Col md="12">
+                        <Col md="12" style={{ whiteSpace: 'pre' }}>
                             {ctdg.bomon}
                         </Col>
                     </Row>

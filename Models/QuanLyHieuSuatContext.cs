@@ -163,6 +163,7 @@ namespace QuanLyHieuSuat.Models
                     .HasMaxLength(1000);
 
                 entity.Property(e => e.Manamhoc).HasColumnName("MANAMHOC");
+                entity.Property(e => e.Mucdoht).HasColumnName("MUCDOHT");
 
                 entity.Property(e => e.Masodanhmuc).HasColumnName("MASODANHMUC");
 
@@ -173,17 +174,17 @@ namespace QuanLyHieuSuat.Models
                     .IsUnicode(false)
                     .IsFixedLength();
 
-                entity.Property(e => e.Ngaythuchien)
-                    .HasColumnName("NGAYTHUCHIEN")
+                entity.Property(e => e.Thoigiankt)
+                    .HasColumnName("THOIGIANKT")
                     .HasColumnType("datetime");
 
                 entity.Property(e => e.Tencongviec)
                     .HasColumnName("TENCONGVIEC")
                     .HasMaxLength(4000);
 
-                entity.Property(e => e.Thoigian)
-                    .HasColumnName("THOIGIAN")
-                    .HasMaxLength(50);
+                entity.Property(e => e.Thoigianbd)
+                   .HasColumnName("THOIGIANBD")
+                   .HasColumnType("datetime");
 
                 entity.HasOne(d => d.ManamhocNavigation)
                     .WithMany(p => p.Congviec)
@@ -316,7 +317,7 @@ namespace QuanLyHieuSuat.Models
                 entity.Property(e => e.Tendanhmuc)
                     .HasColumnName("TENDANHMUC")
                     .HasMaxLength(1000);
-
+                entity.Property(e => e.Diemdg).HasColumnName("DIEMDG");
                 entity.HasOne(d => d.MasolinhvucNavigation)
                     .WithMany(p => p.Danhmuc)
                     .HasForeignKey(d => d.Masolinhvuc)

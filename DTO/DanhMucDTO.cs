@@ -12,6 +12,7 @@ namespace QuanLyHieuSuat.DTO
         public int? Masolinhvuc { get; set; }
         public string Tendanhmuc { get; set; }
         public string Tenlinhvuc { get; set; }
+        public int? Diemdg { get; set; }
 
         public virtual Linhvuccongviec MasolinhvucNavigation { get; set; }
         public virtual ICollection<Congviec> Congviec { get; set; }

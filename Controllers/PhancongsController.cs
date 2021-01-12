@@ -180,6 +180,85 @@ namespace QuanLyHieuSuat.Controllers
             }
         }
 
+        [HttpGet("TStiettheonam/{idvc}/{idnh}")]
+        public string TStiet(string idvc, int idnh)
+        {
+
+            //var nh = (from a in db.Namhoc orderby a.Manamhoc descending select a.Manamhoc).FirstOrDefault();
+
+
+            try
+            {
+                var pc = (from a in db.Phancong
+                          join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
+                          join c in db.Monhoc on a.Idmonhoc equals c.Idmonhoc
+                          where a.Mavienchuc == idvc && a.Manamhoc == idnh
+                          select (c.Sotietlt * a.Soluong + c.Sotietth * a.Soluong)).Sum();
+
+
+
+                return pc.ToString();
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+
+        [HttpGet("mdht/{idvc}/{idnh}")]
+        public string mdht(string idvc, int idnh)
+        {
+
+            //var nh = (from a in db.Namhoc orderby a.Manamhoc descending select a.Manamhoc).FirstOrDefault();
+
+
+            try
+            {
+                var pc = (from a in db.Congviec
+                          join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
+                          join c in db.Danhmuc on a.Masodanhmuc equals c.Masodanhmuc
+                          where a.Mavienchuc == idvc && a.Manamhoc == idnh
+                          select a.Mucdoht).Sum();
+
+
+
+                return pc.ToString();
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("TSDiem/{idvc}/{idnh}")]
+        public string TSDiem(string idvc, int idnh)
+        {
+
+            //var nh = (from a in db.Namhoc orderby a.Manamhoc descending select a.Manamhoc).FirstOrDefault();
+
+
+            try
+            {
+                var pc = (from a in db.Congviec
+                          join b in db.Vienchuc on a.Mavienchuc equals b.Mavienchuc
+                          join c in db.Danhmuc on a.Masodanhmuc equals c.Masodanhmuc
+                          where a.Mavienchuc == idvc && a.Manamhoc == idnh
+                          select c.Diemdg).Sum();
+
+
+
+                return pc.ToString();
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
 
         [HttpPost("themmonhoc")]
         public int mh([FromBody] Phancong pc)

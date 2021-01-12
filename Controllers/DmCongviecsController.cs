@@ -29,6 +29,7 @@ namespace QuanLyHieuSuat.Controllers
                          Masolinhvuc = b.Masolinhvuc,
                          Tendanhmuc = a.Tendanhmuc,
                          Tenlinhvuc = b.Tenlinhvuc,
+                         Diemdg = a.Diemdg
 
                      };
 
@@ -64,6 +65,26 @@ namespace QuanLyHieuSuat.Controllers
             }
         }
 
+        [HttpGet("TSDiem/{id}")]
+        public string TSDiem(int id)
+        {
+
+            //var nh = (from a in db.Namhoc orderby a.Manamhoc descending select a.Manamhoc).FirstOrDefault();
+
+
+            try
+            {
+                var pc = (from a in db.Danhmuc where a.Masodanhmuc==id select a.Diemdg).FirstOrDefault();
+
+
+                return pc.ToString();
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
 
         [HttpPut("{id}")]
